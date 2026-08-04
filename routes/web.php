@@ -29,11 +29,11 @@ Route::group(['middlewareGroups' => ['web']], function() {
 	Route::get('/', function() {
 		return redirect('/home');
 	});
-	// Route::get('/home', 'CompanyProfile\CompanyProfileController@getHome');
+
 	Route::get(
 		'/home',
-		'Dashboard\HomeController@getOverview'
-	)->name('dashboard.home');
+		'CompanyProfile\CompanyProfileController@getHome'
+	);
 	Route::get('/logout', 'CompanyProfile\UserController@getLogout');
 	Route::get('/ChangePassword/{username}/edit', 'CompanyProfile\UserController@getEdit');
 	Route::put('/ChangePassword/{username}/change-password', 'CompanyProfile\UserController@putChangePassword');
@@ -58,9 +58,10 @@ Route::group(['middlewareGroups' => ['web']], function() {
 			Route::get('/', function () {
 				return redirect('/dashboard/home');
 			});
-			Route::get('/home', function () {
-			    return view('dashboard.home');
-			});
+			Route::get(
+				'/home',
+				'Dashboard\HomeController@getOverview'
+			)->name('dashboard.home');
 
 			// Areal Statement
 			Route::group(['prefix' => 'arealstatement'], function() {

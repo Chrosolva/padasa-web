@@ -45,7 +45,7 @@
             </li>
 
             <li class="{{ Request::is('dashboard/home') ? 'active' : '' }}">
-                <a href="{{ route('dashboard.home') }}">
+                <a href="{{ url('/dashboard/home') }}">
                     <i class="fa fa-dashboard"></i>
                     <span>Overview</span>
                 </a>
