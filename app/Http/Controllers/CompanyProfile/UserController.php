@@ -59,7 +59,9 @@ class UserController extends Controller
 		if(Auth::attempt($user, $remember_me))
 		{
 			// return redirect()->intended('/');
-			return redirect()->intended('/dashboard/home');
+			$request->session()->regenerate();
+
+            return redirect('/dashboard/home');
 		}
 		else {
 			return Redirect::back()

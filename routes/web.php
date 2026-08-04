@@ -23,9 +23,12 @@ use App\Http\Controllers\request;
 //     return view('welcome');
 // });
 
-Route::group(['middlewareGroups' => ['web']], function() {
+// Route::group(['middlewareGroups' => ['web']], function() {
 
-	// Company Profile
+	
+// });
+
+// Company Profile
 	Route::get('/', function() {
 		return redirect('/home');
 	});
@@ -259,5 +262,3 @@ Route::group(['middlewareGroups' => ['web']], function() {
 			Route::put('/modul-per-kebun/edit', 'Admin\ModulPerKebunController@putEdit');
 		});
 	});
-});
-
