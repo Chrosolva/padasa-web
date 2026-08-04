@@ -58,7 +58,8 @@ class UserController extends Controller
         $remember_me = (Input::has('remember_me')) ? true : false;
 		if(Auth::attempt($user, $remember_me))
 		{
-			return redirect()->intended('/');
+			// return redirect()->intended('/');
+			return redirect()->intended('/dashboard/home');
 		}
 		else {
 			return Redirect::back()
