@@ -32,12 +32,29 @@
         font-size: 13px;
     }
 
+    .overview-info {
+        margin-left: auto;
+        text-align: right;
+    }
+
+    .overview-info-site {
+        color: #185f2d;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .overview-info-date {
+        margin-top: 2px;
+        color: #6b7280;
+        font-size: 12px;
+    }
+
     .overview-filter-panel {
+        margin-bottom: 15px;
+        padding: 12px 15px;
         background: #ffffff;
         border: 1px solid #dfe5ea;
         border-radius: 8px;
-        padding: 12px 15px;
-        margin-bottom: 15px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     }
 
@@ -66,47 +83,22 @@
         border-radius: 5px;
     }
 
-    .btn-overview-filter {
-        height: 34px;
-        padding: 6px 18px;
-        border: none;
-        border-radius: 5px;
-        background: #218838;
-        color: #ffffff;
-        font-weight: 600;
-    }
-
-    .btn-overview-filter:hover,
-    .btn-overview-filter:focus {
-        background: #176b2b;
-        color: #ffffff;
-    }
-
-    .overview-info {
-        margin-left: auto;
-        text-align: right;
-    }
-
-    .overview-info-site {
-        color: #185f2d;
-        font-size: 16px;
-        font-weight: 700;
-    }
-
-    .overview-info-date {
-        margin-top: 2px;
+    .overview-filter-description {
+        display: flex;
+        align-items: center;
+        min-height: 34px;
         color: #6b7280;
-        font-size: 12px;
+        font-size: 11px;
+    }
+
+    .overview-filter-description i {
+        margin-right: 5px;
+        color: #249ac7;
     }
 
     .kpi-grid {
         display: grid;
-        grid-template-columns:
-            minmax(180px, 1fr)
-            minmax(180px, 1fr)
-            minmax(180px, 1fr)
-            minmax(220px, 1.15fr)
-            minmax(180px, 1fr);
+        grid-template-columns: repeat(7, minmax(0, 1fr));
         gap: 0;
         overflow: hidden;
         background: #ffffff;
@@ -152,27 +144,17 @@
         height: 48px;
         flex: 0 0 48px;
         border-radius: 50%;
-        font-size: 25px;
     }
 
-    .kpi-icon-tbs {
-        background: #fff4d9;
-        color: #dc8b00;
+    .kpi-icon-image {
+        background: transparent;
     }
 
-    .kpi-icon-cpo {
-        background: #fff3db;
-        color: #ee9500;
-    }
-
-    .kpi-icon-kernel {
-        background: #f4eadf;
-        color: #8a5a2b;
-    }
-
-    .kpi-icon-ker {
-        background: #f3eadf;
-        color: #79502c;
+    .kpi-icon-image img {
+        display: block;
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
     }
 
     .kpi-value-container {
@@ -198,7 +180,7 @@
 
     .kpi-footer {
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: minmax(0, 1fr) auto;
         align-items: center;
         gap: 8px;
         margin-top: 8px;
@@ -239,15 +221,40 @@
         background: #ed2727;
     }
 
+    .status-info {
+        background: #249ac7;
+    }
+
     .oer-card {
         padding-left: 8px;
         padding-right: 8px;
     }
 
+    .oer-gauge-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: 76px;
+    }
+
     #oerGauge {
         width: 100%;
-        height: 92px;
-        margin-top: -5px;
+        height: 55px;
+        margin: 0;
+    }
+
+    .oer-gauge-value {
+        margin-top: -2px;
+        color: #18752c;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 24px;
+        text-align: center;
+    }
+
+    .oer-gauge-value-danger {
+        color: #dc2626;
     }
 
     .oer-footer {
@@ -258,27 +265,31 @@
     .empty-overview {
         margin-top: 15px;
         padding: 14px;
+        color: #7a5b00;
+        background: #fff9e8;
         border: 1px solid #f2c94c;
         border-radius: 6px;
-        background: #fff9e8;
-        color: #7a5b00;
     }
 
-    @media (max-width: 1250px) {
+    @media (max-width: 1500px) {
         .kpi-grid {
-            grid-template-columns: repeat(3, minmax(190px, 1fr));
+            grid-template-columns: repeat(4, minmax(180px, 1fr));
         }
 
-        .kpi-card:nth-child(3) {
+        .kpi-card {
+            border-bottom: 1px solid #e4e8ec;
+        }
+
+        .kpi-card:nth-child(4n) {
             border-right: none;
         }
 
-        .kpi-card:nth-child(-n+3) {
-            border-bottom: 1px solid #e4e8ec;
+        .kpi-card:nth-last-child(-n+3) {
+            border-bottom: none;
         }
     }
 
-    @media (max-width: 850px) {
+    @media (max-width: 950px) {
         .overview-header {
             align-items: flex-start;
             flex-direction: column;
@@ -301,6 +312,14 @@
         .kpi-card:nth-child(2n) {
             border-right: none;
         }
+
+        .kpi-card:nth-last-child(-n+3) {
+            border-bottom: 1px solid #e4e8ec;
+        }
+
+        .kpi-card:last-child {
+            border-bottom: none;
+        }
     }
 
     @media (max-width: 520px) {
@@ -313,19 +332,24 @@
             border-bottom: 1px solid #e4e8ec;
         }
 
+        .kpi-card:last-child {
+            border-bottom: none;
+        }
+
         .overview-filter-group {
             width: 100%;
         }
 
-        .btn-overview-filter {
+        .overview-filter-description {
             width: 100%;
         }
     }
 </style>
 
 @php
-    function overviewStatusClass($achievement)
-    {
+    $statusClass = function ($achievement) {
+        $achievement = (float) $achievement;
+
         if ($achievement >= 100) {
             return 'status-success';
         }
@@ -335,22 +359,38 @@
         }
 
         return 'status-danger';
-    }
+    };
 
-    function overviewValueClass($achievement)
-    {
-        return $achievement < 95
+    $valueClass = function ($achievement) {
+        return (float) $achievement < 95
             ? 'kpi-value-danger'
             : '';
-    }
+    };
+
+    $formatOverviewDecimal = function ($value, $decimals = 1) {
+        $formatted = number_format(
+            (float) $value,
+            $decimals,
+            ',',
+            '.'
+        );
+
+        $formatted = rtrim($formatted, '0');
+        $formatted = rtrim($formatted, ',');
+
+        return $formatted;
+    };
+
+    $isEmptyOverview =
+        (float) $overview->TBSOLAH === 0.0 &&
+        (float) $overview->PRODUKSICPO === 0.0 &&
+        (float) $overview->PRODUKSIPK === 0.0;
 @endphp
 
 <section class="content-header">
     <div class="overview-header">
         <div class="overview-title">
-            <h1>
-                Dashboard Highlight
-            </h1>
+            <h1>Dashboard Highlight</h1>
 
             <p>
                 Overview operasional harian seluruh PMKS
@@ -358,7 +398,10 @@
         </div>
 
         <div class="overview-info">
-            <div class="overview-info-site">
+            <div
+                id="overviewPmksName"
+                class="overview-info-site"
+            >
                 PMKS {{ $overview->PMKS }}
             </div>
 
@@ -372,7 +415,7 @@
 
 <section class="content overview-page">
 
-    @if(session('error'))
+    @if(!empty($queryError))
         <div class="alert alert-danger alert-dismissible">
             <button
                 type="button"
@@ -384,7 +427,7 @@
             </button>
 
             <strong>Error:</strong>
-            {{ session('error') }}
+            {{ $queryError }}
         </div>
     @endif
 
@@ -393,6 +436,7 @@
             method="GET"
             action="{{ route('dashboard.home') }}"
             class="overview-filter-form"
+            id="overviewFilterForm"
         >
             <div class="overview-filter-group">
                 <label for="tanggal">
@@ -430,13 +474,10 @@
                 </select>
             </div>
 
-            <button
-                type="submit"
-                class="btn btn-overview-filter"
-            >
-                <i class="fa fa-search"></i>
-                Tampilkan
-            </button>
+            <div class="overview-filter-description">
+                <i class="fa fa-info-circle"></i>
+                Tanggal mengambil ulang data. PMKS berubah langsung tanpa reload.
+            </div>
         </form>
     </div>
 
@@ -449,12 +490,18 @@
             </div>
 
             <div class="kpi-main">
-                <div class="kpi-icon kpi-icon-tbs">
-                    <i class="fa fa-cubes"></i>
+                <div class="kpi-icon kpi-icon-image">
+                    <img
+                        src="{{ asset('assets/dashboard/icons/tbs.png') }}"
+                        alt="TBS Diolah"
+                    >
                 </div>
 
                 <div class="kpi-value-container">
-                    <span class="kpi-value">
+                    <span
+                        id="tbsValue"
+                        class="kpi-value"
+                    >
                         {{ number_format($overview->TBSOLAH, 0, ',', '.') }}
                     </span>
 
@@ -483,12 +530,18 @@
             </div>
 
             <div class="kpi-main">
-                <div class="kpi-icon kpi-icon-cpo">
-                    <i class="fa fa-tint"></i>
+                <div class="kpi-icon kpi-icon-image">
+                    <img
+                        src="{{ asset('assets/dashboard/icons/cpo.png') }}"
+                        alt="CPO Produksi"
+                    >
                 </div>
 
                 <div class="kpi-value-container">
-                    <span class="kpi-value {{ overviewValueClass($overview->PENCAPAIANCPO) }}">
+                    <span
+                        id="cpoValue"
+                        class="kpi-value {{ $valueClass($overview->PENCAPAIANCPO) }}"
+                    >
                         {{ number_format($overview->PRODUKSICPO, 0, ',', '.') }}
                     </span>
 
@@ -501,14 +554,21 @@
             <div class="kpi-footer">
                 <span class="kpi-target">
                     Target
-                    {{ number_format($overview->TARGET_CPO_HARIAN, 0, ',', '.') }}
+                    <span id="cpoTarget">
+                        {{ number_format($overview->TARGET_CPO_HARIAN, 0, ',', '.') }}
+                    </span>
                     Ton
                 </span>
 
                 <span class="kpi-achievement">
-                    <span class="status-dot {{ overviewStatusClass($overview->PENCAPAIANCPO) }}"></span>
+                    <span
+                        id="cpoDot"
+                        class="status-dot {{ $statusClass($overview->PENCAPAIANCPO) }}"
+                    ></span>
 
-                    {{ number_format($overview->PENCAPAIANCPO, 1, ',', '.') }}%
+                    <span id="cpoAchievement">
+                        {{ number_format($overview->PENCAPAIANCPO, 1, ',', '.') }}
+                    </span>%
                 </span>
             </div>
         </div>
@@ -520,12 +580,18 @@
             </div>
 
             <div class="kpi-main">
-                <div class="kpi-icon kpi-icon-kernel">
-                    <i class="fa fa-circle"></i>
+                <div class="kpi-icon kpi-icon-image">
+                    <img
+                        src="{{ asset('assets/dashboard/icons/kernel.png') }}"
+                        alt="Kernel Produksi"
+                    >
                 </div>
 
                 <div class="kpi-value-container">
-                    <span class="kpi-value {{ overviewValueClass($overview->PENCAPAIANPK) }}">
+                    <span
+                        id="kernelValue"
+                        class="kpi-value {{ $valueClass($overview->PENCAPAIANPK) }}"
+                    >
                         {{ number_format($overview->PRODUKSIPK, 0, ',', '.') }}
                     </span>
 
@@ -538,36 +604,66 @@
             <div class="kpi-footer">
                 <span class="kpi-target">
                     Target
-                    {{ number_format($overview->TARGET_PK_HARIAN, 0, ',', '.') }}
+                    <span id="kernelTarget">
+                        {{ number_format($overview->TARGET_PK_HARIAN, 0, ',', '.') }}
+                    </span>
                     Ton
                 </span>
 
                 <span class="kpi-achievement">
-                    <span class="status-dot {{ overviewStatusClass($overview->PENCAPAIANPK) }}"></span>
+                    <span
+                        id="kernelDot"
+                        class="status-dot {{ $statusClass($overview->PENCAPAIANPK) }}"
+                    ></span>
 
-                    {{ number_format($overview->PENCAPAIANPK, 1, ',', '.') }}%
+                    <span id="kernelAchievement">
+                        {{ number_format($overview->PENCAPAIANPK, 1, ',', '.') }}
+                    </span>%
                 </span>
             </div>
         </div>
 
-        {{-- OER GAUGE --}}
+        {{-- OER --}}
         <div class="kpi-card oer-card">
             <div class="kpi-card-title">
                 OER
             </div>
 
-            <div id="oerGauge"></div>
+            <div class="oer-gauge-wrap">
+                <div id="oerGauge"></div>
+
+                <div
+                    id="oerValue"
+                    class="
+                        oer-gauge-value
+                        {{
+                            (float) $overview->PENCAPAIAN_OER < 95
+                                ? 'oer-gauge-value-danger'
+                                : ''
+                        }}
+                    "
+                >
+                    {{ number_format($overview->OER, 2, ',', '.') }}%
+                </div>
+            </div>
 
             <div class="kpi-footer oer-footer">
                 <span class="kpi-target">
                     Target
-                    {{ number_format($overview->TARGET_OER, 2, ',', '.') }}%
+                    <span id="oerTarget">
+                        {{ number_format($overview->TARGET_OER, 2, ',', '.') }}
+                    </span>%
                 </span>
 
                 <span class="kpi-achievement">
-                    <span class="status-dot {{ overviewStatusClass($overview->PENCAPAIAN_OER) }}"></span>
+                    <span
+                        id="oerDot"
+                        class="status-dot {{ $statusClass($overview->PENCAPAIAN_OER) }}"
+                    ></span>
 
-                    {{ number_format($overview->PENCAPAIAN_OER, 1, ',', '.') }}%
+                    <span id="oerAchievement">
+                        {{ number_format($overview->PENCAPAIAN_OER, 1, ',', '.') }}
+                    </span>%
                 </span>
             </div>
         </div>
@@ -579,12 +675,18 @@
             </div>
 
             <div class="kpi-main">
-                <div class="kpi-icon kpi-icon-ker">
-                    <i class="fa fa-circle-o"></i>
+                <div class="kpi-icon kpi-icon-image">
+                    <img
+                        src="{{ asset('assets/dashboard/icons/ker.png') }}"
+                        alt="KER"
+                    >
                 </div>
 
                 <div class="kpi-value-container">
-                    <span class="kpi-value {{ overviewValueClass($overview->PENCAPAIAN_KER) }}">
+                    <span
+                        id="kerValue"
+                        class="kpi-value {{ $valueClass($overview->PENCAPAIAN_KER) }}"
+                    >
                         {{ number_format($overview->KER, 2, ',', '.') }}%
                     </span>
                 </div>
@@ -593,161 +695,551 @@
             <div class="kpi-footer">
                 <span class="kpi-target">
                     Target
-                    {{ number_format($overview->TARGET_KER, 2, ',', '.') }}%
+                    <span id="kerTarget">
+                        {{ number_format($overview->TARGET_KER, 2, ',', '.') }}
+                    </span>%
                 </span>
 
                 <span class="kpi-achievement">
-                    <span class="status-dot {{ overviewStatusClass($overview->PENCAPAIAN_KER) }}"></span>
+                    <span
+                        id="kerDot"
+                        class="status-dot {{ $statusClass($overview->PENCAPAIAN_KER) }}"
+                    ></span>
 
-                    {{ number_format($overview->PENCAPAIAN_KER, 1, ',', '.') }}%
+                    <span id="kerAchievement">
+                        {{ number_format($overview->PENCAPAIAN_KER, 1, ',', '.') }}
+                    </span>%
+                </span>
+            </div>
+        </div>
+
+        {{-- JAM OPERASI --}}
+        <div class="kpi-card">
+            <div class="kpi-card-title">
+                Jam Operasi
+            </div>
+
+            <div class="kpi-main">
+                <div class="kpi-icon kpi-icon-image">
+                    <img
+                        src="{{ asset('assets/dashboard/icons/jam-operasi.png') }}"
+                        alt="Jam Operasi"
+                    >
+                </div>
+
+                <div class="kpi-value-container">
+                    <span
+                        id="jamOlahValue"
+                        class="kpi-value"
+                    >
+                        {{ $formatOverviewDecimal($overview->JAMOLAH, 1) }}
+                    </span>
+
+                    <span class="kpi-unit">
+                        Jam
+                    </span>
+                </div>
+            </div>
+
+            <div class="kpi-footer">
+                <span class="kpi-target">
+                    Total jam operasi
+                </span>
+
+                <span class="kpi-achievement">
+                    <span class="status-dot status-info"></span>
+                    Aktual
+                </span>
+            </div>
+        </div>
+
+        {{-- BREAKDOWN --}}
+        <div class="kpi-card">
+            <div class="kpi-card-title">
+                Breakdown
+            </div>
+
+            <div class="kpi-main">
+                <div class="kpi-icon kpi-icon-image">
+                    <img
+                        src="{{ asset('assets/dashboard/icons/breakdown.png') }}"
+                        alt="Breakdown"
+                    >
+                </div>
+
+                <div class="kpi-value-container">
+                    <span
+                        id="breakdownValue"
+                        class="kpi-value"
+                    >
+                        {{ $formatOverviewDecimal($overview->BREAKDOWN, 1) }}
+                    </span>
+
+                    <span class="kpi-unit">
+                        Jam
+                    </span>
+                </div>
+            </div>
+
+            <div class="kpi-footer">
+                <span class="kpi-target">
+                    Total downtime
+                </span>
+
+                <span class="kpi-achievement">
+                    <span class="status-dot status-info"></span>
+                    Aktual
                 </span>
             </div>
         </div>
 
     </div>
 
-    @if(
-        $overview->TBSOLAH == 0 &&
-        $overview->PRODUKSICPO == 0 &&
-        $overview->PRODUKSIPK == 0
-    )
-        <div class="empty-overview">
-            <i class="fa fa-info-circle"></i>
+    <div
+        id="emptyOverview"
+        class="empty-overview"
+        style="{{ $isEmptyOverview ? '' : 'display:none;' }}"
+    >
+        <i class="fa fa-info-circle"></i>
 
-            Tidak ada data produksi untuk PMKS dan tanggal yang dipilih.
-        </div>
-    @endif
+        Tidak ada data produksi untuk PMKS dan tanggal yang dipilih.
+    </div>
 
 </section>
 
-{{-- Apache ECharts --}}
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        var overviewBySite = @json($overviewBySite);
+
+        var siteSelect = document.getElementById('site_id');
+        var tanggalInput = document.getElementById('tanggal');
+        var overviewForm = document.getElementById('overviewFilterForm');
         var gaugeElement = document.getElementById('oerGauge');
 
-        if (!gaugeElement || typeof echarts === 'undefined') {
-            return;
+        var oerGauge = null;
+
+        function toNumber(value) {
+            var number = Number(value);
+
+            return Number.isFinite(number)
+                ? number
+                : 0;
         }
 
-        var oerValue = Number(@json($overview->OER));
-        var targetOer = Number(@json($overview->TARGET_OER));
-        var achievementOer = Number(@json($overview->PENCAPAIAN_OER));
-
-        var gaugeMaximum = Math.max(
-            30,
-            Math.ceil(targetOer * 1.25),
-            Math.ceil(oerValue * 1.15)
-        );
-
-        var achievementColor;
-
-        if (achievementOer >= 100) {
-            achievementColor = '#218838';
-        } else if (achievementOer >= 95) {
-            achievementColor = '#f2b705';
-        } else {
-            achievementColor = '#dc2626';
+        function formatNumber(value, decimals) {
+            return toNumber(value).toLocaleString('id-ID', {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
+            });
         }
 
-        var oerGauge = echarts.init(gaugeElement);
+        function formatFlexibleNumber(value, decimals) {
+            return toNumber(value).toLocaleString('id-ID', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: decimals
+            });
+        }
 
-        var oerGaugeOption = {
-            animationDuration: 700,
+        function updateText(elementId, value) {
+            var element = document.getElementById(elementId);
 
-            series: [
-                {
-                    type: 'gauge',
+            if (element) {
+                element.textContent = value;
+            }
+        }
 
-                    startAngle: 180,
-                    endAngle: 0,
+        function getStatusClass(achievement) {
+            achievement = toNumber(achievement);
 
-                    center: ['50%', '74%'],
-                    radius: '105%',
+            if (achievement >= 100) {
+                return 'status-success';
+            }
 
-                    min: 0,
-                    max: gaugeMaximum,
+            if (achievement >= 95) {
+                return 'status-warning';
+            }
 
-                    splitNumber: 6,
+            return 'status-danger';
+        }
 
-                    axisLine: {
-                        lineStyle: {
-                            width: 9,
+        function updateStatusDot(elementId, achievement) {
+            var element = document.getElementById(elementId);
 
-                            color: [
-                                [0.60, '#dc2626'],
-                                [0.80, '#f2b705'],
-                                [1.00, '#218838']
-                            ]
-                        }
-                    },
+            if (!element) {
+                return;
+            }
 
-                    pointer: {
-                        show: true,
-                        length: '55%',
-                        width: 4,
-                        itemStyle: {
-                            color: '#ef8c00'
-                        }
-                    },
+            element.classList.remove(
+                'status-success',
+                'status-warning',
+                'status-danger'
+            );
 
-                    anchor: {
-                        show: true,
-                        showAbove: true,
-                        size: 8,
-                        itemStyle: {
-                            color: '#ef8c00'
-                        }
-                    },
+            element.classList.add(
+                getStatusClass(achievement)
+            );
+        }
 
-                    axisTick: {
-                        show: false
-                    },
+        function updateValueColor(elementId, achievement) {
+            var element = document.getElementById(elementId);
 
-                    splitLine: {
-                        show: false
-                    },
+            if (!element) {
+                return;
+            }
 
-                    axisLabel: {
-                        show: false
-                    },
+            element.classList.toggle(
+                'kpi-value-danger',
+                toNumber(achievement) < 95
+            );
+        }
 
-                    title: {
-                        show: false
-                    },
+        function getGaugeMaximum(oerValue, targetOer) {
+            return Math.max(
+                30,
+                Math.ceil(toNumber(targetOer) * 1.25),
+                Math.ceil(toNumber(oerValue) * 1.15)
+            );
+        }
 
-                    detail: {
-                        valueAnimation: true,
-                        offsetCenter: [0, '13%'],
+        function getGaugeOption(oerValue, targetOer) {
+            return {
+                animationDuration: 700,
 
-                        formatter: function (value) {
-                            return value
-                                .toLocaleString('id-ID', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                }) + '%';
+                series: [
+                    {
+                        type: 'gauge',
+
+                        startAngle: 180,
+                        endAngle: 0,
+
+                        center: ['50%', '90%'],
+                        radius: '88%',
+
+                        min: 0,
+                        max: getGaugeMaximum(
+                            oerValue,
+                            targetOer
+                        ),
+
+                        splitNumber: 6,
+
+                        axisLine: {
+                            lineStyle: {
+                                width: 9,
+
+                                color: [
+                                    [0.60, '#dc2626'],
+                                    [0.80, '#f2b705'],
+                                    [1.00, '#218838']
+                                ]
+                            }
                         },
 
-                        color: achievementColor,
-                        fontSize: 24,
-                        fontWeight: 700
-                    },
+                        pointer: {
+                            show: true,
+                            length: '55%',
+                            width: 4,
 
-                    data: [
-                        {
-                            value: oerValue
-                        }
-                    ]
+                            itemStyle: {
+                                color: '#ef8c00'
+                            }
+                        },
+
+                        anchor: {
+                            show: true,
+                            showAbove: true,
+                            size: 8,
+
+                            itemStyle: {
+                                color: '#ef8c00'
+                            }
+                        },
+
+                        axisTick: {
+                            show: false
+                        },
+
+                        splitLine: {
+                            show: false
+                        },
+
+                        axisLabel: {
+                            show: false
+                        },
+
+                        title: {
+                            show: false
+                        },
+
+                        detail: {
+                            show: false
+                        },
+
+                        data: [
+                            {
+                                value: toNumber(oerValue)
+                            }
+                        ]
+                    }
+                ]
+            };
+        }
+
+        function updateGauge(data) {
+            if (!oerGauge) {
+                return;
+            }
+
+            oerGauge.setOption({
+                series: [
+                    {
+                        max: getGaugeMaximum(
+                            data.OER,
+                            data.TARGET_OER
+                        ),
+
+                        data: [
+                            {
+                                value: toNumber(data.OER)
+                            }
+                        ]
+                    }
+                ]
+            });
+        }
+
+        function updateOverview(siteId) {
+            siteId = String(siteId);
+
+            var data = overviewBySite[siteId];
+
+            if (!data && overviewBySite['9999']) {
+                siteId = '9999';
+                data = overviewBySite['9999'];
+
+                if (siteSelect) {
+                    siteSelect.value = '9999';
                 }
-            ]
-        };
+            }
 
-        oerGauge.setOption(oerGaugeOption);
+            if (!data) {
+                return;
+            }
 
-        window.addEventListener('resize', function () {
-            oerGauge.resize();
-        });
+            updateText(
+                'overviewPmksName',
+                'PMKS ' + (data.PMKS || '-')
+            );
+
+            updateText(
+                'tbsValue',
+                formatNumber(data.TBSOLAH, 0)
+            );
+
+            updateText(
+                'cpoValue',
+                formatNumber(data.PRODUKSICPO, 0)
+            );
+
+            updateText(
+                'cpoTarget',
+                formatNumber(data.TARGET_CPO_HARIAN, 0)
+            );
+
+            updateText(
+                'cpoAchievement',
+                formatNumber(data.PENCAPAIANCPO, 1)
+            );
+
+            updateStatusDot(
+                'cpoDot',
+                data.PENCAPAIANCPO
+            );
+
+            updateValueColor(
+                'cpoValue',
+                data.PENCAPAIANCPO
+            );
+
+            updateText(
+                'kernelValue',
+                formatNumber(data.PRODUKSIPK, 0)
+            );
+
+            updateText(
+                'kernelTarget',
+                formatNumber(data.TARGET_PK_HARIAN, 0)
+            );
+
+            updateText(
+                'kernelAchievement',
+                formatNumber(data.PENCAPAIANPK, 1)
+            );
+
+            updateStatusDot(
+                'kernelDot',
+                data.PENCAPAIANPK
+            );
+
+            updateValueColor(
+                'kernelValue',
+                data.PENCAPAIANPK
+            );
+
+            updateText(
+                'oerValue',
+                formatNumber(data.OER, 2) + '%'
+            );
+
+            updateText(
+                'oerTarget',
+                formatNumber(data.TARGET_OER, 2)
+            );
+
+            updateText(
+                'oerAchievement',
+                formatNumber(data.PENCAPAIAN_OER, 1)
+            );
+
+            updateStatusDot(
+                'oerDot',
+                data.PENCAPAIAN_OER
+            );
+
+            var oerValueElement =
+                document.getElementById('oerValue');
+
+            if (oerValueElement) {
+                oerValueElement.classList.toggle(
+                    'oer-gauge-value-danger',
+                    toNumber(data.PENCAPAIAN_OER) < 95
+                );
+            }
+
+            updateGauge(data);
+
+            updateText(
+                'kerValue',
+                formatNumber(data.KER, 2) + '%'
+            );
+
+            updateText(
+                'kerTarget',
+                formatNumber(data.TARGET_KER, 2)
+            );
+
+            updateText(
+                'kerAchievement',
+                formatNumber(data.PENCAPAIAN_KER, 1)
+            );
+
+            updateStatusDot(
+                'kerDot',
+                data.PENCAPAIAN_KER
+            );
+
+            updateValueColor(
+                'kerValue',
+                data.PENCAPAIAN_KER
+            );
+
+            updateText(
+                'jamOlahValue',
+                formatFlexibleNumber(data.JAMOLAH, 1)
+            );
+
+            updateText(
+                'breakdownValue',
+                formatFlexibleNumber(data.BREAKDOWN, 1)
+            );
+
+            var noData =
+                toNumber(data.TBSOLAH) === 0 &&
+                toNumber(data.PRODUKSICPO) === 0 &&
+                toNumber(data.PRODUKSIPK) === 0;
+
+            var emptyOverview =
+                document.getElementById('emptyOverview');
+
+            if (emptyOverview) {
+                emptyOverview.style.display =
+                    noData ? 'block' : 'none';
+            }
+
+            var currentUrl = new URL(
+                window.location.href
+            );
+
+            currentUrl.searchParams.set(
+                'site_id',
+                siteId
+            );
+
+            if (tanggalInput && tanggalInput.value) {
+                currentUrl.searchParams.set(
+                    'tanggal',
+                    tanggalInput.value
+                );
+            }
+
+            window.history.replaceState(
+                {},
+                '',
+                currentUrl.toString()
+            );
+        }
+
+        if (
+            gaugeElement &&
+            typeof echarts !== 'undefined'
+        ) {
+            var initialSiteId = siteSelect
+                ? String(siteSelect.value)
+                : '9999';
+
+            var initialData =
+                overviewBySite[initialSiteId] ||
+                overviewBySite['9999'] ||
+                @json($overview);
+
+            oerGauge = echarts.init(gaugeElement);
+
+            oerGauge.setOption(
+                getGaugeOption(
+                    initialData.OER,
+                    initialData.TARGET_OER
+                )
+            );
+        }
+
+        if (siteSelect) {
+            siteSelect.addEventListener(
+                'change',
+                function () {
+                    updateOverview(this.value);
+                }
+            );
+        }
+
+        if (tanggalInput && overviewForm) {
+            tanggalInput.addEventListener(
+                'change',
+                function () {
+                    overviewForm.submit();
+                }
+            );
+        }
+
+        window.addEventListener(
+            'resize',
+            function () {
+                if (oerGauge) {
+                    oerGauge.resize();
+                }
+            }
+        );
     });
 </script>
 

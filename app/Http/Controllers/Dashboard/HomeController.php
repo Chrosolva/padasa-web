@@ -11,105 +11,91 @@ class HomeController extends Controller
 {
     public function getOverview(Request $request)
     {
-        /*
-         * Default date:
-         * Use yesterday because LHP data is normally complete for yesterday.
-         *
-         * Change Carbon::yesterday() to Carbon::today()
-         * when you want the default filter to use today.
-         */
-        $tanggal = $request->get(
-            'tanggal',
-            Carbon::yesterday()->format('Y-m-d')
-        );
-
-        $siteId = $request->get('site_id', '9999');
-
         $request->validate([
-            'tanggal' => 'required|date_format:Y-m-d',
+            'tanggal' => 'nullable|date_format:Y-m-d',
             'site_id' => 'nullable|in:9999,2200,2300,2400,2500,3200,5200',
         ]);
 
-        /*
-         * For SEMUA:
-         * Stored procedure receives NULL.
-         *
-         * For individual PMKS:
-         * Stored procedure receives the selected SITE_ID.
-         */
-        $siteIdParameter = $siteId === '9999'
-            ? null
-            : (int) $siteId;
+        $tanggal = $request->filled('tanggal')
+            ? $request->input('tanggal')
+            : Carbon::yesterday()->format('Y-m-d');
+
+        $siteId = $request->filled('site_id')
+            ? (string) $request->input('site_id')
+            : '9999';
 
         $sqlDate = Carbon::parse($tanggal)->format('Ymd');
+
+        /*
+        * Harus berada sebelum try supaya tetap tersedia
+        * saat terjadi exception.
+        */
+        $sites = $this->getSiteOptions();
 
         try {
             $result = DB::select(
                 "
-                EXEC PUBDB.Produksi.Overview_PMKS_1_Harian_DashBoard_GPT
+                SET NOCOUNT ON;
+
+                EXEC [PUBDB].[Produksi].[Overview_PMKS_1_Harian_DashBoard_GPT]
                     @startdate = ?,
                     @enddate   = ?,
-                    @site_id   = ?
+                    @site_id   = ?;
                 ",
                 [
                     $sqlDate,
                     $sqlDate,
-                    $siteIdParameter,
+                    null,
                 ]
             );
 
-            /*
-             * When site_id is NULL, the stored procedure returns:
-             * - every PMKS
-             * - one final SEMUA row with SITE_ID = 9999
-             *
-             * The overview only needs one selected row.
-             */
-            if ($siteId === '9999') {
-                $overview = collect($result)->first(function ($row) {
-                    return (string) $row->SITE_ID === '9999';
+            $overviewBySite = collect($result)
+                ->map(function ($row) {
+                    return $this->normalizeOverview($row);
+                })
+                ->keyBy(function ($row) {
+                    return (string) $row->SITE_ID;
                 });
-            } else {
-                $overview = collect($result)->first(function ($row) use ($siteId) {
-                    return (string) $row->SITE_ID === (string) $siteId;
-                });
-            }
 
-            /*
-             * Fallback when no result is found.
-             */
+            $overview = $overviewBySite->get($siteId);
+
             if (!$overview) {
-                $overview = $this->emptyOverview($tanggal, $siteId);
+                $overview = $overviewBySite->get('9999');
             }
 
-            $overview = $this->normalizeOverview($overview);
+            if (!$overview) {
+                $overview = $this->normalizeOverview(
+                    $this->emptyOverview($tanggal, $siteId)
+                );
+            }
 
-            $sites = $this->getSiteOptions();
-
-            return view('dashboard.overview', compact(
-                'overview',
-                'tanggal',
-                'siteId',
-                'sites'
-            ));
-        } catch (\Exception $exception) {
+            return view('dashboard.overview', [
+                'overview' => $overview,
+                'overviewBySite' => $overviewBySite,
+                'tanggal' => $tanggal,
+                'siteId' => $siteId,
+                'sites' => $sites,
+                'queryError' => null,
+            ]);
+        } catch (\Throwable $exception) {
             report($exception);
 
-            $overview = $this->normalizeOverview(
+            $emptyOverview = $this->normalizeOverview(
                 $this->emptyOverview($tanggal, $siteId)
             );
 
-            $sites = $this->getSiteOptions();
-
-            return view('dashboard.overview', compact(
-                'overview',
-                'tanggal',
-                'siteId',
-                'sites'
-            ))->with(
-                'error',
-                'Data overview gagal dimuat: ' . $exception->getMessage()
-            );
+            return view('dashboard.overview', [
+                'overview' => $emptyOverview,
+                'overviewBySite' => collect([
+                    $siteId => $emptyOverview,
+                ]),
+                'tanggal' => $tanggal,
+                'siteId' => $siteId,
+                'sites' => $sites,
+                'queryError' =>
+                    'Gagal mengambil data overview: ' .
+                    $exception->getMessage(),
+            ]);
         }
     }
 

@@ -50,6 +50,28 @@
             margin-top: 10px;
         }
     }
+
+    .table-toolbar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .table-search {
+        width: 340px;
+        max-width: 100%;
+    }
+
+    @media (max-width: 767px) {
+        .table-toolbar {
+            justify-content: stretch;
+        }
+
+        .table-search {
+            width: 100%;
+        }
+    }
 </style>
 
 <section class="content-header">
@@ -226,37 +248,37 @@
         </div>
 
         <div class="box-body">
-            <div class="row" style="margin-bottom: 10px;">
-                <div class="col-md-4 col-sm-6">
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-addon">
-                            <i class="fa fa-search"></i>
-                        </span>
+            <div class="table-toolbar">
+                <div class="input-group input-group-sm table-search">
+                    <span class="input-group-addon">
+                        <i class="fa fa-search"></i>
+                    </span>
 
-                        <input
-                            type="text"
-                            id="search-detail-hpt"
-                            class="form-control"
-                            placeholder="Cari kode site atau data lainnya..."
-                            autocomplete="off"
+                    <input
+                        type="text"
+                        id="search-detail-hpt"
+                        class="form-control"
+                        placeholder="Cari kode site atau data lainnya..."
+                        autocomplete="off"
+                    >
+
+                    <span class="input-group-btn">
+                        <button
+                            type="button"
+                            id="clear-search-detail-hpt"
+                            class="btn btn-default"
+                            title="Hapus pencarian"
                         >
-
-                        <span class="input-group-btn">
-                            <button
-                                type="button"
-                                id="clear-search-detail-hpt"
-                                class="btn btn-default"
-                                title="Hapus pencarian"
-                            >
-                                <i class="fa fa-times"></i>
-                            </button>
-                        </span>
-                    </div>
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </span>
                 </div>
             </div>
 
             <div id="detail-hpt-table"></div>
         </div>
+
+        <h5> Catatan : %Terserang = Jumlah Pokok sakit / total Pokok</h5>
     </div>
 </section>
 <style>

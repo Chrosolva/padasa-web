@@ -46,7 +46,7 @@
 
             <li class="{{ Request::is('dashboard/home') ? 'active' : '' }}">
                 <a href="{{ url('/dashboard/home') }}">
-                    <i class="fa fa-dashboard"></i>
+                    <i class="fa fa-home fa-fw" aria-hidden="true"></i>
                     <span>Overview</span>
                 </a>
             </li>
@@ -68,8 +68,31 @@
                     </li>
                     <li class="{{ Auth::user()->canAccessByHakAkses('Areal Statement', 'Luasan Wilayah Per Kebun') ? '' : 'disabled' }}">
                         <a href="{{ url('/dashboard/arealstatement/luasan-wilayah-per-kebun') }}" class="sidebar-wrap-link">
-                            {{-- <i class="fa fa-exclamation-circle menu-unconfirmed" title="Belum dikonfirmasi"></i>--}}
+                            {{-- <i class="fa fa-exclamation-circle menu-unconfirmed" title="Belum dikonfirmasi"></i> --}}
                             <span class="sidebar-wrap-text">Luasan Wilayah</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ request()->is('dashboard/agronomi*') ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-leaf"></i>
+                    <span>Agronomi</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+
+                <ul class="treeview-menu">
+                    <li class="{{
+                        Auth::user()->canAccessByHakAkses('Agronomi', 'Produksi TBS')
+                            ? (request()->is('dashboard/agronomi/produksi-tbs') ? 'active' : '')
+                            : 'disabled'
+                    }}">
+                        <a href="{{ route('agronomi.produksi-tbs') }}">
+                            <i class="fa fa-exclamation-circle menu-unconfirmed" title="Belum dikonfirmasi"></i>
+                            Produksi TBS
                         </a>
                     </li>
                 </ul>

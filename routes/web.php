@@ -213,6 +213,14 @@ use App\Http\Controllers\request;
 					'Dashboard\HPTController@getDetailHPT'
 				)->name('hpt.detail');
 			});
+
+			// AGRONOMI
+			Route::group(['prefix' => 'agronomi'], function () {
+				Route::get(
+					'/produksi-tbs',
+					'Dashboard\AgronomiController@getProduksiTBS'
+				)->name('agronomi.produksi-tbs');
+			});
 		});
 
 		// Admin Panel
