@@ -107,16 +107,23 @@ class AgronomiController extends Controller
          * sudah tersedia tabel master kebun.
          */
         $siteOptions = [
-            '2200' => 'TELDA / TD',
-            '2300' => 'KALSA / K1',
-            '2400' => 'KALDA / K2',
-            '2500' => 'KOKAR / KK',
+            '2200' => 'TELDA',
+            '2300' => 'KALSA',
+            '2400' => 'KALDA',
+            '2500' => 'KOKAR',
             '2600' => 'MITRA KOKAR',
-            '3200' => 'RICKO / RK',
-            '4200' => 'MUARA / MR',
-            '5200' => 'PASER / PS',
-            '6200' => 'LANGGAI / LG',
+            '3200' => 'RICKO',
+            '4200' => 'MUARA',
+            '5200' => 'PASER',
+            '6200' => 'LANGGAI',
         ];
+
+        $selectedSiteNames = collect($selectedSites)
+        ->map(function ($siteId) use ($siteOptions) {
+            return $siteOptions[$siteId] ?? $siteId;
+        })
+        ->values()
+        ->all();
 
         $namaBulan = [
             1 => 'JANUARI',
@@ -140,6 +147,7 @@ class AgronomiController extends Controller
             'namaBulan' => $namaBulan,
             'siteOptions' => $siteOptions,
             'selectedSites' => $selectedSites,
+            'selectedSiteNames' => $selectedSiteNames,
         ]);
     }
 

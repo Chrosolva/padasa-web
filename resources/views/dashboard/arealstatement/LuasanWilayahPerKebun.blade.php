@@ -430,6 +430,60 @@ $(document).ready(function () {
         JSON_NUMERIC_CHECK
     ) !!};
 
+    function simplifyUnitName(name) {
+        var text = String(name || '').trim().replace(/\s+/g, ' ');
+
+        // Kalau ada "RAYON X", tampilkan hanya "RAYON X"
+        var rayonMatch = text.match(/\bRAYON\s+([A-Z0-9]+)/i);
+        if (rayonMatch) {
+            return 'RAYON ' + rayonMatch[1].toUpperCase();
+        }
+
+        return text;
+    }
+
+    // Untuk chart tetap seperti TM/TBM/TB/LAIN
+    var FIXED_STACK_COLORS = {
+        TM:   '#2E86DE', // biru
+        TBM:  '#00A86B', // hijau
+        TB:   '#F39C12', // oranye
+        LAIN: '#E74C3C'  // merah
+    };
+
+    // Untuk chart dinamis seperti Tahun Tanam / Bibit / Topografi
+    var HIGH_CONTRAST_PALETTE = [
+        '#2E86DE', // blue
+        '#E74C3C', // red
+        '#00A86B', // green
+        '#F39C12', // orange
+        '#8E44AD', // purple
+        '#16A085', // teal
+        '#C0392B', // dark red
+        '#2980B9', // strong blue
+        '#D35400', // dark orange
+        '#27AE60', // strong green
+        '#7F8C8D', // gray
+        '#2C3E50', // navy
+        '#E91E63', // pink
+        '#1ABC9C', // aqua green
+        '#9B59B6', // violet
+        '#34495E', // slate
+        '#F1C40F', // yellow
+        '#FF6B6B', // salmon
+        '#4ECDC4', // cyan
+        '#6C5CE7'  // indigo
+    ];
+
+    function getHighContrastColor(index) {
+        if (index < HIGH_CONTRAST_PALETTE.length) {
+            return HIGH_CONTRAST_PALETTE[index];
+        }
+
+        // fallback kalau series sangat banyak
+        var hue = (index * 137.508) % 360;
+        return 'hsl(' + hue + ', 70%, 48%)';
+    }
+
     function padTwoDigits(value) {
         var result = String(value || '');
         return result.length < 2 ? '0' + result : result;
@@ -468,21 +522,84 @@ $(document).ready(function () {
     }
 
     function extractAfdelingName(value) {
-        var originalName = String(value || '').trim();
-        var match = originalName.match(/afdeling\s*[-_:]?\s*0*(\d+)/i);
+        var originalName = String(value || '')
+            .replace(/^HA\s+/i, '')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .toUpperCase();
 
-        if (match && match[1]) {
-            var afdelingNumber = parseInt(match[1], 10);
+        /*
+        * Contoh:
+        * PEU - MITRA KALIANTA RAYON A -> RAYON A
+        * APMR - MITRA RICKO RAYON A -> RAYON A
+        * MMMA - MITRA PASER RAYON B -> RAYON B
+        */
+        var rayonMatch = originalName.match(/\bRAYON\s+([A-Z0-9]+)\b/i);
+
+        if (rayonMatch && rayonMatch[1]) {
+            return 'RAYON ' + rayonMatch[1].toUpperCase();
+        }
+
+        /*
+        * Contoh:
+        * PEU - TELDA Afdeling 01 -> AFD 01
+        * Afdeling 2 -> AFD 02
+        */
+        var afdelingMatch = originalName.match(
+            /\bAFDELING\s*[-_:]?\s*0*(\d+)\b/i
+        );
+
+        if (afdelingMatch && afdelingMatch[1]) {
+            var afdelingNumber = parseInt(afdelingMatch[1], 10);
 
             if (!isNaN(afdelingNumber)) {
                 return 'AFD ' + padTwoDigits(afdelingNumber);
             }
         }
 
-        return originalName
-            .replace(/^HA\s+/i, '')
-            .trim()
-            .toUpperCase();
+        /*
+        * Antisipasi bila database sudah mengirim AFD 01.
+        */
+        var afdMatch = originalName.match(/\bAFD\s*[-_:]?\s*0*(\d+)\b/i);
+
+        if (afdMatch && afdMatch[1]) {
+            var afdNumber = parseInt(afdMatch[1], 10);
+
+            if (!isNaN(afdNumber)) {
+                return 'AFD ' + padTwoDigits(afdNumber);
+            }
+        }
+
+        return originalName;
+    }
+
+    function sortAfdelingRayonLast(rows, renumber) {
+        var sortedRows = (rows || []).slice().sort(function (a, b) {
+            var nameA = extractAfdelingName(a.DIVISIONNAME || '');
+            var nameB = extractAfdelingName(b.DIVISIONNAME || '');
+
+            var isRayonA = /^RAYON\b/i.test(nameA);
+            var isRayonB = /^RAYON\b/i.test(nameB);
+
+            // AFD selalu di atas, RAYON selalu di bawah
+            if (isRayonA !== isRayonB) {
+                return isRayonA ? 1 : -1;
+            }
+
+            // Urutkan nomor AFD atau huruf RAYON
+            return nameA.localeCompare(nameB, undefined, {
+                numeric: true,
+                sensitivity: 'base'
+            });
+        });
+
+        if (renumber === true) {
+            sortedRows.forEach(function (row, index) {
+                row.NOURUT = index + 1;
+            });
+        }
+
+        return sortedRows;
     }
 
     function removeHaPrefix(columnName) {
@@ -537,10 +654,20 @@ $(document).ready(function () {
         row.HA_TBM = toNumber(row.HA_TBM);
         row.HA_TB = toNumber(row.HA_TB);
         row.HA_LAIN = toNumber(row.HA_LAIN);
-        row.TOTAL_HA = row.HA_TM + row.HA_TBM + row.HA_TB + row.HA_LAIN;
+        row.TOTAL_HA =
+            row.HA_TM +
+            row.HA_TBM +
+            row.HA_TB +
+            row.HA_LAIN;
 
         return row;
     });
+
+    dataAfdeling = sortAfdelingRayonLast(dataAfdeling, true);
+
+    dataTahunTanam = sortAfdelingRayonLast(dataTahunTanam, false);
+    dataBibit = sortAfdelingRayonLast(dataBibit, false);
+    dataTopografi = sortAfdelingRayonLast(dataTopografi, false);
 
     function buildPivotColumns(rows) {
         var columns = [
@@ -695,36 +822,21 @@ $(document).ready(function () {
         '#table-tahun-tanam',
         dataTahunTanam,
         buildPivotColumns(dataTahunTanam),
-        [
-            {
-                column: 'DIVISIONNAME',
-                dir: 'asc'
-            }
-        ]
+        []
     );
 
     var tableBibit = createTable(
         '#table-bibit',
         dataBibit,
         buildPivotColumns(dataBibit),
-        [
-            {
-                column: 'DIVISIONNAME',
-                dir: 'asc'
-            }
-        ]
+        []
     );
 
     var tableTopografi = createTable(
         '#table-topografi',
         dataTopografi,
         buildPivotColumns(dataTopografi),
-        [
-            {
-                column: 'DIVISIONNAME',
-                dir: 'asc'
-            }
-        ]
+        []
     );
 
     function bindSearch(inputSelector, table) {
@@ -782,26 +894,26 @@ $(document).ready(function () {
     bindPageSize('#page-size-topografi', tableTopografi);
 
     var chartColors = [
-        '#3c8dbc',
-        '#00a65a',
-        '#f39c12',
-        '#dd4b39',
-        '#605ca8',
-        '#00c0ef',
-        '#d81b60',
-        '#39cccc',
-        '#ff851b',
-        '#001f3f',
-        '#b10dc9',
-        '#01ff70',
-        '#7f8c8d',
-        '#e67e22',
-        '#2c3e50',
-        '#16a085',
-        '#8e44ad',
-        '#c0392b',
-        '#27ae60',
-        '#2980b9'
+        '#1565C0', // biru
+        '#E53935', // merah
+        '#00897B', // teal
+        '#FB8C00', // oranye
+        '#6A1B9A', // ungu
+        '#7CB342', // hijau muda
+        '#3949AB', // indigo
+        '#FDD835', // kuning
+        '#8D6E63', // cokelat
+        '#00ACC1', // cyan
+        '#D81B60', // magenta
+        '#546E7A', // abu biru
+        '#43A047', // hijau
+        '#F4511E', // oranye merah
+        '#5E35B1', // violet
+        '#C0CA33', // lime
+        '#1E88E5', // biru terang
+        '#C62828', // merah gelap
+        '#00695C', // teal gelap
+        '#EF6C00'  // oranye gelap
     ];
 
     function getChartColor(index) {
@@ -816,13 +928,15 @@ $(document).ready(function () {
 
     function buildPivotChartDatasets(rows) {
         return getHaColumns(rows).map(function (columnName, index) {
+            var color = getChartColor(index);
+
             return {
                 label: getDynamicColumnLabel(columnName),
                 data: (rows || []).map(function (row) {
                     return toNumber(row[columnName]);
                 }),
-                backgroundColor: getChartColor(index),
-                borderColor: getChartColor(index),
+                backgroundColor: color,
+                borderColor: color,
                 borderWidth: 1
             };
         });
@@ -936,37 +1050,37 @@ $(document).ready(function () {
             {
                 label: 'TM',
                 data: dataAfdeling.map(function (row) {
-                    return row.HA_TM;
+                    return toNumber(row.HA_TM);
                 }),
-                backgroundColor: '#3c8dbc',
-                borderColor: '#3c8dbc',
+                backgroundColor: FIXED_STACK_COLORS.TM,
+                borderColor: FIXED_STACK_COLORS.TM,
                 borderWidth: 1
             },
             {
                 label: 'TBM',
                 data: dataAfdeling.map(function (row) {
-                    return row.HA_TBM;
+                    return toNumber(row.HA_TBM);
                 }),
-                backgroundColor: '#00a65a',
-                borderColor: '#00a65a',
+                backgroundColor: FIXED_STACK_COLORS.TBM,
+                borderColor: FIXED_STACK_COLORS.TBM,
                 borderWidth: 1
             },
             {
                 label: 'TB',
                 data: dataAfdeling.map(function (row) {
-                    return row.HA_TB;
+                    return toNumber(row.HA_TB);
                 }),
-                backgroundColor: '#f39c12',
-                borderColor: '#f39c12',
+                backgroundColor: FIXED_STACK_COLORS.TB,
+                borderColor: FIXED_STACK_COLORS.TB,
                 borderWidth: 1
             },
             {
                 label: 'LAIN',
                 data: dataAfdeling.map(function (row) {
-                    return row.HA_LAIN;
+                    return toNumber(row.HA_LAIN);
                 }),
-                backgroundColor: '#dd4b39',
-                borderColor: '#dd4b39',
+                backgroundColor: FIXED_STACK_COLORS.LAIN,
+                borderColor: FIXED_STACK_COLORS.LAIN,
                 borderWidth: 1
             }
         ]

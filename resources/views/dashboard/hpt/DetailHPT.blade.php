@@ -438,7 +438,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         columns: [
             {
-                title: "KODE SITE",
+                title: "KODE BLOK",
                 field: "kodesite",
                 minWidth: 130,
                 frozen: true,

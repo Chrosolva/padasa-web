@@ -515,6 +515,39 @@
 
     /*
     |--------------------------------------------------------------------------
+    | Singkatan Nama PT
+    |--------------------------------------------------------------------------
+    */
+    function abbreviatePTName(name) {
+        var normalizedName = String(name || '').trim().toUpperCase();
+
+        var ptAbbreviations = {
+            'PT. PADASA ENAM UTAMA': 'PEU',
+            'PT PADASA ENAM UTAMA': 'PEU',
+            'PADASA ENAM UTAMA': 'PEU',
+
+            'PT. ALAM PERMAI MAKMUR RAYA': 'APMR',
+            'PT ALAM PERMAI MAKMUR RAYA': 'APMR',
+            'ALAM PERMAI MAKMUR RAYA': 'APMR',
+
+            'PT. BUMI MULIA MAKMUR LESTARI': 'BMML',
+            'PT BUMI MULIA MAKMUR LESTARI': 'BMML',
+            'BUMI MULIA MAKMUR LESTARI': 'BMML',
+
+            'PT. MULTI MAKMUR MITRA ALAM': 'MMMA',
+            'PT MULTI MAKMUR MITRA ALAM': 'MMMA',
+            'MULTI MAKMUR MITRA ALAM': 'MMMA',
+
+            'PT. SINAR ALAM NIAGA RAYA': 'SANR',
+            'PT SINAR ALAM NIAGA RAYA': 'SANR',
+            'SINAR ALAM NIAGA RAYA': 'SANR'
+        };
+
+        return ptAbbreviations[normalizedName] || name || '';
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | Data Wilayah
     |--------------------------------------------------------------------------
     |
@@ -583,7 +616,7 @@
                         : 998
                 ),
 
-            NAMA: row.NAMA || '',
+            NAMA: abbreviatePTName(row.NAMA),
 
             HA_TM: toNumber(row.HA_TM),
             HA_TBM: toNumber(row.HA_TBM),
@@ -1008,29 +1041,29 @@
                     {
                         label: 'TM [HA]',
                         data: chartData.HA_TM,
-                        backgroundColor: '#00a65a',
-                        borderColor: '#008d4c',
+                        backgroundColor: '#16a34a',
+                        borderColor: '#15803d',
                         borderWidth: 1
                     },
                     {
                         label: 'TBM [HA]',
                         data: chartData.HA_TBM,
-                        backgroundColor: '#3c8dbc',
-                        borderColor: '#367fa9',
+                        backgroundColor: '#2563eb',
+                        borderColor: '#1d4ed8',
                         borderWidth: 1
                     },
                     {
                         label: 'TB [HA]',
                         data: chartData.HA_TB,
-                        backgroundColor: '#f39c12',
-                        borderColor: '#e08e0b',
+                        backgroundColor: '#f59e0b',
+                        borderColor: '#d97706',
                         borderWidth: 1
                     },
                     {
                         label: 'LAIN [HA]',
                         data: chartData.HA_LAIN,
-                        backgroundColor: '#dd4b39',
-                        borderColor: '#d73925',
+                        backgroundColor: '#7c3aed',
+                        borderColor: '#6d28d9',
                         borderWidth: 1
                     }
                 ]

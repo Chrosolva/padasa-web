@@ -186,6 +186,43 @@
         font-weight: 600;
     }
 
+    .period-summary {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px 24px;
+        padding: 9px 15px;
+        margin-bottom: 10px;
+        font-size: 13px;
+        background: #f8f9fa;
+        border: 1px solid #d2d6de;
+        border-radius: 3px;
+    }
+
+    .period-summary span {
+        white-space: nowrap;
+    }
+
+    .period-summary strong {
+        margin-right: 4px;
+    }
+
+    @media (max-width: 767px) {
+        .period-summary {
+            display: block;
+        }
+
+        .period-summary span {
+            display: block;
+            margin-bottom: 5px;
+            white-space: normal;
+        }
+
+        .period-summary span:last-child {
+            margin-bottom: 0;
+        }
+    }
+
     @media (max-width: 767px) {
         .table-toolbar {
             display: block;
@@ -297,10 +334,11 @@
                                         name="site_id[]"
                                         class="site-checkbox"
                                         value="{{ $siteId }}"
+                                        data-site-name="{{ $siteName }}"
                                         {{ in_array((string) $siteId, array_map('strval', $selectedSites), true) ? 'checked' : '' }}
                                     >
-                                    <strong>{{ $siteId }}</strong>
-                                    - {{ $siteName }}
+                                    <strong>{{ $siteName }}</strong>
+                                    <small class="text-muted">({{ $siteId }})</small>
                                 </label>
                             @endforeach
                         </div>
@@ -326,32 +364,32 @@
         </div>
     </div>
 
-    <table class="period-information">
-        <tr>
-            <td class="period-label">PERIODE</td>
-            <td class="period-value">BULANAN</td>
-        </tr>
-        <tr>
-            <td class="period-label">TAHUN</td>
-            <td class="period-value">{{ $tahun }}</td>
-        </tr>
-        <tr>
-            <td class="period-label">BULAN</td>
-            <td class="period-value">
-                {{ $namaBulan[$bulan] ?? '' }}
-            </td>
-        </tr>
-        <tr>
-            <td class="period-label">KEBUN</td>
-            <td class="period-value">
-                @if(count($selectedSites) === 0)
-                    SEMUA KEBUN
-                @else
-                    {{ implode(', ', $selectedSites) }}
-                @endif
-            </td>
-        </tr>
-    </table>
+    <div class="period-summary">
+        <span>
+            <strong>Periode:</strong>
+            Bulanan
+        </span>
+
+        <span>
+            <strong>Tahun:</strong>
+            {{ $tahun }}
+        </span>
+
+        <span>
+            <strong>Bulan:</strong>
+            {{ $namaBulan[$bulan] ?? '' }}
+        </span>
+
+        <span>
+            <strong>Kebun:</strong>
+
+            @if(count($selectedSiteNames) === 0)
+                Semua Kebun
+            @else
+                {{ implode(', ', $selectedSiteNames) }}
+            @endif
+        </span>
+    </div>
 
     <div class="panel panel-default">
         <div class="panel-body">
@@ -774,19 +812,22 @@ document.addEventListener("DOMContentLoaded", function () {
             .call(siteCheckboxes)
             .filter(function (checkbox) {
                 return checkbox.checked;
-            })
-            .map(function (checkbox) {
-                return checkbox.value;
             });
 
         if (checkedSites.length === 0) {
             siteDropdownLabel.textContent = "Semua Kebun";
-        } else if (checkedSites.length === 1) {
-            siteDropdownLabel.textContent = checkedSites[0];
-        } else {
-            siteDropdownLabel.textContent =
-                checkedSites.length + " kebun dipilih";
+            return;
         }
+
+        if (checkedSites.length === 1) {
+            siteDropdownLabel.textContent =
+                checkedSites[0].getAttribute("data-site-name");
+
+            return;
+        }
+
+        siteDropdownLabel.textContent =
+            checkedSites.length + " kebun dipilih";
     }
 
     siteDropdownButton.addEventListener("click", function (event) {
