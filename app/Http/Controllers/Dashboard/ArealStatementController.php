@@ -232,6 +232,28 @@ class ArealStatementController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | Query Per Umur Tanaman
+        |--------------------------------------------------------------------------
+        */
+
+        $dataUmur = DB::select("
+            SET NOCOUNT ON;
+
+            EXEC PUBDB.Tanaman.ArealStatement_8_KELOMPOK_UMUR_TANAMAN_V2
+                @kategori = ?,
+                @comp_id = null,
+                @site_id = ?,
+                @tahun = ?,
+                @bulan = ?
+        ", [
+            'HA',
+            $site_id,
+            $tahun,
+            $bulan
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
         | Format Data Per Afdeling
         |--------------------------------------------------------------------------
         |
@@ -261,6 +283,33 @@ class ArealStatementController extends Controller
             unset($row->PKK_TM);
             unset($row->PKK_TBM);
             unset($row->PKK_TB);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Format Data Per Umur
+        |--------------------------------------------------------------------------
+        */
+
+        $noUrutUmur = 1;
+
+        foreach ($dataUmur as $row) {
+            $row->NOURUT = $noUrutUmur++;
+
+            $row->TBM = (float) ($row->TBM ?? 0);
+            $row->MUDA = (float) ($row->MUDA ?? 0);
+            $row->REMAJA = (float) ($row->REMAJA ?? 0);
+            $row->DEWASA = (float) ($row->DEWASA ?? 0);
+            $row->TUA = (float) ($row->TUA ?? 0);
+            $row->REPLANTING = (float) ($row->REPLANTING ?? 0);
+
+            $row->TOTAL_HA =
+                $row->TBM +
+                $row->MUDA +
+                $row->REMAJA +
+                $row->DEWASA +
+                $row->TUA +
+                $row->REPLANTING;
         }
 
         /*
@@ -343,6 +392,7 @@ class ArealStatementController extends Controller
             'dataTahunTanam' => $dataTahunTanam,
             'dataBibit' => $dataBibit,
             'dataTopografi' => $dataTopografi,
+            'dataUmur' => $dataUmur,
 
             'columnsTahunTanam' => $columnsTahunTanam,
             'columnsBibit' => $columnsBibit,

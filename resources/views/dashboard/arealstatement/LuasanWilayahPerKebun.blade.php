@@ -82,6 +82,11 @@
                     <i class="fa fa-area-chart"></i> Per Topografi
                 </a>
             </li>
+            <li>
+                <a href="#tab-umur" data-toggle="tab">
+                    <i class="fa fa-clock-o"></i> Per Umur
+                </a>
+            </li>
         </ul>
 
         <div class="tab-content">
@@ -260,6 +265,65 @@
                     </div>
                 </div>
             </div>
+
+            {{-- PER UMUR --}}
+            <div class="tab-pane" id="tab-umur">
+
+                {{-- CHART --}}
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Distribusi Luasan Berdasarkan Kelompok Umur Tanaman
+                        </h3>
+                    </div>
+
+                    <div class="box-body">
+                        <div class="chart-container">
+                            <canvas id="chartUmur"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- TABLE --}}
+                <div class="box box-info">
+                    <div class="box-body">
+
+                        <div class="table-area">
+
+                            <div class="table-toolbar">
+
+                                <div class="table-toolbar-left">
+                                    <label for="page-size-umur">Tampilkan:</label>
+
+                                    <select id="page-size-umur"
+                                            class="form-control input-sm table-page-size">
+                                        <option value="10">10</option>
+                                        <option value="25" selected>25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+
+                                    <span>baris</span>
+                                </div>
+
+                                <div class="table-toolbar-right">
+                                    <label for="search-umur">Search:</label>
+
+                                    <input type="text"
+                                        id="search-umur"
+                                        class="form-control input-sm table-search"
+                                        placeholder="Cari kebun atau nilai..."
+                                        autocomplete="off">
+                                </div>
+
+                            </div>
+
+                            <div id="table-umur"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -307,7 +371,8 @@
     #table-afdeling,
     #table-tahun-tanam,
     #table-bibit,
-    #table-topografi {
+    #table-topografi,
+    #table-umur {
         width: 100%;
         max-width: 100%;
         height: 350px;
@@ -425,6 +490,13 @@ $(document).ready(function () {
 
     var dataTopografi = {!! json_encode(
         $dataTopografi ?? [],
+        JSON_UNESCAPED_UNICODE |
+        JSON_UNESCAPED_SLASHES |
+        JSON_NUMERIC_CHECK
+    ) !!};
+
+    var dataUmur = {!! json_encode(
+        $dataUmur ?? [],
         JSON_UNESCAPED_UNICODE |
         JSON_UNESCAPED_SLASHES |
         JSON_NUMERIC_CHECK
@@ -669,6 +741,32 @@ $(document).ready(function () {
     dataBibit = sortAfdelingRayonLast(dataBibit, false);
     dataTopografi = sortAfdelingRayonLast(dataTopografi, false);
 
+    dataUmur = (dataUmur || []).map(function (row, index) {
+
+        row.NOURUT = toNumber(row.NOURUT || index + 1);
+
+        row.KEBUN = String(row.KEBUN || '')
+            .trim()
+            .toUpperCase();
+
+        row.TBM = toNumber(row.TBM);
+        row.MUDA = toNumber(row.MUDA);
+        row.REMAJA = toNumber(row.REMAJA);
+        row.DEWASA = toNumber(row.DEWASA);
+        row.TUA = toNumber(row.TUA);
+        row.REPLANTING = toNumber(row.REPLANTING);
+
+        row.TOTAL_HA =
+            row.TBM +
+            row.MUDA +
+            row.REMAJA +
+            row.DEWASA +
+            row.TUA +
+            row.REPLANTING;
+
+        return row;
+    });
+
     function buildPivotColumns(rows) {
         var columns = [
             {
@@ -839,6 +937,110 @@ $(document).ready(function () {
         []
     );
 
+    var tableUmur = createTable(
+        '#table-umur',
+        dataUmur,
+        [
+            {
+                title: 'NO',
+                field: 'NOURUT',
+                sorter: 'number',
+                hozAlign: 'center',
+                width: 60,
+                minWidth: 55,
+                bottomCalc: function () {
+                    return '~';
+                }
+            },
+            {
+                title: 'KEBUN',
+                field: 'KEBUN',
+                sorter: 'string',
+                minWidth: 130,
+                width: 150,
+                bottomCalc: function () {
+                    return 'TOTAL';
+                }
+            },
+            {
+                title: 'TBM<br>[HA]',
+                field: 'TBM',
+                sorter: 'number',
+                hozAlign: 'right',
+                minWidth: 100,
+                formatter: hectareFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: hectareBottomFormatter
+            },
+            {
+                title: 'MUDA<br>[HA]',
+                field: 'MUDA',
+                sorter: 'number',
+                hozAlign: 'right',
+                minWidth: 100,
+                formatter: hectareFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: hectareBottomFormatter
+            },
+            {
+                title: 'REMAJA<br>[HA]',
+                field: 'REMAJA',
+                sorter: 'number',
+                hozAlign: 'right',
+                minWidth: 105,
+                formatter: hectareFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: hectareBottomFormatter
+            },
+            {
+                title: 'DEWASA<br>[HA]',
+                field: 'DEWASA',
+                sorter: 'number',
+                hozAlign: 'right',
+                minWidth: 105,
+                formatter: hectareFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: hectareBottomFormatter
+            },
+            {
+                title: 'TUA<br>[HA]',
+                field: 'TUA',
+                sorter: 'number',
+                hozAlign: 'right',
+                minWidth: 100,
+                formatter: hectareFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: hectareBottomFormatter
+            },
+            {
+                title: 'REPLANTING<br>[HA]',
+                field: 'REPLANTING',
+                sorter: 'number',
+                hozAlign: 'right',
+                minWidth: 120,
+                formatter: hectareFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: hectareBottomFormatter
+            },
+            {
+                title: 'TOTAL<br>[HA]',
+                field: 'TOTAL_HA',
+                sorter: 'number',
+                hozAlign: 'right',
+                minWidth: 110,
+                formatter: hectareFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: hectareBottomFormatter
+            }
+        ],
+        [
+            {
+                column: 'NOURUT',
+                dir: 'asc'
+            }
+        ]
+    );
+
     function bindSearch(inputSelector, table) {
         $(inputSelector).on('keyup change', function () {
             var keyword = String($(this).val() || '')
@@ -887,11 +1089,13 @@ $(document).ready(function () {
     bindSearch('#search-tahun-tanam', tableTahunTanam);
     bindSearch('#search-bibit', tableBibit);
     bindSearch('#search-topografi', tableTopografi);
+    bindSearch('#search-umur', tableUmur);
 
     bindPageSize('#page-size-afdeling', tableAfdeling);
     bindPageSize('#page-size-tahun-tanam', tableTahunTanam);
     bindPageSize('#page-size-bibit', tableBibit);
     bindPageSize('#page-size-topografi', tableTopografi);
+    bindPageSize('#page-size-umur', tableUmur);
 
     var chartColors = [
         '#1565C0', // biru
@@ -915,6 +1119,15 @@ $(document).ready(function () {
         '#00695C', // teal gelap
         '#EF6C00'  // oranye gelap
     ];
+
+    var UMUR_CHART_COLORS = {
+        TBM: '#1565C0',        // biru
+        MUDA: '#E53935',       // merah
+        REMAJA: '#00897B',     // teal
+        DEWASA: '#FB8C00',     // orange
+        TUA: '#6A1B9A',        // ungu
+        REPLANTING: '#7CB342'  // hijau lime
+    };
 
     function getChartColor(index) {
         return chartColors[index % chartColors.length];
@@ -1104,6 +1317,71 @@ $(document).ready(function () {
         buildPivotChartDatasets(dataTopografi)
     );
 
+    var chartUmur = createHorizontalStackedChart(
+        'chartUmur',
+
+        dataUmur.map(function (row) {
+            return row.KEBUN;
+        }),
+
+        [
+            {
+                label: 'TBM',
+                data: dataUmur.map(function (row) {
+                    return row.TBM;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.TBM,
+                borderColor: UMUR_CHART_COLORS.TBM,
+                borderWidth: 1
+            },
+            {
+                label: 'MUDA',
+                data: dataUmur.map(function (row) {
+                    return row.MUDA;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.MUDA,
+                borderColor: UMUR_CHART_COLORS.MUDA,
+                borderWidth: 1
+            },
+            {
+                label: 'REMAJA',
+                data: dataUmur.map(function (row) {
+                    return row.REMAJA;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.REMAJA,
+                borderColor: UMUR_CHART_COLORS.REMAJA,
+                borderWidth: 1
+            },
+            {
+                label: 'DEWASA',
+                data: dataUmur.map(function (row) {
+                    return row.DEWASA;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.DEWASA,
+                borderColor: UMUR_CHART_COLORS.DEWASA,
+                borderWidth: 1
+            },
+            {
+                label: 'TUA',
+                data: dataUmur.map(function (row) {
+                    return row.TUA;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.TUA,
+                borderColor: UMUR_CHART_COLORS.TUA,
+                borderWidth: 1
+            },
+            {
+                label: 'REPLANTING',
+                data: dataUmur.map(function (row) {
+                    return row.REPLANTING;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.REPLANTING,
+                borderColor: UMUR_CHART_COLORS.REPLANTING,
+                borderWidth: 1
+            }
+        ]
+    );
+
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (event) {
         var target = $(event.target).attr('href');
 
@@ -1139,6 +1417,14 @@ $(document).ready(function () {
                     chartTopografi.resize();
                 }
             }
+
+            if (target === '#tab-umur') {
+                tableUmur.redraw(true);
+
+                if (chartUmur) {
+                    chartUmur.resize();
+                }
+            }
         }, 150);
     });
 
@@ -1152,6 +1438,7 @@ $(document).ready(function () {
             tableTahunTanam.redraw(true);
             tableBibit.redraw(true);
             tableTopografi.redraw(true);
+            tableUmur.redraw(true);
 
             if (chartAfdeling) {
                 chartAfdeling.resize();
@@ -1167,6 +1454,10 @@ $(document).ready(function () {
 
             if (chartTopografi) {
                 chartTopografi.resize();
+            }
+
+            if (chartUmur) {
+                chartUmur.resize();
             }
         }, 200);
     });
