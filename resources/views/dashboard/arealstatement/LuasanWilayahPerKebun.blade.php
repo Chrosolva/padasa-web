@@ -841,6 +841,13 @@ $(document).ready(function () {
             .trim()
             .toUpperCase();
 
+        row.DIVISIONCODE = String(row.DIVISIONCODE || '')
+            .trim()
+            .toUpperCase();
+
+        row.DIVISIONNAME = String(row.DIVISIONNAME || '')
+            .trim();
+
         row.TBM = toNumber(row.TBM);
         row.MUDA = toNumber(row.MUDA);
         row.REMAJA = toNumber(row.REMAJA);
@@ -858,6 +865,8 @@ $(document).ready(function () {
 
         return row;
     });
+
+    dataUmur = sortAfdelingRayonLast(dataUmur, true);
 
     function buildPivotColumns(rows) {
         var columns = [
@@ -1045,11 +1054,14 @@ $(document).ready(function () {
                 }
             },
             {
-                title: 'KEBUN',
-                field: 'KEBUN',
+                title: 'AFD',
+                field: 'DIVISIONNAME',
                 sorter: 'string',
-                minWidth: 130,
-                width: 150,
+                minWidth: 100,
+                width: 100,
+                formatter: function (cell) {
+                    return extractAfdelingName(cell.getValue());
+                },
                 bottomCalc: function () {
                     return 'TOTAL';
                 }
@@ -1412,9 +1424,7 @@ $(document).ready(function () {
     var chartUmur = createHorizontalStackedChart(
         'chartUmur',
 
-        dataUmur.map(function (row) {
-            return row.KEBUN;
-        }),
+        getAfdelingLabels(dataUmur),
 
         [
             {

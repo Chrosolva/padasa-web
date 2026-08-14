@@ -286,6 +286,13 @@
                             Per PT
                         </a>
                     </li>
+                    <li>
+                        <a href="#tab-umur"
+                        data-toggle="tab">
+                            <i class="fa fa-clock-o"></i>
+                            Per Umur
+                        </a>
+                    </li>
 
                 </ul>
 
@@ -438,6 +445,64 @@
 
                                 <div class="tabulator-wrapper">
                                     <div id="table-pt"></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane" id="tab-umur">
+
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">
+                                    Distribusi Luasan Berdasarkan Kelompok Umur Tanaman
+                                </h3>
+                            </div>
+
+                            <div class="box-body">
+                                <div class="chart-container">
+                                    <canvas id="chartUmur"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box box-info">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">
+                                    Luasan Per Umur Tanaman
+                                </h3>
+                            </div>
+
+                            <div class="box-body">
+
+                                <div class="table-toolbar">
+
+                                    <div class="table-toolbar-left">
+                                        <div class="input-group table-search">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+
+                                            <input type="text"
+                                                id="search-umur"
+                                                class="form-control"
+                                                placeholder="Cari kebun atau nilai...">
+                                        </div>
+
+                                        <button type="button"
+                                                id="reset-umur"
+                                                class="btn btn-default">
+                                            <i class="fa fa-times"></i>
+                                            Reset
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                <div class="tabulator-wrapper">
+                                    <div id="table-umur"></div>
                                 </div>
 
                             </div>
@@ -626,6 +691,33 @@
         });
     });
 
+    var rawUmurData = @json($dataUmur ?? []);
+
+    var umurTableData = rawUmurData.map(function (row, index) {
+        return {
+            NO: row.NOURUT || (index + 1),
+
+            KEBUN: String(row.KEBUN || '')
+                .trim()
+                .toUpperCase(),
+
+            TBM: toNumber(row.TBM),
+            MUDA: toNumber(row.MUDA),
+            REMAJA: toNumber(row.REMAJA),
+            DEWASA: toNumber(row.DEWASA),
+            TUA: toNumber(row.TUA),
+            REPLANTING: toNumber(row.REPLANTING),
+
+            TOTAL_HA:
+                toNumber(row.TBM) +
+                toNumber(row.MUDA) +
+                toNumber(row.REMAJA) +
+                toNumber(row.DEWASA) +
+                toNumber(row.TUA) +
+                toNumber(row.REPLANTING)
+        };
+    });
+
     /*
     |--------------------------------------------------------------------------
     | Kolom Tabulator
@@ -717,6 +809,107 @@
             }
         ];
     }
+
+    var tableUmur = new Tabulator('#table-umur', {
+        data: umurTableData,
+        layout: 'fitData',
+        height: '350px',
+
+        pagination: 'local',
+        paginationSize: 25,
+
+        movableColumns: true,
+        resizableColumns: true,
+
+        initialSort: [
+            {
+                column: 'NO',
+                dir: 'asc'
+            }
+        ],
+
+        columns: [
+            {
+                title: 'NO',
+                field: 'NO',
+                sorter: 'number',
+                width: 60,
+                hozAlign: 'center'
+            },
+            {
+                title: 'KEBUN',
+                field: 'KEBUN',
+                sorter: 'string',
+                width: 140,
+                bottomCalc: function () {
+                    return 'TOTAL';
+                }
+            },
+            {
+                title: 'TBM<br>[HA]',
+                field: 'TBM',
+                sorter: 'number',
+                hozAlign: 'right',
+                formatter: numberFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: bottomNumberFormatter
+            },
+            {
+                title: 'MUDA<br>[HA]',
+                field: 'MUDA',
+                sorter: 'number',
+                hozAlign: 'right',
+                formatter: numberFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: bottomNumberFormatter
+            },
+            {
+                title: 'REMAJA<br>[HA]',
+                field: 'REMAJA',
+                sorter: 'number',
+                hozAlign: 'right',
+                formatter: numberFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: bottomNumberFormatter
+            },
+            {
+                title: 'DEWASA<br>[HA]',
+                field: 'DEWASA',
+                sorter: 'number',
+                hozAlign: 'right',
+                formatter: numberFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: bottomNumberFormatter
+            },
+            {
+                title: 'TUA<br>[HA]',
+                field: 'TUA',
+                sorter: 'number',
+                hozAlign: 'right',
+                formatter: numberFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: bottomNumberFormatter
+            },
+            {
+                title: 'REPLANTING<br>[HA]',
+                field: 'REPLANTING',
+                sorter: 'number',
+                hozAlign: 'right',
+                formatter: numberFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: bottomNumberFormatter
+            },
+            {
+                title: 'TOTAL<br>[HA]',
+                field: 'TOTAL_HA',
+                sorter: 'number',
+                hozAlign: 'right',
+                formatter: numberFormatter,
+                bottomCalc: 'sum',
+                bottomCalcFormatter: bottomNumberFormatter
+            }
+        ]
+    });
 
     /*
     |--------------------------------------------------------------------------
@@ -917,6 +1110,15 @@
         tablePT.setSort('NO', 'asc');
         tablePT.setPage(1);
     });
+
+    var UMUR_CHART_COLORS = {
+        TBM: '#1565C0',
+        MUDA: '#E53935',
+        REMAJA: '#00897B',
+        DEWASA: '#FB8C00',
+        TUA: '#6A1B9A',
+        REPLANTING: '#7CB342'
+    };
 
     /*
     |--------------------------------------------------------------------------
@@ -1186,6 +1388,71 @@
     var ptChartData = prepareStackedChartData(
         ptTableData,
         'NAMA'
+    );
+
+    var chartUmur = createHorizontalStackedChart(
+        'chartUmur',
+
+        umurTableData.map(function (row) {
+            return row.KEBUN;
+        }),
+
+        [
+            {
+                label: 'TBM',
+                data: umurTableData.map(function (row) {
+                    return row.TBM;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.TBM,
+                borderColor: UMUR_CHART_COLORS.TBM,
+                borderWidth: 1
+            },
+            {
+                label: 'MUDA',
+                data: umurTableData.map(function (row) {
+                    return row.MUDA;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.MUDA,
+                borderColor: UMUR_CHART_COLORS.MUDA,
+                borderWidth: 1
+            },
+            {
+                label: 'REMAJA',
+                data: umurTableData.map(function (row) {
+                    return row.REMAJA;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.REMAJA,
+                borderColor: UMUR_CHART_COLORS.REMAJA,
+                borderWidth: 1
+            },
+            {
+                label: 'DEWASA',
+                data: umurTableData.map(function (row) {
+                    return row.DEWASA;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.DEWASA,
+                borderColor: UMUR_CHART_COLORS.DEWASA,
+                borderWidth: 1
+            },
+            {
+                label: 'TUA',
+                data: umurTableData.map(function (row) {
+                    return row.TUA;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.TUA,
+                borderColor: UMUR_CHART_COLORS.TUA,
+                borderWidth: 1
+            },
+            {
+                label: 'REPLANTING',
+                data: umurTableData.map(function (row) {
+                    return row.REPLANTING;
+                }),
+                backgroundColor: UMUR_CHART_COLORS.REPLANTING,
+                borderColor: UMUR_CHART_COLORS.REPLANTING,
+                borderWidth: 1
+            }
+        ]
     );
 
     /*

@@ -48,12 +48,49 @@ class ArealStatementController extends Controller
             [$comp_id, $site_id, $tahun, $bulan]
         );
 
+        $dataUmur = DB::select("
+            SET NOCOUNT ON;
+
+            EXEC PUBDB.Tanaman.ArealStatement_8_KELOMPOK_UMUR_TANAMAN_V2
+                @kategori = ?,
+                @comp_id = null,
+                @site_id = null,
+                @tahun = ?,
+                @bulan = ?
+        ", [
+            'HA',
+            $tahun,
+            $bulan
+        ]);
+
         $wilayah = $this->addTotalHaAndSubtotal($wilayah, 'REGION');
         $pt = $this->addTotalHaAndSubtotal($pt, 'NAMA');
+
+        $noUrutUmur = 1;
+
+        foreach ($dataUmur as $row) {
+            $row->NOURUT = $noUrutUmur++;
+
+            $row->TBM = (float) ($row->TBM ?? 0);
+            $row->MUDA = (float) ($row->MUDA ?? 0);
+            $row->REMAJA = (float) ($row->REMAJA ?? 0);
+            $row->DEWASA = (float) ($row->DEWASA ?? 0);
+            $row->TUA = (float) ($row->TUA ?? 0);
+            $row->REPLANTING = (float) ($row->REPLANTING ?? 0);
+
+            $row->TOTAL_HA =
+                $row->TBM +
+                $row->MUDA +
+                $row->REMAJA +
+                $row->DEWASA +
+                $row->TUA +
+                $row->REPLANTING;
+        }
 
         return view('dashboard.arealstatement.BreakdownLuasanWilayahPT')->with([
             'wilayah' => $wilayah,
             'pt' => $pt,
+            'dataUmur' => $dataUmur,
             'tahun' => $tahun,
             'bulan' => $bulan
         ]);
@@ -239,7 +276,7 @@ class ArealStatementController extends Controller
         $dataUmur = DB::select("
             SET NOCOUNT ON;
 
-            EXEC PUBDB.Tanaman.ArealStatement_8_KELOMPOK_UMUR_TANAMAN_V2
+            EXEC PUBDB.Tanaman.ArealStatement_8_KELOMPOK_UMUR_TANAMAN_AFDELING
                 @kategori = ?,
                 @comp_id = null,
                 @site_id = ?,
