@@ -289,12 +289,9 @@
                     <div class="box-body">
 
                         <div class="table-area">
-
                             <div class="table-toolbar">
-
                                 <div class="table-toolbar-left">
                                     <label for="page-size-umur">Tampilkan:</label>
-
                                     <select id="page-size-umur"
                                             class="form-control input-sm table-page-size">
                                         <option value="10">10</option>
@@ -302,24 +299,70 @@
                                         <option value="50">50</option>
                                         <option value="100">100</option>
                                     </select>
-
                                     <span>baris</span>
                                 </div>
 
                                 <div class="table-toolbar-right">
                                     <label for="search-umur">Search:</label>
-
                                     <input type="text"
                                         id="search-umur"
                                         class="form-control input-sm table-search"
                                         placeholder="Cari kebun atau nilai..."
                                         autocomplete="off">
                                 </div>
-
                             </div>
 
-                            <div id="table-umur"></div>
+                            <div class="table-with-note">
+                                <div class="table-main">
+                                    <div id="table-umur"></div>
+                                </div>
 
+                                <div class="umur-note-box">
+                                    <div class="umur-note-title">Keterangan Kelompok Umur</div>
+
+                                    <table class="table table-bordered table-condensed umur-note-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Kelompok Umur</th>
+                                                <th>Kelompok</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>0 - 3 tahun</td>
+                                                <td>TBM</td>
+                                                <td>TBM</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4 - 7 tahun</td>
+                                                <td>TM</td>
+                                                <td>Muda</td>
+                                            </tr>
+                                            <tr>
+                                                <td>8 - 13 tahun</td>
+                                                <td>TM</td>
+                                                <td>Remaja</td>
+                                            </tr>
+                                            <tr>
+                                                <td>14 - 20 tahun</td>
+                                                <td>TM</td>
+                                                <td>Dewasa</td>
+                                            </tr>
+                                            <tr>
+                                                <td>> 20 tahun</td>
+                                                <td>TM</td>
+                                                <td>Tua</td>
+                                            </tr>
+                                            <tr>
+                                                <td>> 25 tahun</td>
+                                                <td>Replanting</td>
+                                                <td>Replanting</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -444,6 +487,55 @@
 
     .tabulator .tabulator-footer {
         background-color: #ffffff;
+    }
+
+    .table-with-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        width: 100%;
+    }
+
+    .table-main {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .umur-note-box {
+        flex: 0 0 290px;
+        border: 1px solid #d2d6de;
+        background: #fff;
+        padding: 10px;
+        border-radius: 3px;
+    }
+
+    .umur-note-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #444;
+    }
+
+    .umur-note-table {
+        margin-bottom: 0;
+        font-size: 12px;
+    }
+
+    .umur-note-table th,
+    .umur-note-table td {
+        padding: 6px 8px !important;
+        vertical-align: middle !important;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 991px) {
+        .table-with-note {
+            flex-direction: column;
+        }
+
+        .umur-note-box {
+            width: 100%;
+            flex: none;
+        }
     }
 
     @media (max-width: 767px) {
