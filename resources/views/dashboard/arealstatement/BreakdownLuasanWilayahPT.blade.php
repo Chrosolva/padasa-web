@@ -6,18 +6,30 @@
 
 @section('main-content')
 
-{{-- ========================================================= --}}
-{{-- TABULATOR CSS --}}
-{{-- ========================================================= --}}
-<link rel="stylesheet"
-      href="https://unpkg.com/tabulator-tables@5.6.2/dist/css/tabulator.min.css">
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/tabulator-tables@5.6.2/dist/css/tabulator.min.css"
+>
 
 <style>
-    /*
-    |--------------------------------------------------------------------------
-    | Tabulator Container
-    |--------------------------------------------------------------------------
-    */
+    .chart-container {
+        position: relative;
+        width: 100%;
+        height: 260px;
+    }
+
+    .compact-box {
+        margin-bottom: 10px;
+    }
+
+    .compact-box .box-header {
+        padding: 8px 10px;
+    }
+
+    .compact-box .box-body {
+        padding: 10px;
+    }
+
     .tabulator-wrapper {
         width: 100%;
         overflow: hidden;
@@ -26,19 +38,13 @@
     .tabulator {
         width: 100%;
         border: 1px solid #d2d6de;
-        font-size: 13px;
+        font-size: 12px;
         background-color: #ffffff;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Header
-    |--------------------------------------------------------------------------
-    */
     .tabulator .tabulator-header {
-        border-bottom: 2px solid #d2d6de;
         background-color: #f4f4f4;
-        color: #333333;
+        border-bottom: 2px solid #d2d6de;
         font-weight: 600;
     }
 
@@ -47,146 +53,152 @@
         border-right: 1px solid #d2d6de;
     }
 
-    .tabulator .tabulator-header .tabulator-col:last-child {
-        border-right: none;
-    }
-
     .tabulator .tabulator-header .tabulator-col-content {
-        padding: 8px 5px;
+        padding: 6px 5px;
     }
 
     .tabulator .tabulator-header .tabulator-col-title {
         white-space: normal;
-        line-height: 17px;
+        line-height: 15px;
         text-align: center;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Row dan Cell
-    |--------------------------------------------------------------------------
-    */
     .tabulator .tabulator-row {
-        min-height: 31px;
+        min-height: 27px;
+    }
+
+    .tabulator .tabulator-row .tabulator-cell {
+        padding: 4px 6px;
+        border-right: 1px solid #eeeeee;
         border-bottom: 1px solid #eeeeee;
     }
 
     .tabulator .tabulator-row:nth-child(even) {
-        background-color: #f9f9f9;
+        background-color: #fafafa;
     }
 
     .tabulator .tabulator-row:hover {
         background-color: #eef6ff;
     }
 
-    .tabulator .tabulator-row .tabulator-cell {
-        padding: 6px 7px;
-        border-right: 1px solid #eeeeee;
-        line-height: 18px;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Bottom Calculation / Total
-    |--------------------------------------------------------------------------
-    */
     .tabulator .tabulator-calcs-holder {
         background-color: #eaf2ff;
         border-top: 2px solid #3c8dbc;
     }
 
-    .tabulator .tabulator-calcs-holder .tabulator-row {
+    .tabulator .tabulator-calcs-holder .tabulator-row,
+    .tabulator .tabulator-calcs-holder .tabulator-cell {
         background-color: #eaf2ff !important;
-        color: #222222;
         font-weight: bold;
     }
 
-    .tabulator .tabulator-calcs-holder .tabulator-cell {
-        background-color: #eaf2ff !important;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Pagination
-    |--------------------------------------------------------------------------
-    */
     .tabulator .tabulator-footer {
-        padding: 7px;
-        background-color: #ffffff;
-        border-top: 1px solid #d2d6de;
-    }
-
-    .tabulator .tabulator-footer .tabulator-page {
-        padding: 4px 9px;
-        margin: 2px;
-        border: 1px solid #d2d6de;
-        border-radius: 3px;
+        padding: 5px;
         background-color: #ffffff;
     }
 
-    .tabulator .tabulator-footer .tabulator-page.active {
-        color: #ffffff;
-        background-color: #3c8dbc;
-        border-color: #367fa9;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Table Toolbar
-    |--------------------------------------------------------------------------
-    */
     .table-toolbar {
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 10px;
+        gap: 10px;
+        margin-bottom: 8px;
     }
 
-    .table-toolbar-left {
+    .table-toolbar-left,
+    .table-toolbar-right {
         display: flex;
         align-items: center;
-        flex-wrap: wrap;
         gap: 6px;
     }
 
+    .table-page-size {
+        width: 80px !important;
+    }
+
     .table-search {
-        width: 240px;
-        max-width: 100%;
+        width: 230px !important;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Chart
-    |--------------------------------------------------------------------------
-    */
-    .chart-container {
-        position: relative;
+    #table-wilayah,
+    #table-pt,
+    #table-umur {
         width: 100%;
-        height: 320px;  
+        max-width: 100%;
+        height: 280px;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Mobile
-    |--------------------------------------------------------------------------
-    */
+    .table-with-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        width: 100%;
+    }
+
+    .table-main {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .umur-note-box {
+        flex: 0 0 300px;
+        border: 1px solid #d2d6de;
+        background-color: #ffffff;
+        padding: 8px;
+        border-radius: 3px;
+    }
+
+    .umur-note-title {
+        font-weight: 600;
+        margin-bottom: 7px;
+        color: #444444;
+    }
+
+    .umur-note-table {
+        margin-bottom: 0;
+        font-size: 11px;
+    }
+
+    .umur-note-table th,
+    .umur-note-table td {
+        padding: 5px 6px !important;
+        vertical-align: middle !important;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 991px) {
+        .table-with-note {
+            flex-direction: column;
+        }
+
+        .umur-note-box {
+            width: 100%;
+            flex: none;
+        }
+    }
+
     @media (max-width: 767px) {
         .table-toolbar {
             display: block;
         }
 
-        .table-toolbar-left {
-            margin-bottom: 8px;
+        .table-toolbar-right {
+            margin-top: 8px;
         }
 
         .table-search {
-            width: 100%;
+            width: 100% !important;
         }
 
         .chart-container {
-            height: 420px;
+            height: 300px;
+        }
+
+        #table-wilayah,
+        #table-pt,
+        #table-umur {
+            height: 300px;
         }
     }
 </style>
@@ -200,324 +212,376 @@
 
 <section class="content">
 
-    {{-- ===================================================== --}}
     {{-- FILTER --}}
-    {{-- ===================================================== --}}
     <div class="panel">
         <div class="panel-body">
-
-            <form role="form"
-                  class="form-inline"
-                  method="GET"
-                  action="{{ url('/dashboard/arealstatement/breakdown-luasan-wilayah-pt') }}">
-
+            <form
+                method="GET"
+                action="{{ url('/dashboard/arealstatement/breakdown-luasan-wilayah-pt') }}"
+                class="form-inline"
+            >
                 <div class="form-group">
-                    <label for="tahun">Tahun : </label>
+                    <label for="tahun">Tahun :</label>
 
-                    <div class="input-group date input-inline"
-                         style="width:175px;">
-
+                    <div
+                        class="input-group date input-inline"
+                        style="width: 175px;"
+                    >
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
 
-                        <input type="number"
-                               class="form-control"
-                               id="tahun"
-                               name="tahun"
-                               value="{{ Request::get('tahun') ?: ($tahun ?? date('Y', strtotime('first day of last month'))) }}">
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="tahun"
+                            name="tahun"
+                            value="{{ Request::get('tahun') ?: ($tahun ?? date('Y', strtotime('first day of last month'))) }}"
+                        >
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="bulan">Bulan : </label>
+                    <label for="bulan">Bulan :</label>
 
-                    <div class="input-group date input-inline"
-                         style="width:175px;">
-
+                    <div
+                        class="input-group date input-inline"
+                        style="width: 175px;"
+                    >
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
 
-                        <input type="number"
-                               class="form-control"
-                               id="bulan"
-                               name="bulan"
-                               min="1"
-                               max="12"
-                               value="{{ Request::get('bulan') ?: ($bulan ?? date('m', strtotime('first day of last month'))) }}">
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="bulan"
+                            name="bulan"
+                            min="1"
+                            max="12"
+                            value="{{ Request::get('bulan') ?: ($bulan ?? date('m', strtotime('first day of last month'))) }}"
+                        >
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <button type="submit"
-                            class="btn btn-primary">
-                        <i class="fa fa-filter"></i>
-                        Filter
-                    </button>
-                </div>
-
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    <i class="fa fa-filter"></i> Filter
+                </button>
             </form>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-8 col-sm-12 col-xs-12">
+    {{-- TABS --}}
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a
+                    href="#tab-wilayah"
+                    data-toggle="tab"
+                >
+                    <i class="fa fa-map"></i> Per Wilayah
+                </a>
+            </li>
 
-            <div class="nav-tabs-custom">
+            <li>
+                <a
+                    href="#tab-pt"
+                    data-toggle="tab"
+                >
+                    <i class="fa fa-building"></i> Per PT
+                </a>
+            </li>
 
-                {{-- ===================================================== --}}
-                {{-- TAB HEADER --}}
-                {{-- ===================================================== --}}
-                <ul class="nav nav-tabs">
+            <li>
+                <a
+                    href="#tab-umur"
+                    data-toggle="tab"
+                >
+                    <i class="fa fa-clock-o"></i> Per Umur
+                </a>
+            </li>
+        </ul>
 
-                    <li class="active">
-                        <a href="#tab-wilayah"
-                           data-toggle="tab">
-                            <i class="fa fa-map"></i>
-                            Per Wilayah
-                        </a>
-                    </li>
+        <div class="tab-content">
 
-                    <li>
-                        <a href="#tab-pt"
-                           data-toggle="tab">
-                            <i class="fa fa-building"></i>
-                            Per PT
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#tab-umur"
-                        data-toggle="tab">
-                            <i class="fa fa-clock-o"></i>
-                            Per Umur
-                        </a>
-                    </li>
-
-                </ul>
-
-                <div class="tab-content">
-
-                    {{-- ================================================= --}}
-                    {{-- TAB WILAYAH --}}
-                    {{-- ================================================= --}}
-                    <div class="tab-pane active"
-                         id="tab-wilayah">
-
-                        {{-- CHART WILAYAH --}}
-                        <div class="box box-primary">
-
-                            <div class="box-header with-border">
-                                <h3 class="box-title">
-                                    Komposisi Luasan HA Per Wilayah
-                                </h3>
-                            </div>
-
-                            <div class="box-body">
-                                <div class="chart-container">
-                                    <canvas id="chartWilayah"></canvas>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        {{-- TABLE WILAYAH --}}
-                        <div class="box box-success">
-
-                            <div class="box-header with-border">
-                                <h3 class="box-title">
-                                    Luasan Per Wilayah
-                                </h3>
-                            </div>
-
-                            <div class="box-body">
-
-                                <div class="table-toolbar">
-
-                                    <div class="table-toolbar-left">
-
-                                        <div class="input-group table-search">
-
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-search"></i>
-                                            </span>
-
-                                            <input type="text"
-                                                   id="search-wilayah"
-                                                   class="form-control"
-                                                   placeholder="Cari data wilayah...">
-
-                                        </div>
-
-                                        <button type="button"
-                                                id="reset-wilayah"
-                                                class="btn btn-default">
-                                            <i class="fa fa-times"></i>
-                                            Reset
-                                        </button>
-
-                                    </div>
-
-                                    <div>
-                                        <small class="text-muted">
-                                            Klik header kolom untuk mengurutkan
-                                        </small>
-                                    </div>
-
-                                </div>
-
-                                <div class="tabulator-wrapper">
-                                    <div id="table-wilayah"></div>
-                                </div>
-
-                            </div>
-                        </div>
-
+            {{-- ========================================================= --}}
+            {{-- PER WILAYAH --}}
+            {{-- ========================================================= --}}
+            <div
+                class="tab-pane active"
+                id="tab-wilayah"
+            >
+                <div class="box box-primary compact-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Komposisi Luasan HA Per Wilayah
+                        </h3>
                     </div>
 
-                    {{-- ================================================= --}}
-                    {{-- TAB PT --}}
-                    {{-- ================================================= --}}
-                    <div class="tab-pane"
-                         id="tab-pt">
-
-                        {{-- CHART PT --}}
-                        <div class="box box-primary">
-
-                            <div class="box-header with-border">
-                                <h3 class="box-title">
-                                    Komposisi Luasan HA Per PT
-                                </h3>
-                            </div>
-
-                            <div class="box-body">
-                                <div class="chart-container">
-                                    <canvas id="chartPT"></canvas>
-                                </div>
-                            </div>
-
+                    <div class="box-body">
+                        <div class="chart-container">
+                            <canvas id="chartWilayah"></canvas>
                         </div>
+                    </div>
+                </div>
 
-                        {{-- TABLE PT --}}
-                        <div class="box box-warning">
-
-                            <div class="box-header with-border">
-                                <h3 class="box-title">
-                                    Luasan Per PT
-                                </h3>
-                            </div>
-
-                            <div class="box-body">
-
-                                <div class="table-toolbar">
-
-                                    <div class="table-toolbar-left">
-
-                                        <div class="input-group table-search">
-
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-search"></i>
-                                            </span>
-
-                                            <input type="text"
-                                                   id="search-pt"
-                                                   class="form-control"
-                                                   placeholder="Cari data PT...">
-
-                                        </div>
-
-                                        <button type="button"
-                                                id="reset-pt"
-                                                class="btn btn-default">
-                                            <i class="fa fa-times"></i>
-                                            Reset
-                                        </button>
-
-                                    </div>
-
-                                    <div>
-                                        <small class="text-muted">
-                                            Klik header kolom untuk mengurutkan
-                                        </small>
-                                    </div>
-
-                                </div>
-
-                                <div class="tabulator-wrapper">
-                                    <div id="table-pt"></div>
-                                </div>
-
-                            </div>
-                        </div>
-
+                <div class="box box-success compact-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Luasan Per Wilayah
+                        </h3>
                     </div>
 
-                    <div class="tab-pane" id="tab-umur">
+                    <div class="box-body">
+                        <div class="table-toolbar">
+                            <div class="table-toolbar-left">
+                                <label for="page-size-wilayah">
+                                    Tampilkan:
+                                </label>
 
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">
-                                    Distribusi Luasan Berdasarkan Kelompok Umur Tanaman
-                                </h3>
+                                <select
+                                    id="page-size-wilayah"
+                                    class="form-control input-sm table-page-size"
+                                >
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+
+                                <span>baris</span>
                             </div>
 
-                            <div class="box-body">
-                                <div class="chart-container">
-                                    <canvas id="chartUmur"></canvas>
-                                </div>
+                            <div class="table-toolbar-right">
+                                <label for="search-wilayah">
+                                    Search:
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="search-wilayah"
+                                    class="form-control input-sm table-search"
+                                    placeholder="Cari data wilayah..."
+                                    autocomplete="off"
+                                >
                             </div>
                         </div>
 
-                        <div class="box box-info">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">
-                                    Luasan Per Umur Tanaman
-                                </h3>
+                        <div class="tabulator-wrapper">
+                            <div id="table-wilayah"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ========================================================= --}}
+            {{-- PER PT --}}
+            {{-- ========================================================= --}}
+            <div
+                class="tab-pane"
+                id="tab-pt"
+            >
+                <div class="box box-primary compact-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Komposisi Luasan HA Per PT
+                        </h3>
+                    </div>
+
+                    <div class="box-body">
+                        <div class="chart-container">
+                            <canvas id="chartPT"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box box-warning compact-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Luasan Per PT
+                        </h3>
+                    </div>
+
+                    <div class="box-body">
+                        <div class="table-toolbar">
+                            <div class="table-toolbar-left">
+                                <label for="page-size-pt">
+                                    Tampilkan:
+                                </label>
+
+                                <select
+                                    id="page-size-pt"
+                                    class="form-control input-sm table-page-size"
+                                >
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+
+                                <span>baris</span>
                             </div>
 
-                            <div class="box-body">
+                            <div class="table-toolbar-right">
+                                <label for="search-pt">
+                                    Search:
+                                </label>
 
-                                <div class="table-toolbar">
+                                <input
+                                    type="text"
+                                    id="search-pt"
+                                    class="form-control input-sm table-search"
+                                    placeholder="Cari data PT..."
+                                    autocomplete="off"
+                                >
+                            </div>
+                        </div>
 
-                                    <div class="table-toolbar-left">
-                                        <div class="input-group table-search">
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-search"></i>
-                                            </span>
+                        <div class="tabulator-wrapper">
+                            <div id="table-pt"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                                            <input type="text"
-                                                id="search-umur"
-                                                class="form-control"
-                                                placeholder="Cari kebun atau nilai...">
-                                        </div>
+            {{-- ========================================================= --}}
+            {{-- PER UMUR --}}
+            {{-- ========================================================= --}}
+            <div
+                class="tab-pane"
+                id="tab-umur"
+            >
+                <div class="box box-primary compact-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Distribusi Luasan Berdasarkan Kelompok Umur Tanaman
+                        </h3>
+                    </div>
 
-                                        <button type="button"
-                                                id="reset-umur"
-                                                class="btn btn-default">
-                                            <i class="fa fa-times"></i>
-                                            Reset
-                                        </button>
-                                    </div>
+                    <div class="box-body">
+                        <div class="chart-container">
+                            <canvas id="chartUmur"></canvas>
+                        </div>
+                    </div>
+                </div>
 
-                                </div>
+                <div class="box box-info compact-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Luasan Per Umur Tanaman
+                        </h3>
+                    </div>
 
+                    <div class="box-body">
+                        <div class="table-toolbar">
+                            <div class="table-toolbar-left">
+                                <label for="page-size-umur">
+                                    Tampilkan:
+                                </label>
+
+                                <select
+                                    id="page-size-umur"
+                                    class="form-control input-sm table-page-size"
+                                >
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+
+                                <span>baris</span>
+                            </div>
+
+                            <div class="table-toolbar-right">
+                                <label for="search-umur">
+                                    Search:
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="search-umur"
+                                    class="form-control input-sm table-search"
+                                    placeholder="Cari kebun atau nilai..."
+                                    autocomplete="off"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="table-with-note">
+                            <div class="table-main">
                                 <div class="tabulator-wrapper">
                                     <div id="table-umur"></div>
                                 </div>
+                            </div>
 
+                            <div class="umur-note-box">
+                                <div class="umur-note-title">
+                                    Keterangan Kelompok Umur
+                                </div>
+
+                                <table
+                                    class="table table-bordered table-condensed umur-note-table"
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th>Kelompok Umur</th>
+                                            <th>Kelompok</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td>0 - 3 tahun</td>
+                                            <td>TBM</td>
+                                            <td>TBM</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>4 - 7 tahun</td>
+                                            <td>TM</td>
+                                            <td>Muda</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>8 - 13 tahun</td>
+                                            <td>TM</td>
+                                            <td>Remaja</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>14 - 20 tahun</td>
+                                            <td>TM</td>
+                                            <td>Dewasa</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>&gt; 20 tahun</td>
+                                            <td>TM</td>
+                                            <td>Tua</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>&gt; 25 tahun</td>
+                                            <td>Replanting</td>
+                                            <td>Replanting</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
-
-                <p>
-                    HA = HEKTARE
-                </p>
-
             </div>
+
         </div>
+
+        <p>
+            <strong>HA</strong> = Hektare
+        </p>
     </div>
 
 </section>
@@ -525,66 +589,50 @@
 
 @section('script-content')
 
-{{-- ========================================================= --}}
-{{-- TABULATOR JS --}}
-{{-- ========================================================= --}}
 <script src="https://unpkg.com/tabulator-tables@5.6.2/dist/js/tabulator.min.js"></script>
 
 <script type="text/javascript">
+$(document).ready(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Format Angka Indonesia
+    | Helper
     |--------------------------------------------------------------------------
     */
-    function formatNumberIndonesia(value, decimalPlaces) {
+
+    function toNumber(value) {
         var number = parseFloat(value);
 
-        if (isNaN(number)) {
-            number = 0;
-        }
+        return isNaN(number)
+            ? 0
+            : number;
+    }
 
-        return number.toLocaleString('id-ID', {
+    function formatNumberIndonesia(value, decimalPlaces) {
+        return toNumber(value).toLocaleString('id-ID', {
             minimumFractionDigits: decimalPlaces,
             maximumFractionDigits: decimalPlaces
         });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Tabulator Number Formatter
-    |--------------------------------------------------------------------------
-    */
     function numberFormatter(cell) {
-        return formatNumberIndonesia(cell.getValue(), 2);
+        return formatNumberIndonesia(
+            cell.getValue(),
+            2
+        );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Tabulator Bottom Calculation Formatter
-    |--------------------------------------------------------------------------
-    */
     function bottomNumberFormatter(cell) {
-        return formatNumberIndonesia(cell.getValue(), 2);
+        return formatNumberIndonesia(
+            cell.getValue(),
+            2
+        );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Konversi Nilai Menjadi Number
-    |--------------------------------------------------------------------------
-    */
-    function toNumber(value) {
-        var number = parseFloat(value);
-        return isNaN(number) ? 0 : number;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Singkatan Nama PT
-    |--------------------------------------------------------------------------
-    */
     function abbreviatePTName(name) {
-        var normalizedName = String(name || '').trim().toUpperCase();
+        var normalizedName = String(name || '')
+            .trim()
+            .toUpperCase();
 
         var ptAbbreviations = {
             'PT. PADASA ENAM UTAMA': 'PEU',
@@ -608,40 +656,50 @@
             'SINAR ALAM NIAGA RAYA': 'SANR'
         };
 
-        return ptAbbreviations[normalizedName] || name || '';
+        return ptAbbreviations[normalizedName]
+            || name
+            || '';
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Raw Data
+    |--------------------------------------------------------------------------
+    */
+
+    var rawWilayahData = @json($wilayah ?? []);
+    var rawPTData = @json($pt ?? []);
+    var rawUmurData = @json($dataUmur ?? []);
+
 
     /*
     |--------------------------------------------------------------------------
     | Data Wilayah
     |--------------------------------------------------------------------------
-    |
-    | Baris IS_TOTAL tidak dimasukkan ke body Tabulator karena total dibuat
-    | otomatis menggunakan bottomCalc.
-    |
     */
-    var rawWilayahData = @json($wilayah);
+
     var wilayahTableData = [];
 
-    rawWilayahData.forEach(function(row) {
-
+    rawWilayahData.forEach(function (row) {
         var isTotal =
-            row.IS_TOTAL === true ||
-            row.IS_TOTAL === 1 ||
-            row.IS_TOTAL === '1';
+            row.IS_TOTAL === true
+            || row.IS_TOTAL === 1
+            || row.IS_TOTAL === '1';
 
         if (isTotal) {
             return;
         }
 
         wilayahTableData.push({
-            NO: row.NoUrut !== undefined
-                ? row.NoUrut
-                : (
-                    row.NOURUT !== undefined
-                        ? row.NOURUT
-                        : 998
-                ),
+            NO:
+                row.NoUrut !== undefined
+                    ? row.NoUrut
+                    : (
+                        row.NOURUT !== undefined
+                            ? row.NOURUT
+                            : 998
+                    ),
 
             REGION: row.REGION || '',
 
@@ -653,33 +711,34 @@
         });
     });
 
+
     /*
     |--------------------------------------------------------------------------
     | Data PT
     |--------------------------------------------------------------------------
     */
-    var rawPTData = @json($pt);
+
     var ptTableData = [];
 
-    rawPTData.forEach(function(row) {
-
+    rawPTData.forEach(function (row) {
         var isTotal =
-            row.IS_TOTAL === true ||
-            row.IS_TOTAL === 1 ||
-            row.IS_TOTAL === '1';
+            row.IS_TOTAL === true
+            || row.IS_TOTAL === 1
+            || row.IS_TOTAL === '1';
 
         if (isTotal) {
             return;
         }
 
         ptTableData.push({
-            NO: row.NOURUT !== undefined
-                ? row.NOURUT
-                : (
-                    row.NoUrut !== undefined
-                        ? row.NoUrut
-                        : 998
-                ),
+            NO:
+                row.NOURUT !== undefined
+                    ? row.NOURUT
+                    : (
+                        row.NoUrut !== undefined
+                            ? row.NoUrut
+                            : 998
+                    ),
 
             NAMA: abbreviatePTName(row.NAMA),
 
@@ -691,9 +750,21 @@
         });
     });
 
-    var rawUmurData = @json($dataUmur ?? []);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Data Umur
+    |--------------------------------------------------------------------------
+    */
 
     var umurTableData = rawUmurData.map(function (row, index) {
+        var tbm = toNumber(row.TBM);
+        var muda = toNumber(row.MUDA);
+        var remaja = toNumber(row.REMAJA);
+        var dewasa = toNumber(row.DEWASA);
+        var tua = toNumber(row.TUA);
+        var replanting = toNumber(row.REPLANTING);
+
         return {
             NO: row.NOURUT || (index + 1),
 
@@ -701,49 +772,49 @@
                 .trim()
                 .toUpperCase(),
 
-            TBM: toNumber(row.TBM),
-            MUDA: toNumber(row.MUDA),
-            REMAJA: toNumber(row.REMAJA),
-            DEWASA: toNumber(row.DEWASA),
-            TUA: toNumber(row.TUA),
-            REPLANTING: toNumber(row.REPLANTING),
+            TBM: tbm,
+            MUDA: muda,
+            REMAJA: remaja,
+            DEWASA: dewasa,
+            TUA: tua,
+            REPLANTING: replanting,
 
             TOTAL_HA:
-                toNumber(row.TBM) +
-                toNumber(row.MUDA) +
-                toNumber(row.REMAJA) +
-                toNumber(row.DEWASA) +
-                toNumber(row.TUA) +
-                toNumber(row.REPLANTING)
+                tbm
+                + muda
+                + remaja
+                + dewasa
+                + tua
+                + replanting
         };
     });
 
+
     /*
     |--------------------------------------------------------------------------
-    | Kolom Tabulator
+    | Kolom Tabulator Wilayah / PT
     |--------------------------------------------------------------------------
     */
-    function createColumns(nameTitle, nameField) {
+
+    function createStandardColumns(nameTitle, nameField) {
         return [
             {
                 title: 'NO',
                 field: 'NO',
                 width: 55,
                 minWidth: 50,
-                hozAlign: 'center',
-                headerHozAlign: 'center',
                 sorter: 'number',
-                bottomCalc: function() {
+                hozAlign: 'center',
+                bottomCalc: function () {
                     return '~';
                 }
             },
             {
                 title: nameTitle,
                 field: nameField,
-                minWidth: 170,
-                widthGrow: 2,
+                minWidth: 150,
                 sorter: 'string',
-                bottomCalc: function() {
+                bottomCalc: function () {
                     return 'TOTAL';
                 }
             },
@@ -751,10 +822,8 @@
                 title: 'TM<br>[HA]',
                 field: 'HA_TM',
                 minWidth: 90,
-                widthGrow: 1,
-                hozAlign: 'right',
-                headerHozAlign: 'center',
                 sorter: 'number',
+                hozAlign: 'right',
                 formatter: numberFormatter,
                 bottomCalc: 'sum',
                 bottomCalcFormatter: bottomNumberFormatter
@@ -763,10 +832,8 @@
                 title: 'TBM<br>[HA]',
                 field: 'HA_TBM',
                 minWidth: 90,
-                widthGrow: 1,
-                hozAlign: 'right',
-                headerHozAlign: 'center',
                 sorter: 'number',
+                hozAlign: 'right',
                 formatter: numberFormatter,
                 bottomCalc: 'sum',
                 bottomCalcFormatter: bottomNumberFormatter
@@ -775,10 +842,8 @@
                 title: 'TB<br>[HA]',
                 field: 'HA_TB',
                 minWidth: 90,
-                widthGrow: 1,
-                hozAlign: 'right',
-                headerHozAlign: 'center',
                 sorter: 'number',
+                hozAlign: 'right',
                 formatter: numberFormatter,
                 bottomCalc: 'sum',
                 bottomCalcFormatter: bottomNumberFormatter
@@ -787,10 +852,8 @@
                 title: 'LAIN<br>[HA]',
                 field: 'HA_LAIN',
                 minWidth: 90,
-                widthGrow: 1,
-                hozAlign: 'right',
-                headerHozAlign: 'center',
                 sorter: 'number',
+                hozAlign: 'right',
                 formatter: numberFormatter,
                 bottomCalc: 'sum',
                 bottomCalcFormatter: bottomNumberFormatter
@@ -799,10 +862,8 @@
                 title: 'TOTAL<br>[HA]',
                 field: 'TOTAL_HA',
                 minWidth: 105,
-                widthGrow: 1,
-                hozAlign: 'right',
-                headerHozAlign: 'center',
                 sorter: 'number',
+                hozAlign: 'right',
                 formatter: numberFormatter,
                 bottomCalc: 'sum',
                 bottomCalcFormatter: bottomNumberFormatter
@@ -810,37 +871,98 @@
         ];
     }
 
-    var tableUmur = new Tabulator('#table-umur', {
-        data: umurTableData,
-        layout: 'fitData',
-        height: '350px',
 
-        pagination: 'local',
-        paginationSize: 25,
+    /*
+    |--------------------------------------------------------------------------
+    | Create Tabulator
+    |--------------------------------------------------------------------------
+    */
 
-        movableColumns: true,
-        resizableColumns: true,
+    function createTable(
+        elementSelector,
+        rows,
+        columns
+    ) {
+        return new Tabulator(elementSelector, {
+            data: rows,
 
-        initialSort: [
-            {
-                column: 'NO',
-                dir: 'asc'
-            }
-        ],
+            height: '280px',
+            layout: 'fitData',
 
-        columns: [
+            pagination: 'local',
+            paginationSize: 25,
+            paginationSizeSelector: false,
+            paginationCounter: 'rows',
+
+            movableColumns: true,
+            resizableColumns: true,
+
+            placeholder: 'Data tidak tersedia',
+
+            initialSort: [
+                {
+                    column: 'NO',
+                    dir: 'asc'
+                }
+            ],
+
+            columnDefaults: {
+                headerHozAlign: 'center',
+                vertAlign: 'middle',
+                headerSort: true,
+                resizable: true
+            },
+
+            columns: columns
+        });
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Initialize Tables
+    |--------------------------------------------------------------------------
+    */
+
+    var tableWilayah = createTable(
+        '#table-wilayah',
+        wilayahTableData,
+        createStandardColumns(
+            'REGION',
+            'REGION'
+        )
+    );
+
+    var tablePT = createTable(
+        '#table-pt',
+        ptTableData,
+        createStandardColumns(
+            'PT',
+            'NAMA'
+        )
+    );
+
+    var tableUmur = createTable(
+        '#table-umur',
+        umurTableData,
+        [
             {
                 title: 'NO',
                 field: 'NO',
+                width: 55,
+                minWidth: 50,
                 sorter: 'number',
-                width: 60,
-                hozAlign: 'center'
+                hozAlign: 'center',
+                bottomCalc: function () {
+                    return '~';
+                }
             },
             {
                 title: 'KEBUN',
                 field: 'KEBUN',
+                width: 130,
+                minWidth: 120,
                 sorter: 'string',
-                width: 140,
                 bottomCalc: function () {
                     return 'TOTAL';
                 }
@@ -848,6 +970,7 @@
             {
                 title: 'TBM<br>[HA]',
                 field: 'TBM',
+                minWidth: 90,
                 sorter: 'number',
                 hozAlign: 'right',
                 formatter: numberFormatter,
@@ -857,6 +980,7 @@
             {
                 title: 'MUDA<br>[HA]',
                 field: 'MUDA',
+                minWidth: 90,
                 sorter: 'number',
                 hozAlign: 'right',
                 formatter: numberFormatter,
@@ -866,6 +990,7 @@
             {
                 title: 'REMAJA<br>[HA]',
                 field: 'REMAJA',
+                minWidth: 95,
                 sorter: 'number',
                 hozAlign: 'right',
                 formatter: numberFormatter,
@@ -875,6 +1000,7 @@
             {
                 title: 'DEWASA<br>[HA]',
                 field: 'DEWASA',
+                minWidth: 95,
                 sorter: 'number',
                 hozAlign: 'right',
                 formatter: numberFormatter,
@@ -884,6 +1010,7 @@
             {
                 title: 'TUA<br>[HA]',
                 field: 'TUA',
+                minWidth: 85,
                 sorter: 'number',
                 hozAlign: 'right',
                 formatter: numberFormatter,
@@ -893,6 +1020,7 @@
             {
                 title: 'REPLANTING<br>[HA]',
                 field: 'REPLANTING',
+                minWidth: 110,
                 sorter: 'number',
                 hozAlign: 'right',
                 formatter: numberFormatter,
@@ -902,6 +1030,7 @@
             {
                 title: 'TOTAL<br>[HA]',
                 field: 'TOTAL_HA',
+                minWidth: 105,
                 sorter: 'number',
                 hozAlign: 'right',
                 formatter: numberFormatter,
@@ -909,207 +1038,161 @@
                 bottomCalcFormatter: bottomNumberFormatter
             }
         ]
-    });
-
-    /*
-    |--------------------------------------------------------------------------
-    | Konfigurasi Umum Tabulator
-    |--------------------------------------------------------------------------
-    */
-    function createTabulator(selector, data, columns) {
-        return new Tabulator(selector, {
-            data: data,
-            layout: 'fitData',
-            responsiveLayout: false,
-            movableColumns: false,
-            resizableColumns: true,
-            placeholder: 'Tidak ada data yang tersedia',
-            pagination: 'local',
-            paginationSize: 10,
-            paginationSizeSelector: [10, 25, 50, 100, true],
-            paginationCounter: 'rows',
-            initialSort: [
-                {
-                    column: 'NO',
-                    dir: 'asc'
-                }
-            ],
-            columnDefaults: {
-                vertAlign: 'middle',
-                headerSort: true,
-                resizable: true,
-                tooltip: false
-            },
-            columns: columns,
-            langs: {
-                'id-id': {
-                    data: {
-                        loading: 'Memuat data...',
-                        error: 'Terjadi kesalahan'
-                    },
-                    pagination: {
-                        page_size: 'Jumlah baris',
-                        first: 'Awal',
-                        first_title: 'Halaman pertama',
-                        last: 'Akhir',
-                        last_title: 'Halaman terakhir',
-                        prev: 'Sebelumnya',
-                        prev_title: 'Halaman sebelumnya',
-                        next: 'Berikutnya',
-                        next_title: 'Halaman berikutnya',
-                        all: 'Semua',
-                        counter: {
-                            showing: 'Menampilkan',
-                            of: 'dari',
-                            rows: 'baris',
-                            pages: 'halaman'
-                        }
-                    }
-                }
-            },
-            locale: 'id-id'
-        });
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Initialize Tabulator
-    |--------------------------------------------------------------------------
-    */
-    var tableWilayah = createTabulator(
-        '#table-wilayah',
-        wilayahTableData,
-        createColumns('REGION', 'REGION')
     );
 
-    var tablePT = createTabulator(
-        '#table-pt',
-        ptTableData,
-        createColumns('PT', 'NAMA')
-    );
 
     /*
     |--------------------------------------------------------------------------
-    | Global Search Tabulator
+    | Search
     |--------------------------------------------------------------------------
     */
-    function applyGlobalSearch(table, keyword, searchableFields) {
 
-        keyword = String(keyword || '')
-            .trim()
-            .toLowerCase();
+    function bindSearch(
+        inputSelector,
+        table,
+        searchableFields
+    ) {
+        $(inputSelector).on('keyup change', function () {
+            var keyword = String($(this).val() || '')
+                .trim()
+                .toLowerCase();
 
-        if (keyword === '') {
-            table.clearFilter(true);
-            return;
-        }
-
-        table.setFilter(function(rowData) {
-
-            for (var index = 0; index < searchableFields.length; index++) {
-
-                var field = searchableFields[index];
-                var value = rowData[field];
-                var formattedValue;
-
-                if (
-                    field === 'HA_TM' ||
-                    field === 'HA_TBM' ||
-                    field === 'HA_TB' ||
-                    field === 'HA_LAIN' ||
-                    field === 'TOTAL_HA'
-                ) {
-                    formattedValue = formatNumberIndonesia(value, 2);
-                } else {
-                    formattedValue = String(
-                        value === null || value === undefined
-                            ? ''
-                            : value
-                    );
-                }
-
-                if (formattedValue.toLowerCase().indexOf(keyword) !== -1) {
-                    return true;
-                }
+            if (keyword === '') {
+                table.clearFilter();
+                return;
             }
 
-            return false;
+            table.setFilter(function (rowData) {
+                return searchableFields.some(function (field) {
+                    var value = rowData[field];
+
+                    if (
+                        value === null
+                        || value === undefined
+                    ) {
+                        return false;
+                    }
+
+                    var originalValue =
+                        String(value).toLowerCase();
+
+                    var formattedValue =
+                        typeof value === 'number'
+                            ? formatNumberIndonesia(
+                                value,
+                                2
+                            ).toLowerCase()
+                            : originalValue;
+
+                    return (
+                        originalValue.indexOf(keyword) !== -1
+                        || formattedValue.indexOf(keyword) !== -1
+                    );
+                });
+            });
         });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Search Wilayah
-    |--------------------------------------------------------------------------
-    */
-    var wilayahSearchTimer = null;
-
-    $('#search-wilayah').on('input', function() {
-
-        var keyword = this.value;
-
-        clearTimeout(wilayahSearchTimer);
-
-        wilayahSearchTimer = setTimeout(function() {
-            applyGlobalSearch(
-                tableWilayah,
-                keyword,
-                [
-                    'NO',
-                    'REGION',
-                    'HA_TM',
-                    'HA_TBM',
-                    'HA_TB',
-                    'HA_LAIN',
-                    'TOTAL_HA'
-                ]
-            );
-        }, 200);
-    });
-
-    $('#reset-wilayah').on('click', function() {
-        $('#search-wilayah').val('');
-        tableWilayah.clearFilter(true);
-        tableWilayah.setSort('NO', 'asc');
-        tableWilayah.setPage(1);
-    });
 
     /*
     |--------------------------------------------------------------------------
-    | Search PT
+    | Page Size
     |--------------------------------------------------------------------------
     */
-    var ptSearchTimer = null;
 
-    $('#search-pt').on('input', function() {
+    function bindPageSize(
+        selectSelector,
+        table
+    ) {
+        $(selectSelector).on('change', function () {
+            var pageSize =
+                parseInt(
+                    $(this).val(),
+                    10
+                );
 
-        var keyword = this.value;
+            if (isNaN(pageSize)) {
+                pageSize = 25;
+            }
 
-        clearTimeout(ptSearchTimer);
+            table.setPageSize(pageSize);
+            table.setPage(1);
+        });
+    }
 
-        ptSearchTimer = setTimeout(function() {
-            applyGlobalSearch(
-                tablePT,
-                keyword,
-                [
-                    'NO',
-                    'NAMA',
-                    'HA_TM',
-                    'HA_TBM',
-                    'HA_TB',
-                    'HA_LAIN',
-                    'TOTAL_HA'
-                ]
-            );
-        }, 200);
-    });
 
-    $('#reset-pt').on('click', function() {
-        $('#search-pt').val('');
-        tablePT.clearFilter(true);
-        tablePT.setSort('NO', 'asc');
-        tablePT.setPage(1);
-    });
+    bindSearch(
+        '#search-wilayah',
+        tableWilayah,
+        [
+            'NO',
+            'REGION',
+            'HA_TM',
+            'HA_TBM',
+            'HA_TB',
+            'HA_LAIN',
+            'TOTAL_HA'
+        ]
+    );
+
+    bindSearch(
+        '#search-pt',
+        tablePT,
+        [
+            'NO',
+            'NAMA',
+            'HA_TM',
+            'HA_TBM',
+            'HA_TB',
+            'HA_LAIN',
+            'TOTAL_HA'
+        ]
+    );
+
+    bindSearch(
+        '#search-umur',
+        tableUmur,
+        [
+            'NO',
+            'KEBUN',
+            'TBM',
+            'MUDA',
+            'REMAJA',
+            'DEWASA',
+            'TUA',
+            'REPLANTING',
+            'TOTAL_HA'
+        ]
+    );
+
+    bindPageSize(
+        '#page-size-wilayah',
+        tableWilayah
+    );
+
+    bindPageSize(
+        '#page-size-pt',
+        tablePT
+    );
+
+    bindPageSize(
+        '#page-size-umur',
+        tableUmur
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Chart Colors
+    |--------------------------------------------------------------------------
+    */
+
+    var STANDARD_CHART_COLORS = {
+        TM: '#1565C0',
+        TBM: '#00897B',
+        TB: '#FB8C00',
+        LAIN: '#E53935'
+    };
 
     var UMUR_CHART_COLORS = {
         TBM: '#1565C0',
@@ -1120,419 +1203,568 @@
         REPLANTING: '#7CB342'
     };
 
-    /*
-    |--------------------------------------------------------------------------
-    | Plugin Total di Ujung Horizontal Stacked Bar
-    |--------------------------------------------------------------------------
-    */
-    Chart.plugins.register({
-        afterDatasetsDraw: function(chart) {
-
-            if (chart.config.type !== 'horizontalBar') {
-                return;
-            }
-
-            var datasets = chart.data.datasets || [];
-
-            if (!datasets.length) {
-                return;
-            }
-
-            var ctx = chart.ctx;
-            var labels = chart.data.labels || [];
-
-            ctx.save();
-            ctx.font = 'bold 11px Arial';
-            ctx.fillStyle = '#333333';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-
-            labels.forEach(function(label, dataIndex) {
-
-                var total = 0;
-                var lastElement = null;
-
-                datasets.forEach(function(dataset, datasetIndex) {
-
-                    var value = toNumber(dataset.data[dataIndex]);
-                    total += value;
-
-                    var meta = chart.getDatasetMeta(datasetIndex);
-
-                    if (
-                        !meta.hidden &&
-                        meta.data &&
-                        meta.data[dataIndex]
-                    ) {
-                        lastElement = meta.data[dataIndex];
-                    }
-                });
-
-                if (!lastElement || total <= 0) {
-                    return;
-                }
-
-                var model = lastElement._model || lastElement._view;
-
-                if (!model) {
-                    return;
-                }
-
-                ctx.fillText(
-                    formatNumberIndonesia(total, 2),
-                    model.x + 8,
-                    model.y
-                );
-            });
-
-            ctx.restore();
-        }
-    });
 
     /*
     |--------------------------------------------------------------------------
-    | Siapkan Data Chart
+    | Create Horizontal Stacked Chart
     |--------------------------------------------------------------------------
     */
-    function prepareStackedChartData(data, labelField) {
 
-        var labels = [];
-        var haTM = [];
-        var haTBM = [];
-        var haTB = [];
-        var haLain = [];
-
-        data.forEach(function(row) {
-            labels.push(row[labelField] || '');
-            haTM.push(toNumber(row.HA_TM));
-            haTBM.push(toNumber(row.HA_TBM));
-            haTB.push(toNumber(row.HA_TB));
-            haLain.push(toNumber(row.HA_LAIN));
-        });
-
-        return {
-            labels: labels,
-            HA_TM: haTM,
-            HA_TBM: haTBM,
-            HA_TB: haTB,
-            HA_LAIN: haLain
-        };
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Create Horizontal Stacked Bar Chart
-    |--------------------------------------------------------------------------
-    */
-    function createHorizontalStackedBarChart(elementId, chartData, categoryLabel) {
-
-        var canvas = document.getElementById(elementId);
+    function createHorizontalStackedChart(
+        canvasId,
+        labels,
+        datasets
+    ) {
+        var canvas =
+            document.getElementById(canvasId);
 
         if (!canvas) {
             return null;
         }
 
-        var ctx = canvas.getContext('2d');
+        return new Chart(
+            canvas.getContext('2d'),
+            {
+                type: 'horizontalBar',
 
-        return new Chart(ctx, {
-            type: 'horizontalBar',
-
-            data: {
-                labels: chartData.labels,
-                datasets: [
-                    {
-                        label: 'TM [HA]',
-                        data: chartData.HA_TM,
-                        backgroundColor: '#16a34a',
-                        borderColor: '#15803d',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'TBM [HA]',
-                        data: chartData.HA_TBM,
-                        backgroundColor: '#2563eb',
-                        borderColor: '#1d4ed8',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'TB [HA]',
-                        data: chartData.HA_TB,
-                        backgroundColor: '#f59e0b',
-                        borderColor: '#d97706',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'LAIN [HA]',
-                        data: chartData.HA_LAIN,
-                        backgroundColor: '#7c3aed',
-                        borderColor: '#6d28d9',
-                        borderWidth: 1
-                    }
-                ]
-            },
-
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                layout: {
-                    padding: {
-                        right: 70
-                    }
+                data: {
+                    labels: labels,
+                    datasets: datasets
                 },
 
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: {
-                        boxWidth: 14,
-                        padding: 15
-                    }
-                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
 
-                scales: {
-                    xAxes: [{
-                        stacked: true,
-                        ticks: {
-                            beginAtZero: true,
-                            callback: function(value) {
-                                return formatNumberIndonesia(value, 0);
-                            }
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Luasan [HA]'
+                    layout: {
+                        padding: {
+                            right: 45
                         }
-                    }],
+                    },
 
-                    yAxes: [{
-                        stacked: true,
-                        gridLines: {
-                            display: false
-                        },
-                        ticks: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+
+                        labels: {
+                            boxWidth: 11,
+                            padding: 10,
                             fontSize: 10
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: categoryLabel
-                        }
-                    }]
-                },
-
-                tooltips: {
-                    mode: 'index',
-                    intersect: false,
-                    callbacks: {
-                        title: function(tooltipItems, data) {
-                            if (!tooltipItems.length) {
-                                return '';
-                            }
-
-                            return data.labels[tooltipItems[0].index] || '';
-                        },
-
-                        label: function(tooltipItem, data) {
-
-                            var dataset = data.datasets[tooltipItem.datasetIndex];
-                            var value = toNumber(dataset.data[tooltipItem.index]);
-
-                            return dataset.label + ': ' + formatNumberIndonesia(value, 2) + ' HA';
-                        },
-
-                        footer: function(tooltipItems, data) {
-
-                            if (!tooltipItems.length) {
-                                return '';
-                            }
-
-                            var dataIndex = tooltipItems[0].index;
-                            var total = 0;
-
-                            data.datasets.forEach(function(dataset) {
-                                total += toNumber(dataset.data[dataIndex]);
-                            });
-
-                            return 'TOTAL: ' + formatNumberIndonesia(total, 2) + ' HA';
                         }
                     },
-                    footerFontStyle: 'bold'
-                },
 
-                hover: {
-                    mode: 'index',
-                    intersect: false
-                },
+                    scales: {
+                        xAxes: [
+                            {
+                                stacked: true,
 
-                animation: {
-                    duration: 500
+                                ticks: {
+                                    beginAtZero: true,
+
+                                    callback: function (value) {
+                                        return formatNumberIndonesia(
+                                            value,
+                                            0
+                                        );
+                                    }
+                                },
+
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Total Hektare'
+                                }
+                            }
+                        ],
+
+                        yAxes: [
+                            {
+                                stacked: true,
+
+                                gridLines: {
+                                    display: false
+                                },
+
+                                ticks: {
+                                    autoSkip: false,
+                                    fontSize: 10
+                                }
+                            }
+                        ]
+                    },
+
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false,
+
+                        callbacks: {
+                            title: function (
+                                tooltipItems,
+                                chartData
+                            ) {
+                                if (
+                                    !tooltipItems
+                                    || tooltipItems.length === 0
+                                ) {
+                                    return '';
+                                }
+
+                                return chartData.labels[
+                                    tooltipItems[0].index
+                                ] || '';
+                            },
+
+                            label: function (
+                                tooltipItem,
+                                chartData
+                            ) {
+                                var dataset =
+                                    chartData.datasets[
+                                        tooltipItem.datasetIndex
+                                    ];
+
+                                var value =
+                                    toNumber(
+                                        dataset.data[
+                                            tooltipItem.index
+                                        ]
+                                    );
+
+                                if (value === 0) {
+                                    return null;
+                                }
+
+                                return (
+                                    dataset.label
+                                    + ': '
+                                    + formatNumberIndonesia(
+                                        value,
+                                        2
+                                    )
+                                    + ' HA'
+                                );
+                            },
+
+                            footer: function (
+                                tooltipItems,
+                                chartData
+                            ) {
+                                if (
+                                    !tooltipItems
+                                    || tooltipItems.length === 0
+                                ) {
+                                    return '';
+                                }
+
+                                var rowIndex =
+                                    tooltipItems[0].index;
+
+                                var total = 0;
+
+                                chartData.datasets.forEach(
+                                    function (dataset) {
+                                        total += toNumber(
+                                            dataset.data[
+                                                rowIndex
+                                            ]
+                                        );
+                                    }
+                                );
+
+                                return (
+                                    'TOTAL: '
+                                    + formatNumberIndonesia(
+                                        total,
+                                        2
+                                    )
+                                    + ' HA'
+                                );
+                            }
+                        },
+
+                        footerFontStyle: 'bold'
+                    },
+
+                    hover: {
+                        mode: 'index',
+                        intersect: false
+                    }
                 }
             }
-        });
+        );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Data Chart Wilayah
-    |--------------------------------------------------------------------------
-    */
-    var wilayahChartData = prepareStackedChartData(
-        wilayahTableData,
-        'REGION'
-    );
 
     /*
     |--------------------------------------------------------------------------
-    | Data Chart PT
+    | Chart Wilayah
     |--------------------------------------------------------------------------
     */
-    var ptChartData = prepareStackedChartData(
-        ptTableData,
-        'NAMA'
-    );
 
-    var chartUmur = createHorizontalStackedChart(
-        'chartUmur',
+    var chartWilayah =
+        createHorizontalStackedChart(
+            'chartWilayah',
 
-        umurTableData.map(function (row) {
-            return row.KEBUN;
-        }),
+            wilayahTableData.map(function (row) {
+                return row.REGION;
+            }),
 
-        [
-            {
-                label: 'TBM',
-                data: umurTableData.map(function (row) {
-                    return row.TBM;
-                }),
-                backgroundColor: UMUR_CHART_COLORS.TBM,
-                borderColor: UMUR_CHART_COLORS.TBM,
-                borderWidth: 1
-            },
-            {
-                label: 'MUDA',
-                data: umurTableData.map(function (row) {
-                    return row.MUDA;
-                }),
-                backgroundColor: UMUR_CHART_COLORS.MUDA,
-                borderColor: UMUR_CHART_COLORS.MUDA,
-                borderWidth: 1
-            },
-            {
-                label: 'REMAJA',
-                data: umurTableData.map(function (row) {
-                    return row.REMAJA;
-                }),
-                backgroundColor: UMUR_CHART_COLORS.REMAJA,
-                borderColor: UMUR_CHART_COLORS.REMAJA,
-                borderWidth: 1
-            },
-            {
-                label: 'DEWASA',
-                data: umurTableData.map(function (row) {
-                    return row.DEWASA;
-                }),
-                backgroundColor: UMUR_CHART_COLORS.DEWASA,
-                borderColor: UMUR_CHART_COLORS.DEWASA,
-                borderWidth: 1
-            },
-            {
-                label: 'TUA',
-                data: umurTableData.map(function (row) {
-                    return row.TUA;
-                }),
-                backgroundColor: UMUR_CHART_COLORS.TUA,
-                borderColor: UMUR_CHART_COLORS.TUA,
-                borderWidth: 1
-            },
-            {
-                label: 'REPLANTING',
-                data: umurTableData.map(function (row) {
-                    return row.REPLANTING;
-                }),
-                backgroundColor: UMUR_CHART_COLORS.REPLANTING,
-                borderColor: UMUR_CHART_COLORS.REPLANTING,
-                borderWidth: 1
-            }
-        ]
-    );
+            [
+                {
+                    label: 'TM',
+
+                    data: wilayahTableData.map(
+                        function (row) {
+                            return row.HA_TM;
+                        }
+                    ),
+
+                    backgroundColor:
+                        STANDARD_CHART_COLORS.TM,
+
+                    borderColor:
+                        STANDARD_CHART_COLORS.TM,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'TBM',
+
+                    data: wilayahTableData.map(
+                        function (row) {
+                            return row.HA_TBM;
+                        }
+                    ),
+
+                    backgroundColor:
+                        STANDARD_CHART_COLORS.TBM,
+
+                    borderColor:
+                        STANDARD_CHART_COLORS.TBM,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'TB',
+
+                    data: wilayahTableData.map(
+                        function (row) {
+                            return row.HA_TB;
+                        }
+                    ),
+
+                    backgroundColor:
+                        STANDARD_CHART_COLORS.TB,
+
+                    borderColor:
+                        STANDARD_CHART_COLORS.TB,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'LAIN',
+
+                    data: wilayahTableData.map(
+                        function (row) {
+                            return row.HA_LAIN;
+                        }
+                    ),
+
+                    backgroundColor:
+                        STANDARD_CHART_COLORS.LAIN,
+
+                    borderColor:
+                        STANDARD_CHART_COLORS.LAIN,
+
+                    borderWidth: 1
+                }
+            ]
+        );
+
 
     /*
     |--------------------------------------------------------------------------
-    | Initialize Charts
+    | Chart PT
     |--------------------------------------------------------------------------
     */
-    var chartWilayah = createHorizontalStackedBarChart(
-        'chartWilayah',
-        wilayahChartData,
-        'Wilayah'
-    );
 
-    var chartPT = createHorizontalStackedBarChart(
-        'chartPT',
-        ptChartData,
-        'PT'
-    );
+    var chartPT =
+        createHorizontalStackedChart(
+            'chartPT',
+
+            ptTableData.map(function (row) {
+                return row.NAMA;
+            }),
+
+            [
+                {
+                    label: 'TM',
+
+                    data: ptTableData.map(
+                        function (row) {
+                            return row.HA_TM;
+                        }
+                    ),
+
+                    backgroundColor:
+                        STANDARD_CHART_COLORS.TM,
+
+                    borderColor:
+                        STANDARD_CHART_COLORS.TM,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'TBM',
+
+                    data: ptTableData.map(
+                        function (row) {
+                            return row.HA_TBM;
+                        }
+                    ),
+
+                    backgroundColor:
+                        STANDARD_CHART_COLORS.TBM,
+
+                    borderColor:
+                        STANDARD_CHART_COLORS.TBM,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'TB',
+
+                    data: ptTableData.map(
+                        function (row) {
+                            return row.HA_TB;
+                        }
+                    ),
+
+                    backgroundColor:
+                        STANDARD_CHART_COLORS.TB,
+
+                    borderColor:
+                        STANDARD_CHART_COLORS.TB,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'LAIN',
+
+                    data: ptTableData.map(
+                        function (row) {
+                            return row.HA_LAIN;
+                        }
+                    ),
+
+                    backgroundColor:
+                        STANDARD_CHART_COLORS.LAIN,
+
+                    borderColor:
+                        STANDARD_CHART_COLORS.LAIN,
+
+                    borderWidth: 1
+                }
+            ]
+        );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Chart Umur
+    |--------------------------------------------------------------------------
+    */
+
+    var chartUmur =
+        createHorizontalStackedChart(
+            'chartUmur',
+
+            umurTableData.map(function (row) {
+                return row.KEBUN;
+            }),
+
+            [
+                {
+                    label: 'TBM',
+
+                    data: umurTableData.map(
+                        function (row) {
+                            return row.TBM;
+                        }
+                    ),
+
+                    backgroundColor:
+                        UMUR_CHART_COLORS.TBM,
+
+                    borderColor:
+                        UMUR_CHART_COLORS.TBM,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'MUDA',
+
+                    data: umurTableData.map(
+                        function (row) {
+                            return row.MUDA;
+                        }
+                    ),
+
+                    backgroundColor:
+                        UMUR_CHART_COLORS.MUDA,
+
+                    borderColor:
+                        UMUR_CHART_COLORS.MUDA,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'REMAJA',
+
+                    data: umurTableData.map(
+                        function (row) {
+                            return row.REMAJA;
+                        }
+                    ),
+
+                    backgroundColor:
+                        UMUR_CHART_COLORS.REMAJA,
+
+                    borderColor:
+                        UMUR_CHART_COLORS.REMAJA,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'DEWASA',
+
+                    data: umurTableData.map(
+                        function (row) {
+                            return row.DEWASA;
+                        }
+                    ),
+
+                    backgroundColor:
+                        UMUR_CHART_COLORS.DEWASA,
+
+                    borderColor:
+                        UMUR_CHART_COLORS.DEWASA,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'TUA',
+
+                    data: umurTableData.map(
+                        function (row) {
+                            return row.TUA;
+                        }
+                    ),
+
+                    backgroundColor:
+                        UMUR_CHART_COLORS.TUA,
+
+                    borderColor:
+                        UMUR_CHART_COLORS.TUA,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: 'REPLANTING',
+
+                    data: umurTableData.map(
+                        function (row) {
+                            return row.REPLANTING;
+                        }
+                    ),
+
+                    backgroundColor:
+                        UMUR_CHART_COLORS.REPLANTING,
+
+                    borderColor:
+                        UMUR_CHART_COLORS.REPLANTING,
+
+                    borderWidth: 1
+                }
+            ]
+        );
+
 
     /*
     |--------------------------------------------------------------------------
     | Redraw Saat Tab Dibuka
     |--------------------------------------------------------------------------
-    |
-    | Tabulator dan Chart yang berada pada tab tersembunyi perlu di-redraw
-    | ketika tab ditampilkan agar ukuran kolom dan canvas tidak rusak.
-    |
     */
-    $('a[href="#tab-wilayah"]').on('shown.bs.tab', function() {
 
-        setTimeout(function() {
+    $('a[data-toggle="tab"]').on(
+        'shown.bs.tab',
+        function (event) {
+            var target =
+                $(event.target).attr('href');
 
-            tableWilayah.redraw(true);
+            setTimeout(function () {
+                if (target === '#tab-wilayah') {
+                    tableWilayah.redraw(true);
 
-            if (chartWilayah) {
-                chartWilayah.resize();
-            }
+                    if (chartWilayah) {
+                        chartWilayah.resize();
+                    }
+                }
 
-        }, 100);
-    });
+                if (target === '#tab-pt') {
+                    tablePT.redraw(true);
 
-    $('a[href="#tab-pt"]').on('shown.bs.tab', function() {
+                    if (chartPT) {
+                        chartPT.resize();
+                    }
+                }
 
-        setTimeout(function() {
+                if (target === '#tab-umur') {
+                    tableUmur.redraw(true);
 
-            tablePT.redraw(true);
+                    if (chartUmur) {
+                        chartUmur.resize();
+                    }
+                }
+            }, 100);
+        }
+    );
 
-            if (chartPT) {
-                chartPT.resize();
-            }
-
-        }, 100);
-    });
 
     /*
     |--------------------------------------------------------------------------
-    | Redraw Saat Ukuran Window Berubah
+    | Resize
     |--------------------------------------------------------------------------
     */
-    var resizeTimer = null;
 
-    $(window).on('resize', function() {
+    $(window).on('resize', function () {
+        tableWilayah.redraw(true);
+        tablePT.redraw(true);
+        tableUmur.redraw(true);
 
-        clearTimeout(resizeTimer);
+        if (chartWilayah) {
+            chartWilayah.resize();
+        }
 
-        resizeTimer = setTimeout(function() {
+        if (chartPT) {
+            chartPT.resize();
+        }
 
-            tableWilayah.redraw(true);
-            tablePT.redraw(true);
-
-            if (chartWilayah) {
-                chartWilayah.resize();
-            }
-
-            if (chartPT) {
-                chartPT.resize();
-            }
-
-        }, 200);
+        if (chartUmur) {
+            chartUmur.resize();
+        }
     });
-
+});
 </script>
+
 @endsection
