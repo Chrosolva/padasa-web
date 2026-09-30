@@ -89,7 +89,7 @@
         <div class="panel-body">
             {{-- TAB DILETAKKAN DI ATAS TOOLBAR --}}
             <ul class="nav nav-tabs biaya-mode-tabs" id="biaya-mode-tabs">
-                <li class="active"><a href="#tab-rpkg" data-toggle="tab" data-mode="RPKG">RP/KG TBS</a></li>
+                <li class="active"><a href="#tab-rpkg" data-toggle="tab" data-mode="RPKG">RP/TON TBS</a></li>
                 <li><a href="#tab-kgha" data-toggle="tab" data-mode="KGHA">RP/KG HA</a></li>
             </ul>
 
@@ -273,15 +273,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function createProduksiColumns(){
         return [
-            {title:"PRODUKSI TAHUN LALU",headerHozAlign:"center",columns:[
-                {title:"YTD",field:"YTD_TAHUN_LALU",hozAlign:"right",headerHozAlign:"center",formatter:produksiNumberFormatter,accessorDownload:exportProduksiTonAccessor},
+            {title:"YTD<br>TAHUN LALU",headerHozAlign:"center",columns:[
+                {title:"AKT",field:"YTD_TAHUN_LALU",hozAlign:"right",headerHozAlign:"center",formatter:produksiNumberFormatter,accessorDownload:exportProduksiTonAccessor},
             ]},
             {title:"KEBUN",field:"KEBUN",frozen:true,headerHozAlign:"center"},
             {title:"PRODUKSI TAHUN INI",headerHozAlign:"center",columns:[
-                {title:"AKT<br>BULAN<br>INI",field:"AKT_BULAN_INI",hozAlign:"right",headerHozAlign:"center",formatter:produksiNumberFormatter,accessorDownload:exportProduksiTonAccessor},
-                {title:"BUD<br>BULAN<br>INI",field:"BUD_BULAN_INI",hozAlign:"right",headerHozAlign:"center",formatter:produksiNumberFormatter,accessorDownload:exportProduksiTonAccessor},
-                {title:"YTD",field:"YTD_TAHUN_INI",hozAlign:"right",headerHozAlign:"center",formatter:produksiNumberFormatter,accessorDownload:exportProduksiTonAccessor},
-                {title:"BUD<br>YTD",field:"BUD_YTD_TAHUN_INI",hozAlign:"right",headerHozAlign:"center",formatter:produksiNumberFormatter,accessorDownload:exportProduksiTonAccessor},
+                {title:"BULAN INI", headerHozAlign:"center", columns:[
+                    {title:"AKT",field:"AKT_BULAN_INI",hozAlign:"right",headerHozAlign:"center",formatter:produksiNumberFormatter,accessorDownload:exportProduksiTonAccessor},
+                    {title:"BUD",field:"BUD_BULAN_INI",hozAlign:"right",headerHozAlign:"center",formatter:produksiNumberFormatter,accessorDownload:exportProduksiTonAccessor},
+                ]},
+                {title:"SAMPAI DENGAN YTD", headerHozAlign:"center", columns:[
+                    {title:"YTD",field:"YTD_TAHUN_INI",hozAlign:"right",headerHozAlign:"center",formatter:produksiNumberFormatter,accessorDownload:exportProduksiTonAccessor},
+                    {title:"BUD<br>YTD",field:"BUD_YTD_TAHUN_INI",hozAlign:"right",headerHozAlign:"center",formatter:produksiNumberFormatter,accessorDownload:exportProduksiTonAccessor},
+                ]},
                 {title:"BUD<br>TAHUN<br>INI",field:"BUD_TAHUNAN",hozAlign:"right",headerHozAlign:"center",formatter:produksiNumberFormatter,accessorDownload:exportProduksiTonAccessor}
             ]}
         ];
