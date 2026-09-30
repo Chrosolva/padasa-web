@@ -84,6 +84,33 @@
         font-style: italic;
     }
 
+    #rekap-hpt-table .tabulator-group {
+        padding: 6px 10px;
+        background-color: #eef4f8;
+        border-top: 1px solid #d2d6de;
+        border-bottom: 1px solid #d2d6de;
+        font-size: 12px;
+    }
+
+    #rekap-hpt-table .tabulator-group:hover {
+        background-color: #e5eef5;
+    }
+
+    #rekap-hpt-table
+    .tabulator-group
+    .tabulator-calcs-holder {
+        background-color: #f3f3f3;
+        font-weight: 700;
+    }
+
+    #rekap-hpt-table
+    .tabulator-footer
+    .tabulator-calcs-holder {
+        background-color: #d9edf7;
+        border-top: 2px solid #3c8dbc;
+        font-weight: 700;
+    }
+
     @media (max-width: 767px) {
         .compact-filter .form-group {
             display: block;
@@ -356,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
             layout: "fitData",
 
             pagination: "local",
-            paginationSize: 10,
+            paginationSize: true,
             paginationSizeSelector: [
                 10,
                 25,
@@ -364,46 +391,55 @@ document.addEventListener("DOMContentLoaded", function () {
                 true
             ],
 
-            paginationCounter: function (
-                pageSize,
-                currentRow,
-                currentPage,
-                totalRows,
-                totalPages
-            ) {
-                if (totalRows === 0) {
-                    return "Tidak ada data";
-                }
-
-                if (pageSize === true) {
-                    return "Menampilkan seluruh " +
-                        totalRows +
-                        " data";
-                }
-
-                var rowAwal =
-                    ((currentPage - 1) * pageSize) + 1;
-
-                var rowAkhir = Math.min(
-                    currentPage * pageSize,
-                    totalRows
-                );
-
-                return "Menampilkan " +
-                    rowAwal +
-                    " - " +
-                    rowAkhir +
-                    " dari " +
-                    totalRows +
-                    " data";
-            },
+            height: "500px",
 
             placeholder: "Tidak ada data Rekap HPT.",
             movableColumns: true,
             resizableColumns: true,
             columnHeaderVertAlign: "middle",
 
+            columnCalcs: "both",
+
+            groupBy: "tahun_tanam",
+
+            groupStartOpen: true,
+
+            groupHeader: function (
+                value,
+                count
+            ) {
+                return (
+                    "<strong>TAHUN TANAM "
+                    + value
+                    + "</strong>"
+                    + " <span style='"
+                    + "color:#999;"
+                    + "font-weight:normal;"
+                    + "'>"
+                    + count
+                    + " kebun"
+                    + "</span>"
+                );
+            },
+
+            initialSort: [
+                {
+                    column: "tahun_tanam",
+                    dir: "asc"
+                },
+                {
+                    column: "kebun",
+                    dir: "asc"
+                }
+            ],
+
             columns: [
+                {
+                    title: "TAHUN TANAM",
+                    field: "tahun_tanam",
+                    sorter: "number",
+                    visible: false
+                },
                 {
                     title: "KEBUN",
                     field: "kebun",
@@ -414,12 +450,56 @@ document.addEventListener("DOMContentLoaded", function () {
                     sorter: "string",
 
                     bottomCalc: function () {
-                        return "TOTAL";
+                        return "SUBTOTAL";
                     }
                 },
                 {
                     title: "JUMLAH PKK",
                     field: "jumlah_pkk",
+                    minWidth: 160,
+                    headerHozAlign: "center",
+                    hozAlign: "right",
+                    sorter: "number",
+                    formatter: formatInteger,
+                    bottomCalc: "sum",
+                    bottomCalcFormatter: formatInteger
+                },
+                {
+                    title: "RINGAN",
+                    field: "RINGAN",
+                    minWidth: 160,
+                    headerHozAlign: "center",
+                    hozAlign: "right",
+                    sorter: "number",
+                    formatter: formatInteger,
+                    bottomCalc: "sum",
+                    bottomCalcFormatter: formatInteger
+                },
+                {
+                    title: "SEDANG",
+                    field: "SEDANG",
+                    minWidth: 160,
+                    headerHozAlign: "center",
+                    hozAlign: "right",
+                    sorter: "number",
+                    formatter: formatInteger,
+                    bottomCalc: "sum",
+                    bottomCalcFormatter: formatInteger
+                },
+                {
+                    title: "BERAT",
+                    field: "BERAT",
+                    minWidth: 160,
+                    headerHozAlign: "center",
+                    hozAlign: "right",
+                    sorter: "number",
+                    formatter: formatInteger,
+                    bottomCalc: "sum",
+                    bottomCalcFormatter: formatInteger
+                },
+                {
+                    title: "MATI",
+                    field: "MATI",
                     minWidth: 160,
                     headerHozAlign: "center",
                     hozAlign: "right",
@@ -462,6 +542,80 @@ document.addEventListener("DOMContentLoaded", function () {
         "clear-search-rekap-hpt"
     );
 
+    function updateRekapCalculationLabels() {
+        var tableElement =
+            document.getElementById(
+                "rekap-hpt-table"
+            );
+
+        if (!tableElement) {
+            return;
+        }
+
+        var footerCalcRows =
+            tableElement.querySelectorAll(
+                ".tabulator-footer "
+                + ".tabulator-calcs-bottom"
+            );
+
+        footerCalcRows.forEach(function (calcRow) {
+            var cells =
+                calcRow.querySelectorAll(
+                    ".tabulator-cell"
+                );
+
+            cells.forEach(function (cell) {
+                if (
+                    cell.textContent.trim()
+                    === "SUBTOTAL"
+                ) {
+                    cell.textContent =
+                        "GRAND TOTAL";
+                }
+            });
+        });
+    }
+
+    rekapHPTTable.on(
+        "tableBuilt",
+        function () {
+            setTimeout(
+                updateRekapCalculationLabels,
+                0
+            );
+        }
+    );
+
+    rekapHPTTable.on(
+        "renderComplete",
+        function () {
+            setTimeout(
+                updateRekapCalculationLabels,   
+                0
+            );
+        }
+    );
+
+    rekapHPTTable.on(
+        "dataProcessed",
+        function () {
+            setTimeout(
+                updateRekapCalculationLabels,
+                0
+            );
+        }
+    );
+
+    rekapHPTTable.on(
+        "pageLoaded",
+        function () {
+            setTimeout(
+                updateRekapCalculationLabels,
+                0
+            );
+        }
+    );
+
     function applyRekapHPTSearch() {
         var keyword = searchInput.value
             .trim()
@@ -474,8 +628,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         rekapHPTTable.setFilter(function (data) {
             var values = [
+                data.tahun_tanam,
                 data.kebun,
                 data.jumlah_pkk,
+                data.RINGAN,
+                data.SEDANG,
+                data.BERAT,
+                data.MATI,
                 data.pkk_terserang,
                 data.persen_terserang
             ];

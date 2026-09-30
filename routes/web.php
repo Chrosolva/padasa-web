@@ -191,9 +191,9 @@ use App\Http\Controllers\request;
 				Route::get('/StatusbatchEplant', 'Dashboard\BioFertilizerController@getStatusbatchEPLANT');
 				// NEW: Analisa Mutasi Pupuk Compost Per Bulan
         		Route::get(
-            		'/AnalisaMutasiPupukPerBulan',
-            		'Dashboard\BioFertilizerController@getAnalisaMutasiPupukCompost_PerBulan'
-        		);
+					'/biofertilizer/AnalisaMutasiPupukPerBulan',
+					'Dashboard\BioFertilizerController@getAnalisaMutasiPupukCompost_PerBulan'
+				)->name('biofertilizer.analisa-mutasi-per-bulan');
 			});
 
 			// Bantuan
@@ -214,13 +214,73 @@ use App\Http\Controllers\request;
 				)->name('hpt.detail');
 			});
 
-			// AGRONOMI
-			Route::group(['prefix' => 'agronomi'], function () {
+			/*
+			|--------------------------------------------------------------------------
+			| AGRONOMI
+			|--------------------------------------------------------------------------
+			*/
+
+			Route::group(
+				[
+					'prefix' => 'agronomi'
+				],
+				function () {
+
+					Route::get(
+						'/produksi-tbs',
+						'Dashboard\AgronomiController@getProduksiTBS'
+					)->name(
+						'agronomi.produksi-tbs'
+					);
+
+				}
+			);
+
+			/*
+			|--------------------------------------------------------------------------
+			| MILL
+			|--------------------------------------------------------------------------
+			*/
+
+			Route::group(
+				[
+					'prefix' =>
+						'mill'
+				],
+				function () {
+
+					Route::get(
+						'/produksi-cpo-inti',
+						'Dashboard\MillController@getProduksiCPOInti'
+					)->name(
+						'mill.produksi-cpo-inti'
+					);
+
+					Route::get(
+						'/tbs-terima',
+						'Dashboard\\MillController@getTBSTerima'
+					)->name(
+						'mill.tbs-terima'
+					);
+
+				}
+			);
+
+
+			Route::group(['prefix' => 'dev'], function () {
+
 				Route::get(
-					'/produksi-tbs',
-					'Dashboard\AgronomiController@getProduksiTBS'
-				)->name('agronomi.produksi-tbs');
+					'/biaya',
+					'Dashboard\DevController@getBiaya'
+				)->name('dev.biaya');
+
+				Route::get(
+					'/dashboard/dev/biaya-pabrik',
+					'Dashboard\DevController@getBiayaPabrik'
+				)->name('dev.biaya-pabrik');
+
 			});
+
 		});
 
 		// Admin Panel

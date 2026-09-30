@@ -62,14 +62,14 @@
                 <ul class="treeview-menu">
                     <li class="{{ Auth::user()->canAccessByHakAkses('Areal Statement', 'BreakDown Luasan Per Wilayah dan PT') ? '' : 'disabled' }}">
                         <a href="{{ url('/dashboard/arealstatement/breakdown-luasan-wilayah-pt') }}" class="sidebar-wrap-link">
-                            {{-- <i class="fa fa-exclamation-circle menu-unconfirmed" title="Belum dikonfirmasi"></i>--}}
-                            <span class="sidebar-wrap-text">Luasan Per Wilayah dan PT</span>
+                            <i class="fa fa-exclamation-circle menu-unconfirmed" title="Belum dikonfirmasi"></i>
+                            <span class="sidebar-wrap-text">Luasan Per PT</span>
                         </a>
                     </li>
                     <li class="{{ Auth::user()->canAccessByHakAkses('Areal Statement', 'Luasan Wilayah Per Kebun') ? '' : 'disabled' }}">
                         <a href="{{ url('/dashboard/arealstatement/luasan-wilayah-per-kebun') }}" class="sidebar-wrap-link">
-                            {{-- <i class="fa fa-exclamation-circle menu-unconfirmed" title="Belum dikonfirmasi"></i> --}}
-                            <span class="sidebar-wrap-text">Luasan Wilayah</span>
+                            <i class="fa fa-exclamation-circle menu-unconfirmed" title="Belum dikonfirmasi"></i>
+                            <span class="sidebar-wrap-text">Luasan Per Kebun</span>
                         </a>
                     </li>
                 </ul>
@@ -79,6 +79,7 @@
                 <a href="#">
                     <i class="fa fa-leaf"></i>
                     <span>Agronomi</span>
+
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -95,6 +96,107 @@
                             Produksi TBS
                         </a>
                     </li>
+                </ul>
+            </li>
+
+            <li class="treeview {{
+                request()->is(
+                    'dashboard/mill*'
+                )
+                    ? 'active'
+                    : ''
+            }}">
+                <a href="#">
+                    <i class="fa fa-industry"></i>
+
+                    <span>
+                        Mill
+                    </span>
+
+                    <span class="pull-right-container">
+                        <i
+                            class="
+                                fa
+                                fa-angle-left
+                                pull-right
+                            "
+                        ></i>
+                    </span>
+                </a>
+
+                <ul class="treeview-menu">
+
+                    <li class="{{
+                        Auth::user()
+                            ->canAccessByHakAkses(
+                                'Mill',
+                                'TBS Terima'
+                            )
+                            ? (
+                                request()->is(
+                                    'dashboard/mill/tbs-terima'
+                                )
+                                    ? 'active'
+                                    : ''
+                            )
+                            : 'disabled'
+                    }}">
+                        <a
+                            href="{{
+                                route(
+                                    'mill.tbs-terima'
+                                )
+                            }}"
+                        >
+                            <i
+                                class="
+                                    fa
+                                    fa-exclamation-circle
+                                    menu-unconfirmed
+                                "
+                                title="Belum dikonfirmasi"
+                            ></i>
+                            Penerimaan TBS
+                        </a>
+                    </li>
+
+                    <li class="{{
+                        Auth::user()
+                            ->canAccessByHakAkses(
+                                'Mill',
+                                'Produksi CPO Inti'
+                            )
+                            ? (
+                                request()->is(
+                                    'dashboard/mill/produksi-cpo-inti'
+                                )
+                                    ? 'active'
+                                    : ''
+                            )
+                            : 'disabled'
+                    }}">
+                        <a
+                            href="{{
+                                route(
+                                    'mill.produksi-cpo-inti'
+                                )
+                            }}"
+                        >
+                            <i
+                                class="
+                                    fa
+                                    fa-exclamation-circle
+                                    menu-unconfirmed
+                                "
+                                title="Belum dikonfirmasi"
+                            ></i>
+
+                            Produksi CPO & Inti
+                        </a>
+                    </li>
+
+                    
+
                 </ul>
             </li>
 
@@ -179,7 +281,8 @@
                 <ul class="treeview-menu">
                     <li class="{{ Auth::user()->canAccessByHakAkses('BioFertilizer', 'Status Batch') ? '' : 'disabled' }}">
                         <a href="{{ url('/dashboard/biofertilizer/Statusbatch') }}">
-                            <i class="fa fa-circle-o"></i>
+                            {{-- <i class="fa fa-circle-o"></i> --}}
+                            <i class="fa fa-exclamation-circle menu-unconfirmed" title="Belum dikonfirmasi"></i>
                             <span>Status Batch</span>
                         </a>
                     </li>
@@ -191,19 +294,23 @@
                         </a>
                     </li> --}}
 
-                    <li class="{{ Auth::user()->canAccessByHakAkses(
-                        'BioFertilizer',
-                        'Analisa Mutasi Pupuk Compost PerBulan'
-                    ) ? '' : 'disabled' }}">
-                        <a href="{{ url('/dashboard/biofertilizer/AnalisaMutasiPupukPerBulan') }}"
-                           class="submenu-with-status">
-
-                            <i class="fa fa-exclamation-circle menu-unconfirmed"
-                               title="Belum dikonfirmasi"></i>
-
-                            <span class="submenu-text">
-                                Analisa Mutasi Pupuk (Per Bulan)
-                            </span>
+                    <li class="{{
+                        Auth::user()->canAccessByHakAkses(
+                            'BioFertilizer',
+                            'Analisa Mutasi Pupuk Compost PerBulan'
+                        )
+                            ? (
+                                request()->is(
+                                    'dashboard/biofertilizer/AnalisaMutasiPupukPerBulan'
+                                )
+                                    ? 'active'
+                                    : ''
+                            )
+                            : 'disabled'
+                    }}">
+                        <a href="{{ route('biofertilizer.analisa-mutasi-per-bulan') }}">
+                            <i class="fa fa-exclamation-circle menu-unconfirmed" title="Belum dikonfirmasi"></i>
+                            Analisa Mutasi & Produksi Pupuk
                         </a>
                     </li>
                 </ul>
@@ -312,6 +419,31 @@
                     <li><a href="{{ url('/dashboard/bantuan/kamus') }}"><i class="fa fa-circle-o"></i> Kamus Istilah</a></li>
                 </ul>
             </li>
+
+            <li class="{{ Auth::user()->canAccessByHakAkses('Dev', 'Main') ? '' : 'disabled' }} treeview {{ Request::is('dashboard/dev/*') ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-question"></i>
+                    <span>DEV</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::is('dashboard/dev/biaya') ? 'active' : '' }}">
+                        <a href="{{ route('dev.biaya') }}">
+                            <i class="fa fa-circle-o"></i>
+                            Biaya Kebun
+                        </a>
+                    </li>
+                    <li class="{{ Request::is('dashboard/dev/biaya-pabrik') ? 'active' : '' }}">
+                        <a href="{{ route('dev.biaya-pabrik') }}">
+                            <i class="fa fa-circle-o"></i>
+                            Biaya Pabrik
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
         </ul>
     </section>
 </aside>

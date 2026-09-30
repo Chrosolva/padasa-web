@@ -1,6 +1,6 @@
 @extends('dashboard.app')
 @section('header-title')
-    Produksi TBS
+    Biaya Pabrik
 @endsection
 @section('main-content')
 <link
@@ -256,8 +256,8 @@
 </style>
 <section class="content-header">
     <h1>
-        Produksi TBS
-        <small>Laporan Bulanan, Budget dan YTD</small>
+        Biaya Pabrik DEV
+        <small>Development</small>
     </h1>
 </section>
 <section class="content">
@@ -266,7 +266,7 @@
             <form
                 id="filter-form"
                 method="GET"
-                action="{{ route('agronomi.produksi-tbs') }}"
+                action="{{ route('dev.biaya-pabrik') }}"
                 class="form-inline"
             >
                 <div class="form-group">
@@ -352,7 +352,7 @@
                         Tampilkan
                     </button>
                     <a
-                        href="{{ route('agronomi.produksi-tbs') }}"
+                        href="{{ route('dev.biaya-pabrik') }}"
                         class="btn btn-default"
                     >
                         <i class="fa fa-refresh"></i>

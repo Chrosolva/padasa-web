@@ -45,6 +45,33 @@
         margin-top: 24px;
     }
 
+    #detail-hpt-table .tabulator-group {
+        padding: 6px 10px;
+        background-color: #eef4f8;
+        border-top: 1px solid #d2d6de;
+        border-bottom: 1px solid #d2d6de;
+        font-size: 12px;
+    }
+
+    #detail-hpt-table .tabulator-group:hover {
+        background-color: #e5eef5;
+    }
+
+    #detail-hpt-table
+    .tabulator-group
+    .tabulator-calcs-holder {
+        background-color: #f3f3f3;
+        font-weight: 700;
+    }
+
+    #detail-hpt-table
+    .tabulator-footer
+    .tabulator-calcs-holder {
+        background-color: #d9edf7;
+        border-top: 2px solid #3c8dbc;
+        font-weight: 700;
+    }
+
     @media (max-width: 767px) {
         .filter-button-group {
             margin-top: 10px;
@@ -405,38 +432,57 @@ document.addEventListener("DOMContentLoaded", function () {
         layout: "fitData",
 
         pagination: "local",
-        paginationSize: 10,
+        paginationSize: true,
         paginationSizeSelector: [10, 25, 50, true],
 
-        paginationCounter: function (
-            pageSize,
-            currentRow,
-            currentPage,
-            totalRows,
-            totalPages
-        ) {
-            if (totalRows === 0) {
-                return "Tidak ada data";
-            }
-
-            var rowAwal = ((currentPage - 1) * pageSize) + 1;
-            var rowAkhir = Math.min(currentPage * pageSize, totalRows);
-
-            return "Menampilkan " +
-                rowAwal +
-                " - " +
-                rowAkhir +
-                " dari " +
-                totalRows +
-                " data";
-        },
+        height: "500px",
 
         placeholder: "Tidak ada data Detail HPT.",
         movableColumns: true,
         resizableColumns: true,
         columnHeaderVertAlign: "middle",
+        columnCalcs: "both",
+
+        groupBy: "tahun_tanam",
+
+        groupStartOpen: true,
+
+        groupHeader: function (
+            value,
+            count
+        ) {
+            return (
+                "<strong>TAHUN TANAM "
+                + value
+                + "</strong>"
+                + " <span style='"
+                + "color:#999;"
+                + "font-weight:normal;"
+                + "'>"
+                + count
+                + " blok"
+                + "</span>"
+            );
+        },
+
+        initialSort: [
+            {
+                column: "tahun_tanam",
+                dir: "asc"
+            },
+            {
+                column: "kodesite",
+                dir: "asc"
+            }
+        ],
 
         columns: [
+            {
+                title: "TAHUN TANAM",
+                field: "tahun_tanam",
+                sorter: "number",
+                visible: false
+            },
             {
                 title: "KODE BLOK",
                 field: "kodesite",
@@ -446,13 +492,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 hozAlign: "left",
                 sorter: "string",
                 bottomCalc: function () {
-                    return "TOTAL";
+                    return "SUBTOTAL";
                 }
             },
             {
-                title: "JUMLAH POKOK SAKIT",
-                field: "jumlah_pokok_sakit",
-                minWidth: 190,
+                title: "JUMLAH PKK",
+                field: "total_pokok",
+                minWidth: 150,
                 headerHozAlign: "center",
                 hozAlign: "right",
                 sorter: "number",
@@ -461,9 +507,53 @@ document.addEventListener("DOMContentLoaded", function () {
                 bottomCalcFormatter: formatInteger
             },
             {
-                title: "TOTAL POKOK",
-                field: "total_pokok",
-                minWidth: 150,
+                title: "RINGAN",
+                field: "ringan",
+                minWidth: 160,
+                headerHozAlign: "center",
+                hozAlign: "right",
+                sorter: "number",
+                formatter: formatInteger,
+                bottomCalc: "sum",
+                bottomCalcFormatter: formatInteger
+            },
+            {
+                title: "SEDANG",
+                field: "sedang",
+                minWidth: 160,
+                headerHozAlign: "center",
+                hozAlign: "right",
+                sorter: "number",
+                formatter: formatInteger,
+                bottomCalc: "sum",
+                bottomCalcFormatter: formatInteger
+            },
+            {
+                title: "BERAT",
+                field: "berat",
+                minWidth: 160,
+                headerHozAlign: "center",
+                hozAlign: "right",
+                sorter: "number",
+                formatter: formatInteger,
+                bottomCalc: "sum",
+                bottomCalcFormatter: formatInteger
+            },
+            {
+                title: "MATI",
+                field: "mati",
+                minWidth: 160,
+                headerHozAlign: "center",
+                hozAlign: "right",
+                sorter: "number",
+                formatter: formatInteger,
+                bottomCalc: "sum",
+                bottomCalcFormatter: formatInteger
+            },
+            {
+                title: "PKK TERSERANG",
+                field: "jumlah_pokok_sakit",
+                minWidth: 190,
                 headerHozAlign: "center",
                 hozAlign: "right",
                 sorter: "number",
@@ -490,6 +580,89 @@ document.addEventListener("DOMContentLoaded", function () {
         "clear-search-detail-hpt"
     );
 
+    function updateDetailCalculationLabels() {
+        var tableElement =
+            document.getElementById(
+                "detail-hpt-table"
+            );
+
+        if (!tableElement) {
+            return;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Hanya footer utama = GRAND TOTAL
+        |--------------------------------------------------------------------------
+        |
+        | BottomCalc pada masing-masing group tetap SUBTOTAL.
+        |
+        */
+
+        var footerCalcRows =
+            tableElement.querySelectorAll(
+                ".tabulator-footer "
+                + ".tabulator-calcs-bottom"
+            );
+
+        footerCalcRows.forEach(function (calcRow) {
+            var cells =
+                calcRow.querySelectorAll(
+                    ".tabulator-cell"
+                );
+
+            cells.forEach(function (cell) {
+                if (
+                    cell.textContent.trim()
+                    === "SUBTOTAL"
+                ) {
+                    cell.textContent =
+                        "GRAND TOTAL";
+                }
+            });
+        });
+    }
+
+    detailHPTTable.on(
+        "tableBuilt",
+        function () {
+            setTimeout(
+                updateDetailCalculationLabels,
+                0
+            );
+        }
+    );
+
+    detailHPTTable.on(
+        "renderComplete",
+        function () {
+            setTimeout(
+                updateDetailCalculationLabels,
+                0
+            );
+        }
+    );
+
+    detailHPTTable.on(
+        "dataProcessed",
+        function () {
+            setTimeout(
+                updateDetailCalculationLabels,
+                0
+            );
+        }
+    );
+
+    detailHPTTable.on(
+        "pageLoaded",
+        function () {
+            setTimeout(
+                updateDetailCalculationLabels,
+                0
+            );
+        }
+    );
+
     function applyDetailHPTSearch() {
         var keyword = searchInput.value.trim().toLowerCase();
 
@@ -499,28 +672,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         detailHPTTable.setFilter(function (data) {
-            var kodeSite = String(
-                data.kodesite || ""
-            ).toLowerCase();
+            var values = [
+                data.tahun_tanam,
+                data.kodesite,
+                data.jumlah_pokok_sakit,
+                data.ringan,
+                data.sedang,
+                data.berat,
+                data.mati,
+                data.total_pokok,
+                data.persen_sakit
+            ];
 
-            var jumlahPokokSakit = String(
-                data.jumlah_pokok_sakit || ""
-            ).toLowerCase();
-
-            var totalPokok = String(
-                data.total_pokok || ""
-            ).toLowerCase();
-
-            var persenSakit = String(
-                data.persen_sakit || ""
-            ).toLowerCase();
-
-            return (
-                kodeSite.indexOf(keyword) !== -1 ||
-                jumlahPokokSakit.indexOf(keyword) !== -1 ||
-                totalPokok.indexOf(keyword) !== -1 ||
-                persenSakit.indexOf(keyword) !== -1 
-            );
+            return values.some(function (value) {
+                return String(value || "")
+                    .toLowerCase()
+                    .indexOf(keyword) !== -1;
+            });
         });
     }
 

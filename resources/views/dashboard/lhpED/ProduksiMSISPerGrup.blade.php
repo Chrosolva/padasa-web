@@ -320,7 +320,7 @@
                                     ?>
                                     <thead>
                                         <tr>
-                                            <th style="font-size: 12px;">TAHUN</th>
+                                            <th style="font-size: 12px;">TAHUN</th> 
                                             <th style="font-size: 12px;">BULAN</th>
                                             <th style="font-size: 12px;">KEBUN</th>
                                             <th style="font-size: 12px;">PRODUKSI MS IS KS [KG]</th>

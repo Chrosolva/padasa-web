@@ -341,7 +341,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p>Catatan: Qty diperoleh dari GRN dan harga diperoleh dari PO</p>
+                                <p>Catatan: Qty Diperoleh dari PO dan harga diperoleh dari PO</p>
                             </div>
                         </div>
                     </div>
@@ -413,7 +413,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p>Catatan: Qty diperoleh dari GRN dan harga diperoleh dari PO</p>
+                                <p>Catatan: Qty Diperoleh dari PO dan harga diperoleh dari PO</p>
                             </div>
                         </div>
                     </div>
@@ -485,7 +485,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p>Catatan: Qty diperoleh dari GRN dan harga diperoleh dari PO</p>
+                                <p>Catatan: Qty Diperoleh dari PO dan harga diperoleh dari PO</p>
                             </div>
                         </div>
                     </div>
@@ -557,7 +557,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p>Catatan: Qty diperoleh dari GRN dan harga diperoleh dari PO</p>
+                                <p>Catatan: Qty Diperoleh dari PO dan harga diperoleh dari PO</p>
                             </div>
                         </div>
                     </div>
@@ -629,7 +629,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p>Catatan: Qty diperoleh dari GRN dan harga diperoleh dari PO</p>
+                                <p>Catatan: Qty Diperoleh dari PO dan harga diperoleh dari PO</p>
                             </div>
                         </div>
                     </div>
@@ -701,7 +701,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p>Catatan: Qty diperoleh dari GRN dan harga diperoleh dari PO</p>
+                                <p>Catatan: Qty Diperoleh dari PO dan harga diperoleh dari PO</p>
                             </div>
                         </div>
                     </div>
@@ -773,7 +773,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p>Catatan: Qty diperoleh dari GRN dan harga diperoleh dari PO</p>
+                                <p>Catatan: Qty Diperoleh dari PO dan harga diperoleh dari PO</p>
                             </div>
                         </div>
                     </div>
@@ -845,7 +845,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p>Catatan: Qty diperoleh dari GRN dan harga diperoleh dari PO</p>
+                                <p>Catatan: Qty Diperoleh dari PO dan harga diperoleh dari PO</p>
                             </div>
                         </div>
                     </div>
@@ -917,7 +917,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p>Catatan: Qty diperoleh dari GRN dan harga diperoleh dari PO</p>
+                                <p>Catatan: Qty Diperoleh dari PO dan harga diperoleh dari PO</p>
                             </div>
                         </div>
                     </div>

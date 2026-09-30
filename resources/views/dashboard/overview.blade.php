@@ -271,6 +271,31 @@
         border-radius: 6px;
     }
 
+    .empty-overview {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 15px;
+        padding: 12px 15px;
+        color: #8a6d3b;
+        background: #fcf8e3;
+        border: 1px solid #faebcc;
+        border-radius: 6px;
+    }
+
+    .empty-overview i {
+        font-size: 16px;
+    }
+
+    .kpi-grid.no-data-state .kpi-card {
+        opacity: 0.55;
+    }
+
+    .kpi-grid.no-data-state .kpi-value,
+    .kpi-grid.no-data-state .oer-gauge-value {
+        color: #777777 !important;
+    }
+
     @media (max-width: 1500px) {
         .kpi-grid {
             grid-template-columns: repeat(4, minmax(180px, 1fr));
@@ -381,10 +406,11 @@
         return $formatted;
     };
 
+    $hasOverviewData =
+        isset($overviewBySite[(string) $siteId]);
+
     $isEmptyOverview =
-        (float) $overview->TBSOLAH === 0.0 &&
-        (float) $overview->PRODUKSICPO === 0.0 &&
-        (float) $overview->PRODUKSIPK === 0.0;
+        !$hasOverviewData;
 @endphp
 
 <section class="content-header">
@@ -481,7 +507,23 @@
         </form>
     </div>
 
-    <div class="kpi-grid">
+    <div
+        id="emptyOverview"
+        class="empty-overview"
+        style="{{ $isEmptyOverview ? '' : 'display:none;' }}"
+    >
+        <i class="fa fa-exclamation-triangle"></i>
+
+        <strong>Data LHP belum tersedia.</strong>
+
+        <span id="emptyOverviewMessage">
+            Data PMKS yang dipilih belum tersedia atau proses closing LHP belum selesai.
+        </span>
+    </div>
+
+    <div
+    id="kpiGrid"
+    class="kpi-grid {{ $isEmptyOverview ? 'no-data-state' : '' }}">
 
         {{-- TBS OLAH --}}
         <div class="kpi-card">
@@ -795,16 +837,6 @@
 
     </div>
 
-    <div
-        id="emptyOverview"
-        class="empty-overview"
-        style="{{ $isEmptyOverview ? '' : 'display:none;' }}"
-    >
-        <i class="fa fa-info-circle"></i>
-
-        Tidak ada data produksi untuk PMKS dan tanggal yang dipilih.
-    </div>
-
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
@@ -1010,22 +1042,186 @@
             });
         }
 
+        function setNoDataState(siteId) {
+            var selectedOption =
+                siteSelect
+                    ? siteSelect.options[siteSelect.selectedIndex]
+                    : null;
+
+            var pmksName =
+                selectedOption
+                    ? selectedOption.text.trim()
+                    : siteId;
+
+            updateText(
+                'overviewPmksName',
+                'PMKS ' + pmksName
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Kosongkan nilai KPI
+            |--------------------------------------------------------------------------
+            */
+
+            updateText('tbsValue', '-');
+
+            updateText('cpoValue', '-');
+            updateText('cpoTarget', '-');
+            updateText('cpoAchievement', '-');
+
+            updateText('kernelValue', '-');
+            updateText('kernelTarget', '-');
+            updateText('kernelAchievement', '-');
+
+            updateText('oerValue', '-');
+            updateText('oerTarget', '-');
+            updateText('oerAchievement', '-');
+
+            updateText('kerValue', '-');
+            updateText('kerTarget', '-');
+            updateText('kerAchievement', '-');
+
+            updateText('jamOlahValue', '-');
+            updateText('breakdownValue', '-');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Warning
+            |--------------------------------------------------------------------------
+            */
+
+            var emptyOverview =
+                document.getElementById('emptyOverview');
+
+            var emptyOverviewMessage =
+                document.getElementById(
+                    'emptyOverviewMessage'
+                );
+
+            if (emptyOverview) {
+                emptyOverview.style.display = 'flex';
+            }
+
+            if (emptyOverviewMessage) {
+                emptyOverviewMessage.textContent =
+                    'Data LHP PMKS '
+                    + pmksName
+                    + ' untuk tanggal '
+                    + tanggalInput.value
+                    + ' belum tersedia atau belum closing.';
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Dim KPI
+            |--------------------------------------------------------------------------
+            */
+
+            var kpiGrid =
+                document.getElementById('kpiGrid');
+
+            if (kpiGrid) {
+                kpiGrid.classList.add(
+                    'no-data-state'
+                );
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Gauge
+            |--------------------------------------------------------------------------
+            */
+
+            if (oerGauge) {
+                oerGauge.clear();
+            }
+        }
+
+        function updateOverviewUrl(siteId) {
+            var currentUrl =
+                new URL(
+                    window.location.href
+                );
+
+            currentUrl.searchParams.set(
+                'site_id',
+                siteId
+            );
+
+            if (
+                tanggalInput
+                && tanggalInput.value
+            ) {
+                currentUrl.searchParams.set(
+                    'tanggal',
+                    tanggalInput.value
+                );
+            }
+
+            window.history.replaceState(
+                {},
+                '',
+                currentUrl.toString()
+            );
+        }
+
         function updateOverview(siteId) {
             siteId = String(siteId);
 
-            var data = overviewBySite[siteId];
+            var data =
+                overviewBySite[siteId];
 
-            if (!data && overviewBySite['9999']) {
-                siteId = '9999';
-                data = overviewBySite['9999'];
-
-                if (siteSelect) {
-                    siteSelect.value = '9999';
-                }
-            }
+            /*
+            |--------------------------------------------------------------------------
+            | Row PMKS tidak tersedia
+            |--------------------------------------------------------------------------
+            |
+            | Contoh:
+            | SITE_ID 2500 / KOKAR belum closing sehingga row tidak ada.
+            |
+            */
 
             if (!data) {
+                setNoDataState(siteId);
+
+                updateOverviewUrl(siteId);
+
                 return;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Row tersedia
+            |--------------------------------------------------------------------------
+            |
+            | Walaupun seluruh produksi = 0, tetap dianggap ADA DATA.
+            | Contoh KALSA.
+            |
+            */
+
+            var emptyOverview =
+                document.getElementById(
+                    'emptyOverview'
+                );
+
+            if (emptyOverview) {
+                emptyOverview.style.display = 'none';
+            }
+
+            var kpiGrid =
+                document.getElementById(
+                    'kpiGrid'
+                );
+
+            if (kpiGrid) {
+                kpiGrid.classList.remove(
+                    'no-data-state'
+                );
             }
 
             updateText(
@@ -1154,41 +1350,13 @@
                 'breakdownValue',
                 formatFlexibleNumber(data.BREAKDOWN, 1)
             );
-
-            var noData =
-                toNumber(data.TBSOLAH) === 0 &&
-                toNumber(data.PRODUKSICPO) === 0 &&
-                toNumber(data.PRODUKSIPK) === 0;
-
-            var emptyOverview =
-                document.getElementById('emptyOverview');
-
-            if (emptyOverview) {
-                emptyOverview.style.display =
-                    noData ? 'block' : 'none';
-            }
-
-            var currentUrl = new URL(
-                window.location.href
-            );
-
-            currentUrl.searchParams.set(
-                'site_id',
-                siteId
-            );
-
-            if (tanggalInput && tanggalInput.value) {
-                currentUrl.searchParams.set(
-                    'tanggal',
-                    tanggalInput.value
-                );
-            }
-
-            window.history.replaceState(
-                {},
-                '',
-                currentUrl.toString()
-            );
+            
+            /*
+            |--------------------------------------------------------------------------
+            | Update URL
+            |--------------------------------------------------------------------------
+            */
+            updateOverviewUrl(siteId);
         }
 
         if (

@@ -95,11 +95,11 @@
                                             <td style="display:none;">{{$row->ITEMCODE}}</td>
                                             <td>{{$row->ITEMDESCRIPTION}}</td>
                                             <td>{{$row->UOMCODE}}</td>
-                                            <td style="text-align: right;">{{number_format($row->OPENING,2,',','.')}}</td>
-                                            <td style="text-align: right;">{{number_format($row->MASUK,2,',','.')}}</td>
-                                            <td style="text-align: right;">{{number_format($row->KELUAR,2,',','.')}}</td>
-                                            <td style="text-align: right;">{{number_format($row->ADJUST,2,',','.')}}</td>
-                                            <td style="text-align: right;">{{number_format($row->CLOSING,2,',','.')}}</td>
+                                            <td style="text-align: right;">{{number_format($row->OPENING,0,',','.')}}</td>
+                                            <td style="text-align: right;">{{number_format($row->MASUK,0,',','.')}}</td>
+                                            <td style="text-align: right;">{{number_format($row->KELUAR,0,',','.')}}</td>
+                                            <td style="text-align: right;">{{number_format($row->ADJUST,0,',','.')}}</td>
+                                            <td style="text-align: right;">{{number_format($row->CLOSING,0,',','.')}}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

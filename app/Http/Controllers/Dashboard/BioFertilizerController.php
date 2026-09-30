@@ -54,34 +54,94 @@ class BioFertilizerController extends Controller
 
     public function getAnalisaMutasiPupukCompost_PerBulan(Request $request)
     {
-        // --- Filters (default like your examples) ---
-        $tahun  = (int) ($request->get('tahun')  ?? date('Y'));
-        $bulan  = (int) ($request->get('bulan')  ?? date('n')); // 1..12
-        // $siteId = $request->get('site_id');
-        // $siteId = ($siteId === 'ALL' || $siteId === null || $siteId === '') ? null : (int)$siteId;
-        $siteId = (int) ($request->get('site_id') ?? 2200);
+        if (
+            Auth::user()->canAccessByHakAkses(
+                'BioFertilizer',
+                'Analisa Mutasi Pupuk Compost PerBulan'
+            ) == false
+        ) {
+            abort('403-dashboard');
+        }
 
+        $tahun = (int) $request->get('tahun', date('Y'));
+        // $bulan = (int) $request->get('bulan', date('n'));
+        $bulan = 12;
+        $siteId = (int) $request->get('site_id', 2200);
 
-
-        // status & jenis must be NULL; inactive = 0
-        $status   = null;
-        $jenis    = null;
-        $inactive = 0;
-
-        // Run the stored procedure (SQL Server)
-        $rows = DB::select(
-            "SET NOCOUNT ON;
-             EXEC PUBDB.Compost.AnalisaMutasiPupukCompost_PerBulan_Dashboard
-                @Tahun = ?, @Bulan = ?, @site_id = ?, @status = ?, @Jenis = ?, @inactive = ?",
-            [$tahun, $bulan, $siteId, $status, $jenis, $inactive]
+        $jenisProduk = strtoupper(
+            trim((string) $request->get('jenis_produk', 'SEMUA'))
         );
 
-        // Pass data & current filters to the view
-        return view('dashboard.biofertilizer.analisa-mutasi-per-bulan', [
-            'rows'   => $rows,
-            'tahun'  => $tahun,
-            'bulan'  => $bulan,
-            'siteId' => $siteId,
-        ]);
+        $jenisParameter = in_array(
+            $jenisProduk,
+            ['SSB', 'SSC', 'SSK'],
+            true
+        ) ? $jenisProduk : null;
+
+        $status = null;
+        $inactive = 0;
+
+        // TAB 1 - ANALISA MUTASI
+        $rows = DB::select(
+            "SET NOCOUNT ON;
+
+            EXEC PUBDB.Compost.AnalisaMutasiPupukCompost_PerTahun_Dashboard
+                @Tahun = ?,
+                @Bulan = ?,
+                @site_id = ?,
+                @status = ?,
+                @Jenis = ?,
+                @inactive = ?",
+            [
+                $tahun,
+                null,
+                $siteId,
+                'SEMUA',
+                $jenisParameter,
+                $inactive
+            ]
+        );
+
+        // TAB 2 - PRODUKSI PUPUK
+        $produksiPupuk = DB::select(
+            "SET NOCOUNT ON;
+            EXEC PUBDB.Compost.AnalisaPersediaanCompost_YTD_Dashboard
+                @Tahun = ?,
+                @Bulan = ?,
+                @site_id = ?,
+                @status = ?,
+                @Jenis = ?,
+                @inactive = ?",
+            [
+                $tahun,
+                $bulan,
+                (string) $siteId,
+                $status,
+                $jenisParameter,
+                $inactive
+            ]
+        );
+
+        $siteOptions = [
+            '2200' => 'TELDA',
+            '2300' => 'KALSA',
+            '2400' => 'KALDA',
+            '2500' => 'KOKAR',
+            '3200' => 'RICKO',
+            '5200' => 'PASER',
+        ];
+
+        return view(
+            'dashboard.biofertilizer.analisa-mutasi-per-bulan',
+            [
+                'rows' => $rows,
+                'produksiPupuk' => $produksiPupuk,
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+                'siteId' => $siteId,
+                'jenisProduk' => $jenisProduk,
+                'siteOptions' => $siteOptions,
+            ]
+        );
     }
 }

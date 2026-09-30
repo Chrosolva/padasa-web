@@ -30,7 +30,7 @@
 
                     <div class="form-group">
                         <label for="bulan">Bulan : </label>
-                        <div class="input-group date input-inline" style="width: 175px;">
+                        <div class="input-group date input-inline">
                             <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                             </div>
@@ -61,7 +61,7 @@
 
                     <div class="form-group">
                         <label for="selectstatus">Status : </label>
-                        <select class="form-control" id="selectstatus" name="selectstatus" style="width:120px;">
+                        <select class="form-control" id="selectstatus" name="selectstatus"">
                             <option value="SEMUA">SEMUA</option>
                             <option value="CLOSED">CLOSED</option>
                             <option value="OPEN">OPEN-IN PRODUCTION</option>

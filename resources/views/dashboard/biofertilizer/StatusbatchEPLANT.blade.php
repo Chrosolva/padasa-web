@@ -44,7 +44,7 @@
                         <select class="form-control" id="selectstatus" name="selectstatus">
                             <option value="SEMUA">SEMUA</option>
                             <option value="CLOSED">CLOSED</option>
-                            <option value="OPEN">OPEN</option>
+                            <option value="OPEN">OPEN-IN PRODUCTION</option>
                             <option value="AVAILABLE">AVAILABLE</option>
                             <!-- <option value="IN USED">IN USED</option> -->
                         </select>

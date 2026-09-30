@@ -48,10 +48,56 @@ class ArealStatementController extends Controller
             [$comp_id, $site_id, $tahun, $bulan]
         );
 
+        /*
+        |--------------------------------------------------------------------------
+        | Per Bibit Per PT
+        |--------------------------------------------------------------------------
+        */
+
+        $dataBibit = DB::select("
+            SET NOCOUNT ON;
+
+            EXEC PUBDB.Tanaman.ArealStatement_6_PER_KEBUN_PER_BIBIT_PER_PT_v2
+                @comp_id = null,
+                @site_id = null,
+                @tahun = ?,
+                @bulan = ?
+        ", [
+            $tahun,
+            $bulan
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Per Topografi Per PT
+        |--------------------------------------------------------------------------
+        */
+
+        $dataTopografi = DB::select("
+            SET NOCOUNT ON;
+
+            EXEC PUBDB.Tanaman.ArealStatement_7_PER_KEBUN_PER_TOPOGRAFI_PER_PT_V2
+                @comp_id = null,
+                @site_id = null,
+                @tahun = ?,
+                @bulan = ?
+        ", [
+            $tahun,
+            $bulan
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Per Umur Per PT
+        |--------------------------------------------------------------------------
+        */
+
         $dataUmur = DB::select("
             SET NOCOUNT ON;
 
-            EXEC PUBDB.Tanaman.ArealStatement_8_KELOMPOK_UMUR_TANAMAN_V2
+            EXEC PUBDB.Tanaman.ArealStatement_8_KELOMPOK_UMUR_TANAMAN_PER_PT_V2
                 @kategori = ?,
                 @comp_id = null,
                 @site_id = null,
@@ -63,36 +109,165 @@ class ArealStatementController extends Controller
             $bulan
         ]);
 
+        /*
+        |--------------------------------------------------------------------------
+        | Helper Format Dynamic HA Per PT
+        |--------------------------------------------------------------------------
+        */
+
+        $formatDynamicHaPerPt = function ($rows) {
+            $result = [];
+
+            foreach ($rows as $index => $row) {
+                $newRow = [
+                    'NO' =>
+                        $index + 1,
+
+                    'COMP_ID' =>
+                        $row->COMP_ID ?? null,
+
+                    'PT' =>
+                        strtoupper(
+                            trim($row->PT ?? '')
+                        ),
+                ];
+
+                foreach ((array) $row as $columnName => $value) {
+                    $columnUpper =
+                        strtoupper(
+                            trim($columnName)
+                        );
+
+                    /*
+                    * Pertahankan hanya kolom HA.
+                    * Semua PKK diabaikan.
+                    */
+                    if (
+                        strpos(
+                            $columnUpper,
+                            'HA '
+                        ) === 0
+                    ) {
+                        $newRow[$columnName] =
+                            (float) ($value ?? 0);
+                    }
+                }
+
+                $result[] =
+                    $newRow;
+            }
+
+            return $result;
+        };
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Format Bibit & Topografi
+        |--------------------------------------------------------------------------
+        */
+
+        $dataBibit =
+            $formatDynamicHaPerPt(
+                $dataBibit
+            );
+
+        $dataTopografi =
+            $formatDynamicHaPerPt(
+                $dataTopografi
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Dynamic Columns
+        |--------------------------------------------------------------------------
+        */
+
+        $columnsBibit =
+            count($dataBibit) > 0
+                ? array_keys(
+                    $dataBibit[0]
+                )
+                : [];
+
+        $columnsTopografi =
+            count($dataTopografi) > 0
+                ? array_keys(
+                    $dataTopografi[0]
+                )
+                : [];
+
         $wilayah = $this->addTotalHaAndSubtotal($wilayah, 'REGION');
         $pt = $this->addTotalHaAndSubtotal($pt, 'NAMA');
 
         $noUrutUmur = 1;
 
         foreach ($dataUmur as $row) {
-            $row->NOURUT = $noUrutUmur++;
+            $row->NOURUT =
+                $noUrutUmur++;
 
-            $row->TBM = (float) ($row->TBM ?? 0);
-            $row->MUDA = (float) ($row->MUDA ?? 0);
-            $row->REMAJA = (float) ($row->REMAJA ?? 0);
-            $row->DEWASA = (float) ($row->DEWASA ?? 0);
-            $row->TUA = (float) ($row->TUA ?? 0);
-            $row->REPLANTING = (float) ($row->REPLANTING ?? 0);
+            $row->PT =
+                strtoupper(
+                    trim($row->PT ?? '')
+                );
+
+            $row->TBM =
+                (float) ($row->TBM ?? 0);
+
+            $row->MUDA =
+                (float) ($row->MUDA ?? 0);
+
+            $row->REMAJA =
+                (float) ($row->REMAJA ?? 0);
+
+            $row->DEWASA =
+                (float) ($row->DEWASA ?? 0);
+
+            $row->TUA =
+                (float) ($row->TUA ?? 0);
+
+            $row->REPLANTING =
+                (float) ($row->REPLANTING ?? 0);
 
             $row->TOTAL_HA =
-                $row->TBM +
-                $row->MUDA +
-                $row->REMAJA +
-                $row->DEWASA +
-                $row->TUA +
-                $row->REPLANTING;
+                $row->TBM
+                + $row->MUDA
+                + $row->REMAJA
+                + $row->DEWASA
+                + $row->TUA
+                + $row->REPLANTING;
         }
 
-        return view('dashboard.arealstatement.BreakdownLuasanWilayahPT')->with([
-            'wilayah' => $wilayah,
-            'pt' => $pt,
-            'dataUmur' => $dataUmur,
-            'tahun' => $tahun,
-            'bulan' => $bulan
+        return view(
+            'dashboard.arealstatement.BreakdownLuasanWilayahPT'
+        )->with([
+            'wilayah' =>
+                $wilayah,
+
+            'pt' =>
+                $pt,
+
+            'dataBibit' =>
+                $dataBibit,
+
+            'columnsBibit' =>
+                $columnsBibit,
+
+            'dataTopografi' =>
+                $dataTopografi,
+
+            'columnsTopografi' =>
+                $columnsTopografi,
+
+            'dataUmur' =>
+                $dataUmur,
+
+            'tahun' =>
+                $tahun,
+
+            'bulan' =>
+                $bulan
         ]);
     }
 

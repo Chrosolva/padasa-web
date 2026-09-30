@@ -499,6 +499,7 @@
             paginationSizeSelector: [10, 25, 50, 100, true],
 
             columnCalcs: "bottom",
+            headerSort: false,
 
             initialSort: [
                 { column: "TANGGAL", dir: "asc" }
@@ -518,20 +519,19 @@
                 { 
                     title: "NO", 
                     field: "INDEX", 
-                    width: 55,
-                    minWidth: 50
+                    headerSort: false,
+                    minWidth: 10
                 },
-                { title: "SITE ID", field: "SITE_ID", visible: false },
-                { title: "TAHUN", field: "TAHUN", visible: false },
-                { title: "BULAN", field: "BULAN", visible: false },
+                { title: "SITE ID", field: "SITE_ID", headerSort: false, visible: false },
+                { title: "TAHUN", field: "TAHUN", headerSort: false, visible: false },
+                { title: "BULAN", field: "BULAN", headerSort: false, visible: false },
                 {
                     title: "TGL",
                     field: "TANGGAL",
-                    width: 80,
-                    minWidth: 80,
+                    minWidth: 10,
                     hozAlign: "center",
                     sorter: dateSorter,
-                    headerSort: true,
+                    headerSort: false,
                     bottomCalc: function() {
                         return "TOTAL";
                     },
@@ -543,9 +543,9 @@
                 {
                     title: "NAMA",
                     field: "NAMA",
-                    width: 90,
-                    minWidth: 90,
+                    minWidth: 10,
                     hozAlign: "left",
+                    headerSort: false,
                     // headerFilter: "input",
                     bottomCalc: function() {
                         return "";
@@ -554,9 +554,9 @@
                 {
                     title: "TBS<br>TERIMA<br>[KG]",
                     field: "TBSTERIMA",
-                    width: 115,
-                    minWidth: 110,
+                    minWidth: 80,
                     hozAlign: "right",
+                    headerSort: false,
                     formatter: numberFormatter(0),
                     bottomCalc: "sum",
                     bottomCalcFormatter: numberFormatter(0)
@@ -564,19 +564,19 @@
                 {
                     title: "TBS OLAH<br>PROPORSI<br>[KG]",
                     field: "TBS_OLAH_PROPORSI",
-                    width: 110,
-                    minWidth: 125,
+                    minWidth: 80,
                     hozAlign: "right",
+                    headerSort: false,
                     formatter: numberFormatter(0),
                     bottomCalc: "sum",
                     bottomCalcFormatter: numberFormatter(0)
                 },
                 {
-                    title: "REND MS<br>TARGET(%)",
+                    title: "REND MS<br>TARGET<br>(%)",
                     field: "TARGET",
-                    width: 110,
-                    minWidth: 90,
+                    minWidth: 10,
                     hozAlign: "right",
+                    headerSort: false,
                     formatter: numberFormatter(2),
                     bottomCalc: calcTargetPercent,
                     bottomCalcFormatter: numberFormatter(2)
@@ -584,9 +584,9 @@
                 {
                     title: "MS<br>TARGET<br>[KG]",
                     field: "CPO_TARGET",
-                    width: 110,
-                    minWidth: 110,
+                    minWidth: 80,
                     hozAlign: "right",
+                    headerSort: false,
                     formatter: numberFormatter(0),
                     bottomCalc: "sum",
                     bottomCalcFormatter: numberFormatter(0)
@@ -594,9 +594,9 @@
                 {
                     title: "MS<br>PROPORSI<br>REAL[KG]",
                     field: "CPO_PROPORSI",
-                    width: 110,
-                    minWidth: 110,
+                    minWidth: 10,
                     hozAlign: "right",
+                    headerSort: false,
                     formatter: numberFormatter(0),
                     bottomCalc: "sum",
                     bottomCalcFormatter: numberFormatter(0)
@@ -604,19 +604,19 @@
                 {
                     title: "REND MS<br>PROPORSI<br>REAL(%)",
                     field: "REND_PROPORSI",
-                    width: 110,
-                    minWidth: 105,
+                    minWidth: 10,
                     hozAlign: "right",
+                    headerSort: false,
                     formatter: numberFormatter(2),
                     bottomCalc: calcRendProporsiPercent,
                     bottomCalcFormatter: numberFormatter(2)
                 },
                 {
-                    title: "SELISIH<br>MS[KG]",
+                    title: "SELISIH<br>MS<br>[KG]",
                     field: "SELISIH",
-                    width: 110,
-                    minWidth: 110,
+                    minWidth: 10,
                     hozAlign: "right",
+                    headerSort: false,
                     formatter: numberFormatter(0),
                     bottomCalc: "sum",
                     bottomCalcFormatter: numberFormatter(0)
@@ -624,9 +624,9 @@
                 {
                     title: "SELISIH<br>REND<br>[%]",
                     field: "SELISIH_REND",
-                    width: 110,
-                    minWidth: 100,
+                    minWidth: 10,
                     hozAlign: "right",
+                    headerSort: false,
                     formatter: numberFormatter(2),
                     bottomCalc: calcSelisihRend,
                     bottomCalcFormatter: numberFormatter(2)
@@ -634,9 +634,9 @@
                 {
                     title: "BONUS<br>/ DENDA<br>[RP]",
                     field: "HARGA",
-                    width: 120,
-                    minWidth: 120,
+                    minWidth: 80,
                     hozAlign: "right",
+                    headerSort: false,
                     formatter: numberFormatter(0),
                     bottomCalc: "sum",
                     bottomCalcFormatter: numberFormatter(0)

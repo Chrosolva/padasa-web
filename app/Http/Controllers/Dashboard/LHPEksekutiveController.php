@@ -1088,32 +1088,113 @@ class LHPEksekutiveController extends Controller
             ]);
     }
 
-    // get Persediaan Produk Sampingan from DB
-    public function getProdukSampinganfromDB (Request $request) {
-        $dari_tanggal = (isset($request['dari_tanggal'])
-                        ? DateTime::createFromFormat('d/m/Y', $request['dari_tanggal'])
-                         : date("Y-m-d", strtotime("-7 days")));
-        $sampai_tanggal = (isset($request['sampai_tanggal'])
-                         ? DateTime::createFromFormat('d/m/Y', $request['sampai_tanggal'])
-                         : date("Y-m-d", strtotime("0 days")));
-        $select_kebun = (isset($_GET['selectkebun']) ? $_GET['selectkebun'] : '2200');
-        $select_product = (isset($_GET['selectproduct']) ? $_GET['selectproduct'] : 'PALM ACID OIL');
+    // get Persediaan Produk Sampingan Harian from DB
+    public function getProdukSampinganfromDB(Request $request)
+    {
+        $dari_tanggal = $request->filled('dari_tanggal')
+            ? DateTime::createFromFormat('d/m/Y', $request->dari_tanggal)
+            : new DateTime('-7 days');
 
-        return DB::select( "SET NOCOUNT ON; EXEC PUBDB.Production.BYPRODUCTFFB @startDate= ?, @endDate = ?, @site = ?, @produk = ?;" , [$dari_tanggal, $sampai_tanggal, $select_kebun, $select_product]);
+        $sampai_tanggal = $request->filled('sampai_tanggal')
+            ? DateTime::createFromFormat('d/m/Y', $request->sampai_tanggal)
+            : new DateTime('-1 day');
+
+        /*
+        * Untuk stored procedure:
+        * SEMUA kebun  = NULL
+        * SEMUA produk = NULL
+        */
+        $select_kebun = $request->get('selectkebun', '2200');
+        $select_product = $request->get('selectproduct', 'PALM ACID OIL');
+
+        $site = ($select_kebun == 'SEMUA' || $select_kebun == '')
+            ? null
+            : $select_kebun;
+
+        $produk = ($select_product == 'SEMUA' || $select_product == '')
+            ? null
+            : $select_product;
+
+        return DB::select(
+            "SET NOCOUNT ON;
+            EXEC PUBDB.Production.BYPRODUCTFFB
+                @startDate = ?,
+                @endDate   = ?,
+                @site      = ?,
+                @produk    = ?;",
+            [
+                $dari_tanggal->format('Ymd'),
+                $sampai_tanggal->format('Ymd'),
+                $site,
+                $produk
+            ]
+        );
     }
 
-    // get Persediaan Produk Sampingan , return to view
-    public function getProdukSampingan (Request $request) {
-        if (Auth::user()->canAccessByHakAkses('LHP', 'LHP Persediaan Produk Sampingan') == false) abort('403-dashboard');
+
+    // get Persediaan Produk Sampingan Bulanan from DB
+    public function getProdukSampinganBulananfromDB(Request $request)
+    {
+        $dari_tanggal = $request->filled('dari_tanggal')
+            ? DateTime::createFromFormat('d/m/Y', $request->dari_tanggal)
+            : new DateTime('-7 days');
+
+        $sampai_tanggal = $request->filled('sampai_tanggal')
+            ? DateTime::createFromFormat('d/m/Y', $request->sampai_tanggal)
+            : new DateTime('-1 day');
+
+        $select_kebun = $request->get('selectkebun', '2200');
+        $select_product = $request->get('selectproduct', 'PALM ACID OIL');
+
+        $site = ($select_kebun == 'SEMUA' || $select_kebun == '')
+            ? null
+            : $select_kebun;
+
+        $produk = ($select_product == 'SEMUA' || $select_product == '')
+            ? null
+            : $select_product;
+
+        return DB::select(
+            "SET NOCOUNT ON;
+            EXEC PUBDB.Production.BYPRODUCTFFB_REKAPBULANAN
+                @startDate = ?,
+                @endDate   = ?,
+                @site      = ?,
+                @produk    = ?;",
+            [
+                $dari_tanggal->format('Ymd'),
+                $sampai_tanggal->format('Ymd'),
+                $site,
+                $produk
+            ]
+        );
+    }
+
+
+    // get Persediaan Produk Sampingan, return to view
+    public function getProdukSampingan(Request $request)
+    {
+        if (
+            Auth::user()->canAccessByHakAkses(
+                'LHP',
+                'LHP Persediaan Produk Sampingan'
+            ) == false
+        ) {
+            abort('403-dashboard');
+        }
 
         $kebun = (new ModulPerKebun())->getListKebunForModul('LHP');
+
         $lhp_ProdukSampingan = $this->getProdukSampinganfromDB($request);
 
+        $lhp_ProdukSampinganBulanan =
+            $this->getProdukSampinganBulananfromDB($request);
 
         return view('dashboard.lhpED.lhpByProduct')->with([
             'kebun' => $kebun,
             'lhp_ProdukSampingan' => $lhp_ProdukSampingan,
-            ]);
+            'lhp_ProdukSampinganBulanan' => $lhp_ProdukSampinganBulanan,
+        ]);
     }
 
     // get Restan Panen bulanan from DB
@@ -1143,7 +1224,7 @@ class LHPEksekutiveController extends Controller
     }
 
     // get Persediaan Produk Sampingan from DB
-    public function getProdukSampinganBulananfromDB (Request $request) {
+    public function getProdukSampinganBulanan2fromDB (Request $request) {
         $dari_tanggal = (isset($request['dari_tanggal'])
                         ? DateTime::createFromFormat('d/m/Y', $request['dari_tanggal'])
                          : date("Y-m-d", strtotime("-7 days")));
@@ -1163,7 +1244,7 @@ class LHPEksekutiveController extends Controller
         if (Auth::user()->canAccessByHakAkses('LHP', 'LHP Persediaan Produk Sampingan Bulanan') == false) abort('403-dashboard');
 
         $kebun = (new ModulPerKebun())->getListKebunForModul('LHP');
-        $lhp_ProdukSampinganBulanan = $this->getProdukSampinganBulananfromDB($request);
+        $lhp_ProdukSampinganBulanan = $this->getProdukSampinganBulanan2fromDB($request);
 
 
         return view('dashboard.lhpED.lhpByProductBulanan')->with([

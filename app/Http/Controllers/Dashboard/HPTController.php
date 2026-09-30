@@ -49,6 +49,22 @@ class HPTController extends Controller
                         $row->{'JUMLAH PKK'} ?? 0
                     );
 
+                    $ringan = $this->toNumeric(
+                        $row->{'RINGAN'} ?? 0
+                    );
+
+                    $sedang = $this->toNumeric(
+                        $row->{'SEDANG'} ?? 0
+                    );
+
+                    $berat = $this->toNumeric(
+                        $row->{'BERAT'} ?? 0
+                    );
+
+                    $mati = $this->toNumeric(
+                        $row->{'MATI'} ?? 0
+                    );
+
                     $pkkTerserang = $this->toNumeric(
                         $row->{'PKK TERSERANG'} ?? 0
                     );
@@ -58,8 +74,13 @@ class HPTController extends Controller
                         : 0;
 
                     return [
+                        'tahun_tanam' => trim((string) ($row->tahun_tanam ?? '')),
                         'kebun' => trim($row->KEBUN ?? ''),
                         'jumlah_pkk' => $jumlahPkk,
+                        'RINGAN' => $ringan,
+                        'SEDANG' => $sedang,
+                        'BERAT' => $berat,
+                        'MATI' => $mati,
                         'pkk_terserang' => $pkkTerserang,
                         'persen_terserang' => round(
                             $persenTerserang,
@@ -145,6 +166,22 @@ class HPTController extends Controller
                         $row->jumlah_pokok_sakit ?? 0
                     );
 
+                    $ringan = $this->toNumeric(
+                        $row->{'ringan'} ?? 0
+                    );
+
+                    $sedang = $this->toNumeric(
+                        $row->{'sedang'} ?? 0
+                    );
+
+                    $berat = $this->toNumeric(
+                        $row->{'berat'} ?? 0
+                    );
+
+                    $mati = $this->toNumeric(
+                        $row->{'mati'} ?? 0
+                    );
+
                     $totalPokok = $this->toNumeric(
                         $row->total_pokok ?? 0
                     );
@@ -154,12 +191,25 @@ class HPTController extends Controller
                         : 0;
 
                     return [
+                        'tahun_tanam' => trim((string) ($row->tahun_tanam ?? '')),
                         'kodesite' => trim(
                             $row->kodesite ?? ''
                         ),
 
                         'jumlah_pokok_sakit' =>
                             $jumlahPokokSakit,
+
+                        'ringan' =>
+                            $ringan,
+                        
+                        'sedang' =>
+                            $sedang,
+
+                        'berat' =>
+                            $berat,
+
+                        'mati' =>
+                            $mati,
 
                         'total_pokok' =>
                             $totalPokok,

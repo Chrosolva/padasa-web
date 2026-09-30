@@ -140,14 +140,109 @@ class AgronomiController extends Controller
             12 => 'DESEMBER',
         ];
 
+        $dataRegionRaw = DB::select(
+            'SET NOCOUNT ON;
+
+            EXEC PUBDB.Produksi.LaporanProduksiTBS_Bulanan_Budget_REGION_YTD_DASHBOARD
+                @tahun = ?,
+                @bulan = ?,
+                @site_id = ?',
+            [
+                $tahun,
+                $bulan,
+                $siteParameter
+            ]
+        );
+
+        $dataRegion = collect($dataRegionRaw)
+            ->map(function ($row) {
+                return [
+                    'INDEX' =>
+                        (int) ($row->INDEX ?? 0),
+
+                    'REGION' =>
+                        strtoupper(
+                            trim($row->REGION ?? '')
+                        ),
+
+                    /*
+                    * Supaya bisa memakai definisi kolom yang sama
+                    * dengan tabel Per Kebun.
+                    */
+                    'KET_KEBUN' =>
+                        strtoupper(
+                            trim($row->KET_KEBUN ?? '')
+                        ),
+
+                    'PRODUKSI_TBS_SELECTED_BULAN_TAHUNLALU' =>
+                        (float) (
+                            $row->PRODUKSI_TBS_SELECTED_BULAN_TAHUNLALU ?? 0
+                        ),
+
+                    'VARIAN_TAHUNLALU' =>
+                        (float) (
+                            $row->VARIAN_TAHUNLALU ?? 0
+                        ),
+
+                    'PRODUKSI_TBS_AKTUAL_BULAN_INI' =>
+                        (float) (
+                            $row->PRODUKSI_TBS_AKTUAL_BULAN_INI ?? 0
+                        ),
+
+                    'MONTHLYBUDGET' =>
+                        (float) (
+                            $row->MONTHLYBUDGET ?? 0
+                        ),
+
+                    'VARIAN_TAHUN_INI' =>
+                        (float) (
+                            $row->VARIAN_TAHUN_INI ?? 0
+                        ),
+
+                    'PRODUKSI_TBS_AKTUAL_YTD' =>
+                        (float) (
+                            $row->PRODUKSI_TBS_AKTUAL_YTD ?? 0
+                        ),
+
+                    'BUDGETYTD' =>
+                        (float) (
+                            $row->BUDGETYTD ?? 0
+                        ),
+
+                    'VARIAN_YTD' =>
+                        (float) (
+                            $row->VARIAN_YTD ?? 0
+                        ),
+
+                    'ANUALBUDGET' =>
+                        (float) (
+                            $row->ANUALBUDGET ?? 0
+                        ),
+
+                    'VARIAN_TOTAL' =>
+                        (float) (
+                            $row->VARIAN_TOTAL ?? 0
+                        ),
+                ];
+            })
+            ->sortBy('INDEX')
+            ->values();
+
         return view('dashboard.agronomi.ProduksiTBS', [
             'dataProduksi' => $data,
+            'dataRegion' => $dataRegion,
+
             'tahun' => $tahun,
             'bulan' => $bulan,
+
             'namaBulan' => $namaBulan,
+
             'siteOptions' => $siteOptions,
+
             'selectedSites' => $selectedSites,
-            'selectedSiteNames' => $selectedSiteNames,
+
+            'selectedSiteNames' =>
+                $selectedSiteNames,
         ]);
     }
 
@@ -258,4 +353,5 @@ class AgronomiController extends Controller
 
         return strtoupper(trim($divisionCode));
     }
+    
 }

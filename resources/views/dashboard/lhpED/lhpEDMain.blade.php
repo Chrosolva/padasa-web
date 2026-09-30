@@ -53,7 +53,7 @@
                     {{-- <div class="box-header with-border">
                     </div> --}}
                     <div class="box-body">
-                        <div class="box-body table-responsive">
+                        <div class="box-body table-responsive"> 
                             <table id="table-data" class="table table-bordered table-striped table-hover datatable">
                                 <thead>
                                     <tr>

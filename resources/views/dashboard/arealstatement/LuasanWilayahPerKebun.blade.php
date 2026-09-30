@@ -1,12 +1,12 @@
 @extends('dashboard.app')
 
 @section('header-title')
-    Luasan Wilayah
+    Luasan Per Kebun
 @endsection
 
 @section('main-content')
 <section class="content-header">
-    <h1>Luasan Wilayah <small>Areal Statement</small></h1>
+    <h1>Luasan Per Kebun <small>Areal Statement</small></h1>
 </section>
 
 <section class="content">
@@ -64,27 +64,27 @@
         <ul class="nav nav-tabs">
             <li class="active">
                 <a href="#tab-afdeling" data-toggle="tab">
-                    <i class="fa fa-map-marker"></i> Per AFD
+                    <i class="fa fa-map-marker"></i> AFD
                 </a>
             </li>
             <li>
                 <a href="#tab-tahun-tanam" data-toggle="tab">
-                    <i class="fa fa-calendar"></i> Per Tahun Tanam
+                    <i class="fa fa-calendar"></i> Tahun Tanam
                 </a>
             </li>
             <li>
                 <a href="#tab-bibit" data-toggle="tab">
-                    <i class="fa fa-leaf"></i> Per Bibit
+                    <i class="fa fa-leaf"></i> Bibit
                 </a>
             </li>
             <li>
                 <a href="#tab-topografi" data-toggle="tab">
-                    <i class="fa fa-area-chart"></i> Per Topografi
+                    <i class="fa fa-chart-area"></i> Topografi
                 </a>
             </li>
             <li>
                 <a href="#tab-umur" data-toggle="tab">
-                    <i class="fa fa-clock-o"></i> Per Umur
+                    <i class="fa fa-clock"></i> Grup Umur
                 </a>
             </li>
         </ul>
@@ -918,7 +918,7 @@ $(document).ready(function () {
             columnDefaults: {
                 headerHozAlign: 'center',
                 vertAlign: 'middle',
-                headerSort: true,
+                headerSort: false,
                 resizable: true
             },
             columns: columns

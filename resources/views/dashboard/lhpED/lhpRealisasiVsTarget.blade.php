@@ -754,7 +754,7 @@
             placeholder: "Data tidak ditemukan",
             columnDefaults: {
                 resizable: true,
-                headerSort: true,
+                headerSort: false,
                 vertAlign: "middle"
             }
         };
@@ -767,7 +767,7 @@
             columns.push({
                 title: "TANGGAL",
                 field: "TANGGAL",
-                minWidth: 95,
+                minWidth: 10,
                 hozAlign: "center",
                 sorter: dateSorterFromField('TANGGAL_SORT'),
                 bottomCalc: function() { return "TOTAL"; },
@@ -779,8 +779,9 @@
             {
                 title: "NO",
                 field: "INDEX",
-                minWidth: 55,
+                minWidth: 10,
                 hozAlign: "center",
+                visible:false,
                 bottomCalc: selectType === '0' ? function() { return ""; } : function() { return "TOTAL"; },
                 bottomCalcFormatter: selectType === '0' ? undefined : function() { return "<b>TOTAL</b>"; }
             },
@@ -795,16 +796,16 @@
             {
                 title: "TBS TERIMA<br>[KG]",
                 field: "TBSTERIMA",
-                minWidth: 115,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",
                 bottomCalcFormatter: numberFormatter(0)
             },
             {
-                title: "TBS OLAH<br>PROPORSI [KG]",
+                title: "TBS OLAH<br>PROPORSI<br>[KG]",
                 field: "TBS_OLAH_PROPORSI",
-                minWidth: 130,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",
@@ -813,7 +814,7 @@
             {
                 title: "REND.MS<br>TARGET<br>(%)",
                 field: "TARGET",
-                minWidth: 90,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(2),
                 bottomCalc: calcPropTargetPercent,
@@ -822,16 +823,16 @@
             {
                 title: "MS<br>TARGET<br>(KG)",
                 field: "CPO_TARGET",
-                minWidth: 115,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",
                 bottomCalcFormatter: numberFormatter(0)
             },
             {
-                title: "MS PROPORSI<br>REAL.[KG]",
+                title: "MS PROPORSI<br>REAL.<br>[KG]",
                 field: "CPO_PROPORSI",
-                minWidth: 125,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",
@@ -840,34 +841,34 @@
             {
                 title: "REND MS<br>PROPORSI<br>REAL(%)",
                 field: "REND_PROPORSI",
-                minWidth: 115,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(2),
                 bottomCalc: calcPropRendProporsiPercent,
                 bottomCalcFormatter: numberFormatter(2)
             },
             {
-                title: "SELISIH<br>MS[KG]",
+                title: "SELISIH<br>MS<br>[KG]",
                 field: "SELISIH",
-                minWidth: 110,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",
                 bottomCalcFormatter: numberFormatter(0)
             },
             {
-                title: "SELISIH<br>REND [%]",
+                title: "SELISIH<br>REND<br>[%]",
                 field: "SELISIH_REND",
-                minWidth: 105,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(2),
                 bottomCalc: calcPropSelisihRend,
                 bottomCalcFormatter: numberFormatter(2)
             },
             {
-                title: "BONUS /<br>DENDA [RP]",
+                title: "BONUS /<br>DENDA<br>[RP]",
                 field: "HARGA",
-                minWidth: 125,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",
@@ -883,9 +884,9 @@
 
         if (selectType === '0') {
             firstColumn = {
-                title: "TGL",
+                title: "TANGGAL",
                 field: "TGL",
-                minWidth: 95,
+                minWidth: 10,
                 hozAlign: "center",
                 sorter: dateSorterFromField('TGL_SORT'),
                 bottomCalc: function() { return "TOTAL"; },
@@ -895,7 +896,7 @@
             firstColumn = {
                 title: "BULAN",
                 field: "BULAN",
-                minWidth: 80,
+                minWidth: 10,
                 hozAlign: "center",
                 bottomCalc: function() { return "TOTAL"; },
                 bottomCalcFormatter: function() { return "<b>TOTAL</b>"; }
@@ -906,10 +907,9 @@
             { title: "BARIS", field: "BARIS", visible: false },
             firstColumn,
             {
-                title: "NAMA<br>GRUP",
+                title: "NAMA",
                 field: "NAMA_GRUP",
-                width: 80,
-                minWidth: 60,
+                minWidth: 115,
                 hozAlign: "left",
                 // headerFilter: "input",
                 bottomCalc: function() { return ""; }
@@ -917,7 +917,7 @@
             {
                 title: "TBS<br>OLAH<br>(KG)",
                 field: "REALISASI_TBS_OLAH",
-                minWidth: 115,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",
@@ -926,7 +926,7 @@
             {
                 title: "MS<br>TARGET<br>(KG)",
                 field: "PRODUKSI_CPO_TARGET",
-                minWidth: 115,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",
@@ -935,7 +935,7 @@
             {
                 title: "REND.MS<br>TARGET<br>(%)",
                 field: "RENDEMEN_CPO_TARGET",
-                minWidth: 130,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(2),
                 bottomCalc: calcRvstRendemenTarget,
@@ -944,7 +944,7 @@
             {
                 title: "MS<br>REAL.<br>(KG)",
                 field: "PRODUKSI_CPO_REALISASI",
-                minWidth: 115,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",
@@ -953,7 +953,7 @@
             {
                 title: "REND.MS<br>REAL.<br>(%)",
                 field: "RENDEMEN_CPO_REALISASI",
-                minWidth: 130,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(2),
                 bottomCalc: calcRvstRendemenRealisasi,
@@ -962,7 +962,7 @@
             {
                 title: "SELISIH<br>MS<br>(KG)",
                 field: "SELISIH_CPO",
-                minWidth: 120,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",
@@ -971,7 +971,7 @@
             {
                 title: "SELISIH<br>REND.<br>(%)",
                 field: "SELISIH_RENDEMEN",
-                minWidth: 130,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(2),
                 bottomCalc: calcRvstSelisihRendemen,
@@ -980,7 +980,7 @@
             {
                 title: "BONUS<br>/DENDA<br>(RP.)",
                 field: "TOTAL_KERUGIAN",
-                minWidth: 130,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",
@@ -998,7 +998,7 @@
             {
                 title: "RESTAN TBS<br>PABRIK<br>(KG.)",
                 field: "RESTAN_TBS_PABRIK",
-                minWidth: 145,
+                minWidth: 10,
                 hozAlign: "right",
                 formatter: numberFormatter(0),
                 bottomCalc: "sum",

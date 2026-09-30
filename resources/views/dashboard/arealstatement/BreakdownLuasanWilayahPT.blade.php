@@ -1,7 +1,7 @@
 @extends('dashboard.app')
 
 @section('header-title')
-    Luasan Per Wilayah dan PT
+    Luasan Per PT
 @endsection
 
 @section('main-content')
@@ -123,6 +123,7 @@
 
     #table-wilayah,
     #table-pt,
+    #table-bibit,
     #table-umur {
         width: 100%;
         max-width: 100%;
@@ -197,6 +198,7 @@
 
         #table-wilayah,
         #table-pt,
+        #table-bibit,
         #table-umur {
             height: 300px;
         }
@@ -205,7 +207,7 @@
 
 <section class="content-header">
     <h1>
-        Luasan Per Wilayah dan PT
+        Luasan Per PT
         <small>Areal Statement</small>
     </h1>
 </section>
@@ -277,12 +279,14 @@
     {{-- TABS --}}
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
+
             <li class="active">
                 <a
                     href="#tab-wilayah"
                     data-toggle="tab"
                 >
-                    <i class="fa fa-map"></i> Per Wilayah
+                    <i class="fa fa-map"></i>
+                    Wilayah
                 </a>
             </li>
 
@@ -291,7 +295,28 @@
                     href="#tab-pt"
                     data-toggle="tab"
                 >
-                    <i class="fa fa-building"></i> Per PT
+                    <i class="fa fa-building"></i>
+                    PT
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="#tab-bibit"
+                    data-toggle="tab"
+                >
+                    <i class="fa fa-leaf"></i>
+                    Bibit
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="#tab-topografi"
+                    data-toggle="tab"
+                >
+                    <i class="fa fa-chart-area"></i>
+                    Topografi
                 </a>
             </li>
 
@@ -300,9 +325,11 @@
                     href="#tab-umur"
                     data-toggle="tab"
                 >
-                    <i class="fa fa-clock-o"></i> Per Umur
+                    <i class="fa fa-clock"></i>
+                    Grup Umur
                 </a>
             </li>
+
         </ul>
 
         <div class="tab-content">
@@ -448,6 +475,90 @@
             </div>
 
             {{-- ========================================================= --}}
+            {{-- PER BIBIT --}}
+            {{-- ========================================================= --}}
+            <div
+                class="tab-pane"
+                id="tab-bibit"
+            >
+                <div class="box box-primary compact-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Distribusi Luasan Berdasarkan Bibit
+                        </h3>
+                    </div>
+
+                    <div class="box-body">
+                        <div class="chart-container">
+                            <canvas id="chartBibit"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box box-success compact-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Luasan Per Bibit
+                        </h3>
+                    </div>
+
+                    <div class="box-body">
+                        <div class="table-toolbar">
+                            <div class="table-toolbar-left">
+                                <label for="page-size-bibit">
+                                    Tampilkan:
+                                </label>
+
+                                <select
+                                    id="page-size-bibit"
+                                    class="form-control input-sm table-page-size"
+                                >
+                                    <option value="10">
+                                        10
+                                    </option>
+
+                                    <option
+                                        value="25"
+                                        selected
+                                    >
+                                        25
+                                    </option>
+
+                                    <option value="50">
+                                        50
+                                    </option>
+
+                                    <option value="100">
+                                        100
+                                    </option>
+                                </select>
+
+                                <span>baris</span>
+                            </div>
+
+                            <div class="table-toolbar-right">
+                                <label for="search-bibit">
+                                    Search:
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="search-bibit"
+                                    class="form-control input-sm table-search"
+                                    placeholder="Cari kebun atau bibit..."
+                                    autocomplete="off"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="tabulator-wrapper">
+                            <div id="table-bibit"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ========================================================= --}}
             {{-- PER UMUR --}}
             {{-- ========================================================= --}}
             <div
@@ -577,6 +688,101 @@
                 </div>
             </div>
 
+            {{-- ========================================================= --}}
+            {{-- PER TOPOGRAFI --}}
+            {{-- ========================================================= --}}
+
+            <div
+                class="tab-pane"
+                id="tab-topografi"
+            >
+                <div class="box box-primary compact-box">
+
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Distribusi Luasan Berdasarkan Topografi
+                        </h3>
+                    </div>
+
+                    <div class="box-body">
+                        <div class="chart-container">
+                            <canvas id="chartTopografi"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="box box-success compact-box">
+
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            Luasan Per Topografi
+                        </h3>
+                    </div>
+
+                    <div class="box-body">
+
+                        <div class="table-toolbar">
+
+                            <div class="table-toolbar-left">
+                                <label for="page-size-topografi">
+                                    Tampilkan:
+                                </label>
+
+                                <select
+                                    id="page-size-topografi"
+                                    class="form-control input-sm table-page-size"
+                                >
+                                    <option value="10">
+                                        10
+                                    </option>
+
+                                    <option
+                                        value="25"
+                                        selected
+                                    >
+                                        25
+                                    </option>
+
+                                    <option value="50">
+                                        50
+                                    </option>
+
+                                    <option value="100">
+                                        100
+                                    </option>
+                                </select>
+
+                                <span>baris</span>
+                            </div>
+
+                            <div class="table-toolbar-right">
+
+                                <label for="search-topografi">
+                                    Search:
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="search-topografi"
+                                    class="form-control input-sm table-search"
+                                    placeholder="Cari PT atau topografi..."
+                                    autocomplete="off"
+                                >
+
+                            </div>
+
+                        </div>
+
+                        <div class="tabulator-wrapper">
+                            <div id="table-topografi"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
         <p>
@@ -671,6 +877,17 @@ $(document).ready(function () {
     var rawWilayahData = @json($wilayah ?? []);
     var rawPTData = @json($pt ?? []);
     var rawUmurData = @json($dataUmur ?? []);
+    var rawBibitData =
+        @json($dataBibit ?? []);
+
+    var rawBibitColumns =
+        @json($columnsBibit ?? []);
+
+    var rawTopografiData =
+        @json($dataTopografi ?? []);
+
+    var rawTopografiColumns =
+        @json($columnsTopografi ?? []);
 
 
     /*
@@ -701,7 +918,7 @@ $(document).ready(function () {
                             : 998
                     ),
 
-            REGION: row.REGION || '',
+            WILAYAH: row.WILAYAH || '',
 
             HA_TM: toNumber(row.HA_TM),
             HA_TBM: toNumber(row.HA_TBM),
@@ -768,7 +985,7 @@ $(document).ready(function () {
         return {
             NO: row.NOURUT || (index + 1),
 
-            KEBUN: String(row.KEBUN || '')
+            PT: String(row.PT || '')
                 .trim()
                 .toUpperCase(),
 
@@ -789,6 +1006,214 @@ $(document).ready(function () {
         };
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Data Bibit
+    |--------------------------------------------------------------------------
+    */
+
+    var bibitTableData =
+        rawBibitData.map(
+            function (row, index) {
+                var result = {
+                    NO:
+                        row.NO
+                        || (index + 1),
+
+                    PT:
+                        String(
+                            row.PT || ''
+                        )
+                        .trim()
+                        .toUpperCase()
+                };
+
+                Object.keys(row)
+                    .forEach(
+                        function (columnName) {
+                            if (
+                                columnName
+                                    .toUpperCase()
+                                    .indexOf(
+                                        'HA '
+                                    ) === 0
+                            ) {
+                                result[columnName] =
+                                    toNumber(
+                                        row[columnName]
+                                    );
+                            }
+                        }
+                    );
+
+                return result;
+            }
+        );
+    
+    function getBibitHaColumns() {
+        if (
+            bibitTableData.length === 0
+        ) {
+            return [];
+        }
+
+        return Object.keys(
+            bibitTableData[0]
+        ).filter(
+            function (columnName) {
+                return (
+                    columnName
+                        .toUpperCase()
+                        .indexOf('HA ')
+                    === 0
+                );
+            }
+        );
+    }
+
+    function getBibitLabel(columnName) {
+        return String(columnName)
+            .replace(/^HA\s+/i, '')
+            .trim();
+    }
+
+    var topografiTableData =
+        rawTopografiData.map(
+            function (row, index) {
+
+                var result = {
+                    NO:
+                        row.NO
+                        || (index + 1),
+
+                    PT:
+                        String(
+                            row.PT || ''
+                        )
+                        .trim()
+                        .toUpperCase()
+                };
+
+                Object.keys(row)
+                    .forEach(
+                        function (columnName) {
+
+                            if (
+                                columnName
+                                    .toUpperCase()
+                                    .indexOf('HA ')
+                                === 0
+                            ) {
+                                result[columnName] =
+                                    toNumber(
+                                        row[columnName]
+                                    );
+                            }
+                        }
+                    );
+
+                return result;
+            }
+        );
+
+    function getTopografiHaColumns() {
+        if (
+            topografiTableData.length === 0
+        ) {
+            return [];
+        }
+
+        return Object.keys(
+            topografiTableData[0]
+        ).filter(
+            function (columnName) {
+                return (
+                    columnName
+                        .toUpperCase()
+                        .indexOf('HA ')
+                    === 0
+                );
+            }
+        );
+    }
+
+
+    function getTopografiLabel(columnName) {
+        return String(columnName)
+            .replace(/^HA\s+/i, '')
+            .trim();
+    }
+
+    function createTopografiColumns() {
+        var columns = [
+            {
+                title: 'NO',
+                field: 'NO',
+
+                width: 55,
+
+                sorter: 'number',
+
+                hozAlign: 'center',
+
+                bottomCalc:
+                    function () {
+                        return '~';
+                    }
+            },
+
+            {
+                title: 'PT',
+                field: 'PT',
+
+                minWidth: 120,
+
+                sorter: 'string',
+
+                bottomCalc:
+                    function () {
+                        return 'TOTAL';
+                    }
+            }
+        ];
+
+        getTopografiHaColumns()
+            .forEach(
+                function (columnName) {
+
+                    columns.push({
+                        title:
+                            getTopografiLabel(
+                                columnName
+                            )
+                            + '<br>[HA]',
+
+                        field:
+                            columnName,
+
+                        minWidth:
+                            145,
+
+                        sorter:
+                            'number',
+
+                        hozAlign:
+                            'right',
+
+                        formatter:
+                            numberFormatter,
+
+                        bottomCalc:
+                            'sum',
+
+                        bottomCalcFormatter:
+                            bottomNumberFormatter
+                    });
+                }
+            );
+
+        return columns;
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -871,6 +1296,72 @@ $(document).ready(function () {
         ];
     }
 
+    function createBibitColumns() {
+        var columns = [
+            {
+                title: 'NO',
+                field: 'NO',
+                width: 55,
+                minWidth: 50,
+                sorter: 'number',
+                hozAlign: 'center',
+
+                bottomCalc:
+                    function () {
+                        return '~';
+                    }
+            },
+
+            {
+                title: 'PT',
+                field: 'PT',
+                minWidth: 130,
+                sorter: 'string',
+
+                bottomCalc:
+                    function () {
+                        return 'TOTAL';
+                    }
+            }
+        ];
+
+        getBibitHaColumns()
+            .forEach(
+                function (columnName) {
+                    columns.push({
+                        title:
+                            getBibitLabel(
+                                columnName
+                            )
+                            + '<br>[HA]',
+
+                        field:
+                            columnName,
+
+                        minWidth:
+                            110,
+
+                        sorter:
+                            'number',
+
+                        hozAlign:
+                            'right',
+
+                        formatter:
+                            numberFormatter,
+
+                        bottomCalc:
+                            'sum',
+
+                        bottomCalcFormatter:
+                            bottomNumberFormatter
+                    });
+                }
+            );
+
+        return columns;
+    }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -928,8 +1419,8 @@ $(document).ready(function () {
         '#table-wilayah',
         wilayahTableData,
         createStandardColumns(
-            'REGION',
-            'REGION'
+            'WILAYAH',
+            'WILAYAH'
         )
     );
 
@@ -958,8 +1449,8 @@ $(document).ready(function () {
                 }
             },
             {
-                title: 'KEBUN',
-                field: 'KEBUN',
+                title: 'PT',
+                field: 'PT',
                 width: 130,
                 minWidth: 120,
                 sorter: 'string',
@@ -1040,6 +1531,19 @@ $(document).ready(function () {
         ]
     );
 
+    var tableBibit =
+        createTable(
+            '#table-bibit',
+            bibitTableData,
+            createBibitColumns()
+        );
+    
+    var tableTopografi =
+        createTable(
+            '#table-topografi',
+            topografiTableData,
+            createTopografiColumns()
+        );
 
     /*
     |--------------------------------------------------------------------------
@@ -1126,7 +1630,7 @@ $(document).ready(function () {
         tableWilayah,
         [
             'NO',
-            'REGION',
+            'WILAYAH',
             'HA_TM',
             'HA_TBM',
             'HA_TB',
@@ -1154,7 +1658,7 @@ $(document).ready(function () {
         tableUmur,
         [
             'NO',
-            'KEBUN',
+            'PT',
             'TBM',
             'MUDA',
             'REMAJA',
@@ -1163,6 +1667,28 @@ $(document).ready(function () {
             'REPLANTING',
             'TOTAL_HA'
         ]
+    );
+
+    bindSearch(
+        '#search-bibit',
+        tableBibit,
+        [
+            'NO',
+            'PT'
+        ].concat(
+            getBibitHaColumns()
+        )
+    );
+
+    bindSearch(
+        '#search-topografi',
+        tableTopografi,
+        [
+            'NO',
+            'PT'
+        ].concat(
+            getTopografiHaColumns()
+        )
     );
 
     bindPageSize(
@@ -1178,6 +1704,16 @@ $(document).ready(function () {
     bindPageSize(
         '#page-size-umur',
         tableUmur
+    );
+
+    bindPageSize(
+        '#page-size-bibit',
+        tableBibit
+    );
+
+    bindPageSize(
+    '#page-size-topografi',
+    tableTopografi
     );
 
 
@@ -1202,6 +1738,60 @@ $(document).ready(function () {
         TUA: '#6A1B9A',
         REPLANTING: '#7CB342'
     };
+
+    var BIBIT_CHART_COLORS = [
+        '#1565C0',
+        '#00897B',
+        '#FB8C00',
+        '#E53935',
+        '#6A1B9A',
+        '#7CB342',
+        '#00ACC1',
+        '#8D6E63',
+        '#3949AB',
+        '#F4511E'
+    ];
+
+    function buildBibitDatasets() {
+        return getBibitHaColumns()
+            .map(
+                function (
+                    columnName,
+                    index
+                ) {
+                    return {
+                        label:
+                            getBibitLabel(
+                                columnName
+                            ),
+
+                        data:
+                            bibitTableData.map(
+                                function (row) {
+                                    return toNumber(
+                                        row[columnName]
+                                    );
+                                }
+                            ),
+
+                        backgroundColor:
+                            BIBIT_CHART_COLORS[
+                                index
+                                % BIBIT_CHART_COLORS.length
+                            ],
+
+                        borderColor:
+                            BIBIT_CHART_COLORS[
+                                index
+                                % BIBIT_CHART_COLORS.length
+                            ],
+
+                        borderWidth:
+                            1
+                    };
+                }
+            );
+    }
 
 
     /*
@@ -1294,7 +1884,7 @@ $(document).ready(function () {
 
                     tooltips: {
                         mode: 'index',
-                        intersect: false,
+                        intersect: true,
 
                         callbacks: {
                             title: function (
@@ -1385,8 +1975,8 @@ $(document).ready(function () {
                     },
 
                     hover: {
-                        mode: 'index',
-                        intersect: false
+                        mode: 'nearest',
+                        intersect: true
                     }
                 }
             }
@@ -1405,7 +1995,7 @@ $(document).ready(function () {
             'chartWilayah',
 
             wilayahTableData.map(function (row) {
-                return row.REGION;
+                return row.WILAYAH;
             }),
 
             [
@@ -1585,7 +2175,7 @@ $(document).ready(function () {
             'chartUmur',
 
             umurTableData.map(function (row) {
-                return row.KEBUN;
+                return row.PT;
             }),
 
             [
@@ -1699,6 +2289,73 @@ $(document).ready(function () {
             ]
         );
 
+    
+    var chartBibit =
+        createHorizontalStackedChart(
+            'chartBibit',
+
+            bibitTableData.map(
+                function (row) {
+                    return row.PT;
+                }
+            ),
+
+            buildBibitDatasets()
+        );
+
+    function buildTopografiDatasets() {
+        return getTopografiHaColumns()
+            .map(
+                function (
+                    columnName,
+                    index
+                ) {
+                    return {
+                        label:
+                            getTopografiLabel(
+                                columnName
+                            ),
+
+                        data:
+                            topografiTableData.map(
+                                function (row) {
+                                    return toNumber(
+                                        row[columnName]
+                                    );
+                                }
+                            ),
+
+                        backgroundColor:
+                            BIBIT_CHART_COLORS[
+                                index
+                                % BIBIT_CHART_COLORS.length
+                            ],
+
+                        borderColor:
+                            BIBIT_CHART_COLORS[
+                                index
+                                % BIBIT_CHART_COLORS.length
+                            ],
+
+                        borderWidth:
+                            1
+                    };
+                }
+            );
+    }
+
+    var chartTopografi =
+        createHorizontalStackedChart(
+            'chartTopografi',
+
+            topografiTableData.map(
+                function (row) {
+                    return row.PT;
+                }
+            ),
+
+            buildTopografiDatasets()
+        );
 
     /*
     |--------------------------------------------------------------------------
@@ -1736,6 +2393,27 @@ $(document).ready(function () {
                         chartUmur.resize();
                     }
                 }
+
+                if (
+                    target === '#tab-bibit'
+                ) {
+                    tableBibit.redraw(true);
+
+                    if (chartBibit) {
+                        chartBibit.resize();
+                    }
+                }
+
+                if (
+                    target === '#tab-topografi'
+                ) {
+                    tableTopografi.redraw(true);
+
+                    if (chartTopografi) {
+                        chartTopografi.resize();
+                    }
+                }
+
             }, 100);
         }
     );
@@ -1763,6 +2441,19 @@ $(document).ready(function () {
         if (chartUmur) {
             chartUmur.resize();
         }
+
+        tableBibit.redraw(true);
+
+        if (chartBibit) {
+            chartBibit.resize();
+        }
+
+        tableTopografi.redraw(true);
+
+        if (chartTopografi) {
+            chartTopografi.resize();
+        }
+
     });
 });
 </script>
